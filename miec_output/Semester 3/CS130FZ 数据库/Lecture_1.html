@@ -1,0 +1,46 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-1">Lecture 1</h1>
+<h2 id="page-21">使用文件系统存储数据的缺点：Page 21</h2>
+<ul>
+<li>数据被多种不同的文件格式重复存储</li>
+<li>难以对数据进行访问</li>
+<li>数据被分割成许多个文件甚至文件格式</li>
+<li>无法轻松的限制数据取值范围，也无法轻松更改限制</li>
+<li>数据的修改操作可能进行到一半突然异常停止</li>
+<li>多用户同时操作可能会触发意想不到的结果</li>
+</ul>
+<h2 id="dbms">数据库管理系统 DBMS</h2>
+<p>DBMS 说白了就是一个软件系统，它可以实现数据库的定义、创建、维护、权限控制等操作：</p>
+<ul>
+<li>系统是安全的，未认证的用户无权访问</li>
+<li>系统是完整的，数据之间不存在矛盾冲突</li>
+<li>并发的，允许共享数据库</li>
+<li>可恢复到之前的版本</li>
+</ul>
+<p>当然，DBMS 也存在一些缺点，比如：体积较大、需要额外硬件、需要数据转换等</p>
+<h3 id="ddldata-definition-language">DDL（数据定义语言，Data Definition Language）</h3>
+<p>DDL 通常用于定义数据库。DDL 还允许使用者指定数据库中的数据类型、结构和限制（type，structure，constraint）。但是不能用于修改数据。</p>
+<h3 id="dmldata-manipulation-language">DML（数据操纵语言，Data Manipulation Language）</h3>
+<p>实现数据库的增删改查，即 insert，update，delete，retrieve</p>
+<p>查询语言（query language）是指 DML 当中用于查找和修改数据的部分。</p>
+<p>SQL（Structured Query Language）读作 S-Q-L 或 Sequel，是最流行的查询语言。</p>
+<h3 id="_1">三级模式、两级映射结构</h3>
+<p>DBMS 从三个层次管理数据：外部层次、概念层次、内部层次；每个层次都对应着一个模式（schema）：外模式、概念模式、内模式。这种结构可以很方便的将用户操作和实际数据库分离开。</p>
+<p>外部层次是呈现给用户的；概念层次描述了数据库系统的结构；内部层次描述了数据库的物理存储方式、索引方式等。</p>
+<h3 id="_2">数据模型、概念模型</h3>
+<p>数据模型（data model），可以视作三个部分的组合：结构（structural）部分、操作（manipulative）部分、限制（constraints）部分。</p>
+<p>概念模型（conceptual model），也叫做逻辑模型（logical model）</p>
+<h3 id="dbms_1">DBMS 的功能</h3>
+<ul>
+<li>数据的存储、查询、更新</li>
+<li>为用户提供描述了数据的目录</li>
+<li>修改操作要么完全完成，要么进度为零</li>
+<li>允许并行操作</li>
+<li>允许恢复到以前的状态</li>
+<li>提供身份权限认证功能</li>
+<li>允许通信</li>
+<li>保证数据安全和完整，非法操作不应发生，保证操作在数据范围内</li>
+<li>数据独立性</li>
+<li>数据管理、监控、静态分析、垃圾回收等</li>
+</ul>
+</article>>

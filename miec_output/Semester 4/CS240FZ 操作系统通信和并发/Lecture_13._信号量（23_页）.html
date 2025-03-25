@@ -1,0 +1,79 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-13-23">Lecture 13. 信号量（23 页）</h1>
+<h2 id="_1">原先互斥问题解决方案的缺陷</h2>
+<p>回顾一下之前面包店算法的代码实现。</p>
+<p>所有线程在进入和退出 critical section 的时候，都需要执行特定的代码片段。这些代码片段的顺序不能错。而且，每个线程都要有这些。</p>
+<p>这就意味着啊，程序员在编写每一个线程的代码的时候，需要手动的把这些代码片段加入到线程里面去。</p>
+<p>那这就很笨拙（awkward）。比如万一哪一个线程的代码复制错了，那就麻烦了。</p>
+<p>所以说如果有一个抽象的东西，那就好多了。</p>
+<p>还有一点啊，如果是多处理器，之前的面包店算法，可能还会遇到缓存问题。</p>
+<p>软件方面的做法比较笨拙，而硬件方面的方法，刚才说过了，不太公平，也就是不能保证 progress 和 bounded waiting 原则。还有一些乱七八糟的缺陷。比如说，如果低优先级的线程持有锁，把高优先级的线程给阻塞了，就有可能导致系统响应能力变差。</p>
+<p>所以这里引入了信号量这种东西。</p>
+<h2 id="semaphores">信号量 Semaphores</h2>
+<blockquote>
+<p>考试的时候要记得拼写！Semaphores!</p>
+</blockquote>
+<p>信号量，是为了解决三个方面的问题</p>
+<ul>
+<li>笨拙 unwieldy（软件）</li>
+<li>不公平 fairness（硬件）</li>
+<li>忙等 busywaiting（软硬件）</li>
+</ul>
+<p>根据信号量的定义，信号量包含了一个整数变量。这个整数变量只能通过 <code>P</code> 和 <code>V</code> 两个操作访问（其实就是 <code>acquire()</code> 与 <code>release()</code>，只不过信号量的发明者 dijkstra 是荷兰人，所以用荷兰语缩写 PV）</p>
+<p>当然，P 与 V 的操作必须是 indivisible 的。</p>
+<p>下面是 P 与 V 操作的 C 语言描述与示意图</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">P</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">S</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">wait</span><span class="p">();</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">V</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<p><img alt="" src="https://s2.loli.net/2023/06/13/lGiUhbD4QsIfwoz.png"/></p>
+<p>信号量 S 可以有两种类型。一种是二进制类型的，用于控制互斥。还有一种是可以取值很大的，可以实现计数。也就是说，信号量可以分为 binary 和 counting 两种类型。</p>
+<p>那么，如何保证 P 与 V 操作是 indivisible 的呢？有以下方法：</p>
+<ul>
+<li>第一种方法是把 P 与 V 操作当作 critical section，让后使用面包店算法</li>
+<li>第二种方法是操作系统把 P 与 V 操作封装到系统调用里面，并暂时性的屏蔽中断</li>
+<li>使用 indivisible 的硬件指令，搞一个自旋锁（spinlock）（这俩操作代码都比较短，这样做的性能不差）</li>
+</ul>
+<h2 id="_2">信号量的使用方式</h2>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">Semaphore</span><span class="w"> </span><span class="n">mutex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// bin 类型的互斥信号量，初始未上锁</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="n">P</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="c1">// critical section</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="n">V</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></code></pre></div>
+<p>C 语言可以直接使用 POSIX API 里面的信号量：</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pthread.h&gt;</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">pthread_mutex_t</span><span class="w"> </span><span class="n">mutex1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PTHREAD_MUTEX_INITIALIZER</span><span class="p">;</span><span class="w"> </span><span class="c1">// 用宏进行初始化</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="kt">int</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">  </span><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex1</span><span class="p">);</span>
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">  </span><span class="o">++</span><span class="n">counter</span><span class="p">;</span>
+</span><span id="__span-2-9"><a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">  </span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex1</span><span class="p">);</span>
+</span><span id="__span-2-10"><a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="pv">PV 操作的改进</h2>
+<p>由于刚才版本的 P 操作还是有可能导致忙碌等待的，所以可以改进一下，变成这样：</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">P</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="n">s</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="c1">// add this thread into the waiting queue</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="c1">// block;</span>
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="kt">void</span><span class="w"> </span><span class="nf">V</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">  </span><span class="n">s</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-11"><a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">    </span><span class="c1">// remove a thread T from the waiting queue</span>
+</span><span id="__span-3-12"><a href="#__codelineno-3-12" id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="n">wakeup</span><span class="p">(</span><span class="n">T</span><span class="p">);</span>
+</span><span id="__span-3-13"><a href="#__codelineno-3-13" id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-3-14"><a href="#__codelineno-3-14" id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>当然，这时候的 P 和 V 操作也必须满足 indivisible。满足 indivisible 的方法上面提过了。</p>
+<h2 id="_3">信号量的应用</h2>
+<ul>
+<li>有界缓冲问题（生产者消费者）</li>
+<li>哲学家就餐问题</li>
+<li>读者作者问题</li>
+</ul>
+<p>将在后面课程当中研究</p>
+</article>>

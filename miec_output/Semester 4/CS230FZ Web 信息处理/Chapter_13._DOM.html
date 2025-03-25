@@ -1,0 +1,110 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="chapter-13-dom">Chapter 13. DOM</h1>
+<p>DOM 是 Document Object Model 的缩写。DOM 是 W3C 指定的用于访问文档的标准，由三个不同的部分：</p>
+<ul>
+<li>Core DOM</li>
+<li>XML DOM</li>
+<li><strong>HTML DOM</strong></li>
+</ul>
+<p>HTML DOM 模型可以用对象树表示：</p>
+<p><img alt="" src="https://s2.loli.net/2023/06/19/si9bH1T4nfVOdc3.png"/></p>
+<p>有了这个 DOM 模型，JS 就可以创建动态的 HTML 文件：改变元素、改变属性、改变 CSS、删除元素、添加属性等。</p>
+<h2 id="html-dom-methods">HTML DOM Methods</h2>
+<p>HTML DOM 的 property 是可以改变的属性值。DOM 编程接口可以调用 DOM 的方法，比如 JS 等语言。</p>
+<p>在 DOM 当中，所有的 HTML 的元素都被当作一个对象。</p>
+<h3 id="_1">改变元素</h3>
+<ul>
+<li><code>element.innerHTML = xxx</code>，顾名思义</li>
+<li><code>element.attribute = xxx</code>，顾名思义</li>
+<li><code>element.style.property = xxx</code>，顾名思义</li>
+<li><code>element.setAttribute(attribute, value)</code>，顾名思义</li>
+</ul>
+<h3 id="_2">添加或删除元素</h3>
+<ul>
+<li><code>element.createElement(ele)</code></li>
+<li><code>element.removeChild(ele)</code></li>
+<li>`element.appendChild(ele)</li>
+<li><code>element.replaceChild(new, old)</code></li>
+<li><code>element.write(text)</code>，其实相当于改变了 HTML 文件</li>
+</ul>
+<h3 id="document"><code>document</code> 的属性</h3>
+<ul>
+<li><code>document.anchors</code></li>
+<li><code>document.body</code></li>
+<li><code>document.documentElement</code></li>
+<li><code>document.embeds</code></li>
+<li><code>document.forms</code></li>
+<li><code>document.head</code></li>
+<li><code>document.images</code></li>
+<li><code>document.links</code></li>
+<li><code>document.scripts</code></li>
+<li><code>document.title</code></li>
+</ul>
+<p>比如说，要查找一个 HTML 当中的表单，可以不用 <code>getElementByxxx</code>，直接 <code>document.forms["myForm"]["fname"]</code>，就可以定位到指定表单当中的指定输入框：</p>
+<p><img alt="" src="https://s2.loli.net/2023/06/19/JjC7kMvLE8cUTpu.png"/></p>
+<h2 id="dom">DOM 事件</h2>
+<ul>
+<li>click 事件</li>
+<li>页面 loaded 事件（用于判断 cookie 是否存在等）</li>
+<li>图片 loaded 事件</li>
+<li>鼠标移动事件</li>
+<li>输入框变化事件</li>
+<li>表单提交事件</li>
+<li>键盘按键事件</li>
+</ul>
+<h3 id="onload-onunload"><code>onload</code> 与 <code>onunload</code></h3>
+<p>一个是进入这个页面，一个是离开这个页面。</p>
+<h3 id="event-listener">事件监听器 event listener</h3>
+<p><code>addEventListener(event, func, useCapture=false)</code></p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'xxx'</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span><span class="w"> </span><span class="nx">fun</span><span class="p">);</span><span class="w">  </span><span class="c1">// 相当于 onclick="fun"</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kd">function</span><span class="w"> </span><span class="nx">fun</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* blabla */</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h4 id="bubbling-capture">bubbling 还是 capture？</h4>
+<p>第三个参数表示是用冒泡的方式还是捕获的方式。bubbling 是在元素本身触发，然后向上传播到根元素；capture 是在根元素触发，向下传播到实际触发这个事件元素。</p>
+<p>默认的方式是 bubbling，优点在于可以使用一个单一的事件处理句柄，处理多个元素相同的事件（可以共用），而 capture 方式可以在事件到达目标元素之前，取消一个事件的传播，也就是说可以更好地控制元素要不要响应这个事件。</p>
+<p>举个例子。</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">"outer"</span><span class="p">&gt;</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>   <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">"inner"</span><span class="p">&gt;</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">outer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'#outer'</span><span class="p">);</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">inner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">'#inner'</span><span class="p">);</span>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">  </span><span class="nx">outer</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Outer clicked'</span><span class="p">);</span>
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">  </span><span class="p">});</span>
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">  </span><span class="nx">inner</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Inner clicked'</span><span class="p">);</span>
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">  </span><span class="p">});</span>
+</span><span id="__span-1-14"><a href="#__codelineno-1-14" id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>这时候如果在 inner 元素点了一下，就会先后触发 inner 和 outer 的事件处理函数，即输出：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>Inner clicked
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>Outer clicked
+</span></code></pre></div>
+<p>如果是指定了 capture 的方式：</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nx">outer</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Outer clicked'</span><span class="p">);</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="p">},</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nx">inner</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Inner clicked'</span><span class="p">);</span>
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="p">},</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+</span></code></pre></div>
+<p>那么点 inner 的时候，就会先触发父节点的事件，再触发自己的，即输出：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>Outer clicked
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>Inner clicked
+</span></code></pre></div>
+<h4 id="_3">添加多个事件处理</h4>
+<p>一个元素可以添加多个同类型的事件处理句柄</p>
+<p><img alt="" src="https://s2.loli.net/2023/06/19/fWCbgaG5e2xUo8m.png"/></p>
+<p>也可以添加多个不同类型的</p>
+<p><img alt="" src="https://s2.loli.net/2023/06/19/Oi6uahmXYrwEBR1.png"/></p>
+<h4 id="_4">移除</h4>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1">// 移除 mousemove 事件对应的 myfunc 处理句柄，不移除 mousemove 的其他的处理句柄</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'xxx'</span><span class="p">).</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s2">"mousemove"</span><span class="p">,</span><span class="w"> </span><span class="nx">myfunc</span><span class="p">);</span>
+</span></code></pre></div>
+<h2 id="dom-navigation">DOM Navigation</h2>
+<p><img alt="" src="https://s2.loli.net/2023/06/19/si9bH1T4nfVOdc3.png"/></p>
+<p>这棵树当中的所有元素都可以看作一个节点，节点分为 text node 和 attr node，甚至也还有 comment node</p>
+<p>剩下的内容没讲。</p>
+</article>>

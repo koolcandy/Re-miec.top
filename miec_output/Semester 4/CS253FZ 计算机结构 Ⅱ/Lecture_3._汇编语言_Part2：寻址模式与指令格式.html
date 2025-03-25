@@ -1,0 +1,518 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-3-part2">Lecture 3. 汇编语言 Part2：寻址模式与指令格式</h1>
+<h2 id="_1">寻址模式</h2>
+<p>许多汇编指令都需要 <em>运算数（operand）</em>。这个运算数可能以字面量的形式体现在代码中，也在一个寄存器当中，也可能是在由地址字面量指定的位置，或者是表示指针的寄存器指向的位置。CPU 去寻找这个数据的方式叫做 <em>寻址模式（addressing mode）</em>。</p>
+<p>寻址模式有七种，前四种最为重要。</p>
+<h3 id="immediate-addressing">※立即寻址，Immediate addressing</h3>
+<p>运算数以 <strong>字面量</strong> 形式写在指令里面，如 <code>mov ax, 10</code>，这里的运算数也称作 <em>立即数</em>。</p>
+<h3 id="register-addressing">※寄存器寻址，Register Addressing</h3>
+<p>指运算数保存在某个通用寄存器当中，如 <code>mov ax, bx</code>。</p>
+<p>寄存器的访问是在 CPU 内部的，非常非常快，不需要寻址。</p>
+<h3 id="direct-addressing">※直接寻址，Direct Addressing</h3>
+<p>比如 <code>mov ax, Count</code>，就把 data 段当中的变量 <code>Count</code> 作为操作数。</p>
+<p>实际上，变量 <code>Count</code> 在汇编器的眼里，只不过是对应数据所在的地址罢了。所以相当于把 <code>Count</code> 所在地址的值赋给 <code>ax</code></p>
+<p>如果要指定其他的段，可以写作 <code>mov ax, ES:Count</code>，即表示在额外段上的内容。</p>
+<h3 id="register-indirect-addressing">※寄存器间接寻址，Register Indirect Addressing</h3>
+<p>相对于直接寻址（把偏移地址直接以字面量的形式写在指令当中），寄存器间接寻址是 <strong>把偏移地址存在寄存器（通常是索引寄存器 BX，BP，SI 或 DI）当中</strong>。如果是 BP，那对应的段就是栈段，否则就是数据段。</p>
+<p>这种寻址方式的写法，跟高级语言当中的数组比较类似：</p>
+<ul>
+<li><code>mov ax, [bx]</code> 表示 <code>ax = array[bx]</code></li>
+<li><code>mov [bx], ax</code> 表示 <code>array[bx] = ax</code></li>
+</ul>
+<h3 id="register-indirect-with-displacement">寄存器相对寻址，Register Indirect with Displacement</h3>
+<p>课件当中没有提到</p>
+<h3 id="register-indirect-with-base-and-register">基址加变址寻址，Register Indirect with base and register</h3>
+<p>类似于寄存器间接寻址，地址是基址寄存器（BX、BP）与变址寄存器（SI、DI）的直接求和。</p>
+<p>如 <code>mov ax, [bx][SI]</code>，相当于高级语言当中的 <code>ax = array[bx + SI]</code></p>
+<h3 id="register-indirect-with-base-and-index-and-constant">相对基址加变址寻址，Register Indirect with base and index and constant</h3>
+<p>相对于上面使用两个寄存器的基址加变址寻址，这种寻址不仅使用两个寄存器，还使用一个常量（字面量）。</p>
+<p>如 <code>mov ax, Count[bx][SI]</code> 相当于高级语言的 <code>ax = array[Count + bx + SI]</code></p>
+<h2 id="_2">指令格式</h2>
+<p>8086 上的指令，至少有两个字节（16 位）。最高的六位表示 opcode，接下来十位表示 D，W，MOD，REG，R/M 信息。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/31/voQNlSZybi2Fw61.png"/></p>
+<ul>
+<li>OPCODE，表示哪一条指令</li>
+<li>D，表示方向（direction），是 from 寄存器（D=0），还是 to 寄存器（D=1）</li>
+<li>W，表示操作的是字（D=0）还是字节（D=1），一个 <em>字（word）</em> 是两个字节</li>
+<li>Reg，三位数据，表示哪一个寄存器</li>
+<li>MOD，是 mode 缩写，表示寻址模式</li>
+<li>R/M，也与寻址模式相关，是寄存器还是内存</li>
+</ul>
+<h3 id="_3">寄存器编号</h3>
+<p><img alt="" src="https://s2.loli.net/2023/04/06/oshgKL6aU9YIAEW.png"/></p>
+<h3 id="_4">寻址模式</h3>
+<p>由 MOD 和 R/M 配合指定。其中 MOD 指定寻址模式或 offset 信息，R/M 表示寄存器。</p>
+<p>MOD 取值：</p>
+<ul>
+<li>00：立即寻址 或 寄存器间接寻址 或 基址加变址寻址</li>
+<li>01：相对基址加变址寻址，八位</li>
+<li>10：相对基址加变址寻址，十六位</li>
+<li>11：寄存器寻址模式</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/04/06/KaHRozW7981wbqd.png"/></p>
+<h3 id="_5">示例</h3>
+<p><code>mov SP, BX</code> 的二进制指令是：</p>
+<table>
+<thead>
+<tr>
+<th align="center">opcode</th>
+<th align="center">D</th>
+<th align="center">W</th>
+<th align="center">Mod</th>
+<th align="center">Reg</th>
+<th align="center">R/M</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">100010</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">11</td>
+<td align="center">100</td>
+<td align="center">011</td>
+</tr>
+<tr>
+<td align="center"><code>mov</code></td>
+<td align="center">to 寄存器</td>
+<td align="center">字</td>
+<td align="center">寄存器寻址模式</td>
+<td align="center">到 SP 寄存器</td>
+<td align="center">从 BX 寄存器</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ascii">ASCII 码表</h2>
+<h3 id="031">控制字符（0~31）</h3>
+<p>不可打印，用于控制打印机等外围设备</p>
+<table>
+<thead>
+<tr>
+<th>DEC</th>
+<th>HEX</th>
+<th>Symbol</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>NUL</td>
+<td>Null character</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>SOH</td>
+<td>Start of Heading</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>STX</td>
+<td>Start of Text</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>ETX</td>
+<td>End of Text</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>EOT</td>
+<td>End of Transmission</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5</td>
+<td>ENQ</td>
+<td>Enquiry</td>
+</tr>
+<tr>
+<td>6</td>
+<td>6</td>
+<td>ACK</td>
+<td>Acknowledge</td>
+</tr>
+<tr>
+<td>7</td>
+<td>7</td>
+<td>BEL</td>
+<td>Bell, Alert</td>
+</tr>
+<tr>
+<td>8</td>
+<td>8</td>
+<td>BS</td>
+<td>Backspace</td>
+</tr>
+<tr>
+<td><strong>9</strong></td>
+<td><strong>9</strong></td>
+<td><strong>HT</strong></td>
+<td><strong>水平制表，Horizontal Tab</strong></td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td><strong>0A</strong></td>
+<td><strong>LF</strong></td>
+<td><strong>换行，Line Feed</strong></td>
+</tr>
+<tr>
+<td>11</td>
+<td>0B</td>
+<td>VT</td>
+<td>Vertical Tabulation</td>
+</tr>
+<tr>
+<td>12</td>
+<td>0C</td>
+<td>FF</td>
+<td>Form Feed</td>
+</tr>
+<tr>
+<td><strong>13</strong></td>
+<td><strong>0D</strong></td>
+<td><strong>CR</strong></td>
+<td><strong>回车，Carriage Return</strong></td>
+</tr>
+<tr>
+<td>14</td>
+<td>0E</td>
+<td>SO</td>
+<td>Shift Out</td>
+</tr>
+<tr>
+<td>15</td>
+<td>0F</td>
+<td>SI</td>
+<td>Shift In</td>
+</tr>
+<tr>
+<td>16</td>
+<td>10</td>
+<td>DLE</td>
+<td>Data Link Escape</td>
+</tr>
+<tr>
+<td>17</td>
+<td>11</td>
+<td>DC1</td>
+<td>Device Control One (XON)</td>
+</tr>
+<tr>
+<td>18</td>
+<td>12</td>
+<td>DC2</td>
+<td>Device Control Two</td>
+</tr>
+<tr>
+<td>19</td>
+<td>13</td>
+<td>DC3</td>
+<td>Device Control Three (XOFF)</td>
+</tr>
+<tr>
+<td>20</td>
+<td>14</td>
+<td>DC4</td>
+<td>Device Control Four</td>
+</tr>
+<tr>
+<td>21</td>
+<td>15</td>
+<td>NAK</td>
+<td>Negative Acknowledge</td>
+</tr>
+<tr>
+<td>22</td>
+<td>16</td>
+<td>SYN</td>
+<td>Synchronous Idle</td>
+</tr>
+<tr>
+<td>23</td>
+<td>17</td>
+<td>ETB</td>
+<td>End of Transmission Block</td>
+</tr>
+<tr>
+<td>24</td>
+<td>18</td>
+<td>CAN</td>
+<td>Cancel</td>
+</tr>
+<tr>
+<td>25</td>
+<td>19</td>
+<td>EM</td>
+<td>End of medium</td>
+</tr>
+<tr>
+<td>26</td>
+<td>1A</td>
+<td>SUB</td>
+<td>Substitute</td>
+</tr>
+<tr>
+<td><strong>27</strong></td>
+<td><strong>1B</strong></td>
+<td><strong>ESC</strong></td>
+<td><strong>退出，ESC，Escape</strong></td>
+</tr>
+<tr>
+<td>28</td>
+<td>1C</td>
+<td>FS</td>
+<td>File Separator</td>
+</tr>
+<tr>
+<td>29</td>
+<td>1D</td>
+<td>GS</td>
+<td>Group Separator</td>
+</tr>
+<tr>
+<td>30</td>
+<td>1E</td>
+<td>RS</td>
+<td>Record Separator</td>
+</tr>
+<tr>
+<td>31</td>
+<td>1F</td>
+<td>US</td>
+<td>Unit Separator</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32127">通用可打印字符（32~127）</h3>
+<p>对于各种 ASCII 码表的变体，32~127 这个范围内的可打印字符都是通用的。表中省略了阿拉伯数字和大小写字母。</p>
+<table>
+<thead>
+<tr>
+<th>DEC</th>
+<th>HEX</th>
+<th>Symbol</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32</td>
+<td>20</td>
+<td>SP</td>
+<td>空格，Space</td>
+</tr>
+<tr>
+<td>33</td>
+<td>21</td>
+<td>!</td>
+<td>感叹号，Exclamation mark</td>
+</tr>
+<tr>
+<td>34</td>
+<td>22</td>
+<td>"</td>
+<td>双引号，Double quotes (or speech marks)</td>
+</tr>
+<tr>
+<td>35</td>
+<td>23</td>
+<td>#</td>
+<td>井号，Number sign</td>
+</tr>
+<tr>
+<td>36</td>
+<td>24</td>
+<td>$</td>
+<td>美元符号，Dollar</td>
+</tr>
+<tr>
+<td>37</td>
+<td>25</td>
+<td>%</td>
+<td>百分号，Per cent sign</td>
+</tr>
+<tr>
+<td>38</td>
+<td>26</td>
+<td>&amp;</td>
+<td>与符号，Ampersand</td>
+</tr>
+<tr>
+<td>39</td>
+<td>27</td>
+<td>'</td>
+<td>单引号，Single quote</td>
+</tr>
+<tr>
+<td>40</td>
+<td>28</td>
+<td>(</td>
+<td>左括号，Open parenthesis (or open bracket)</td>
+</tr>
+<tr>
+<td>41</td>
+<td>29</td>
+<td>)</td>
+<td>右括号，Close parenthesis (or close bracket)</td>
+</tr>
+<tr>
+<td>42</td>
+<td>2A</td>
+<td>*</td>
+<td>星号，Asterisk</td>
+</tr>
+<tr>
+<td>43</td>
+<td>2B</td>
+<td>+</td>
+<td>加号，Plus</td>
+</tr>
+<tr>
+<td>44</td>
+<td>2C</td>
+<td>,</td>
+<td>逗号，Comma</td>
+</tr>
+<tr>
+<td>45</td>
+<td>2D</td>
+<td>-</td>
+<td>横线（减号），Hyphen-minus</td>
+</tr>
+<tr>
+<td>46</td>
+<td>2E</td>
+<td>.</td>
+<td>点，Period, dot or full stop</td>
+</tr>
+<tr>
+<td>47</td>
+<td>2F</td>
+<td>/</td>
+<td>斜杠，Slash or divide</td>
+</tr>
+<tr>
+<td>58</td>
+<td>3A</td>
+<td>:</td>
+<td>冒号，Colon</td>
+</tr>
+<tr>
+<td>59</td>
+<td>3B</td>
+<td>;</td>
+<td>分号，Semicolon</td>
+</tr>
+<tr>
+<td>60</td>
+<td>3C</td>
+<td>&lt;</td>
+<td>小于，Less than (or open angled bracket)</td>
+</tr>
+<tr>
+<td>61</td>
+<td>3D</td>
+<td>=</td>
+<td>等于，Equals</td>
+</tr>
+<tr>
+<td>62</td>
+<td>3E</td>
+<td>&gt;</td>
+<td>大于，Greater than (or close angled bracket)</td>
+</tr>
+<tr>
+<td>63</td>
+<td>3F</td>
+<td>?</td>
+<td>问号，Question mark</td>
+</tr>
+<tr>
+<td>64</td>
+<td>40</td>
+<td>@</td>
+<td>at 符号，At sign</td>
+</tr>
+<tr>
+<td>91</td>
+<td>5B</td>
+<td>[</td>
+<td>左方括号，Opening bracket</td>
+</tr>
+<tr>
+<td>92</td>
+<td>5C</td>
+<td>\</td>
+<td>反斜杠，Backslash</td>
+</tr>
+<tr>
+<td>93</td>
+<td>5D</td>
+<td>]</td>
+<td>右方括号，Closing bracket</td>
+</tr>
+<tr>
+<td>94</td>
+<td>5E</td>
+<td>^</td>
+<td>幂号，Caret - circumflex</td>
+</tr>
+<tr>
+<td>95</td>
+<td>5F</td>
+<td>_</td>
+<td>下划线，Underscore</td>
+</tr>
+<tr>
+<td>96</td>
+<td>60</td>
+<td>`</td>
+<td>重音号，Grave accent</td>
+</tr>
+<tr>
+<td>123</td>
+<td>7B</td>
+<td>{</td>
+<td>左花括号，Opening brace</td>
+</tr>
+<tr>
+<td>124</td>
+<td>7C</td>
+<td>|</td>
+<td>竖线，Vertical bar</td>
+</tr>
+<tr>
+<td>125</td>
+<td>7D</td>
+<td>}</td>
+<td>右花括号，Closing brace</td>
+</tr>
+<tr>
+<td>126</td>
+<td>7E</td>
+<td>~</td>
+<td>波浪线，Equivalency sign - tilde</td>
+</tr>
+<tr>
+<td>127</td>
+<td>7F</td>
+<td>DEL</td>
+<td>删除，Delete</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">重要字符</h3>
+<ul>
+<li><em>回车（Carriage Return，CR）</em>，是 13，编程语言用 <code>\r</code> 表示，表示回到行首</li>
+<li><em>换行（Line Feed，LF）</em>，是 10，编程语言用 <code>\n</code> 表示</li>
+<li><em>退出（Escape，ESC）</em>，是 27，被用于许多输出设备，标志着开始一个转义字符序列。几十年前 ESC 键用来做这个事情，但是现在基本没有了。</li>
+</ul>
+<h2 id="_7">汇编指示符</h2>
+<p><img alt="" src="https://s2.loli.net/2023/04/06/YwF2ESAOg5ZjaqM.png"/></p>
+</article>>

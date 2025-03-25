@@ -1,0 +1,55 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="slide-4">slide 4：命题逻辑：有效的推理</h1>
+<h2 id="_1">著名的有效推理</h2>
+<h2 id="modus-ponens">肯定前件 Modus ponens</h2>
+<p>$(P \rightarrow Q), P \models Q$<br/>
+如果 $P$，则 $Q$；且 $P$ 为真，故 $Q$ 为真。</p>
+<h2 id="modus-tollens">否定后件 Modus tollens</h2>
+<p>$(P \rightarrow Q), \neg Q \vDash \neg P$<br/>
+如果 $P$，则 $Q$。非 $Q$。所以，非 $P$。</p>
+<h2 id="_2">常见的逻辑运算定律</h2>
+<table>
+<thead>
+<tr>
+<th align="left">运算律</th>
+<th align="center">示例 1</th>
+<th align="center">示例 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">交换律</td>
+<td align="center">$p \wedge q = q \wedge p$</td>
+<td align="center">$p \vee q = q \vee p$</td>
+</tr>
+<tr>
+<td align="left">结合律</td>
+<td align="center">$(p \wedge q) \wedge r = p \wedge (q \wedge r)$</td>
+<td align="center">$(p \vee q) \vee r = p \vee(q \vee r)$</td>
+</tr>
+<tr>
+<td align="left"><strong>分配律</strong></td>
+<td align="center">$p \wedge(q \vee r) = (p \wedge q) \vee(p \wedge r)$</td>
+<td align="center">$p \vee(q \wedge r) = (p \vee q) \wedge(p \vee r)$</td>
+</tr>
+<tr>
+<td align="left">德摩根</td>
+<td align="center">$\neg(p \wedge q) = (\neg p) \vee(\neg q)$</td>
+<td align="center">$\neg(p \vee q) = (\neg p) \wedge(\neg q)$</td>
+</tr>
+<tr>
+<td align="left"><strong>吸收律</strong></td>
+<td align="center">$p \vee(p \wedge q) = p$</td>
+<td align="center">$p \wedge(p \vee q) = p$</td>
+</tr>
+<tr>
+<td align="left">条件句</td>
+<td align="center">$(p \rightarrow q) = (\neg p \vee q)$</td>
+<td align="center">$\neg(p \rightarrow q) = (p \wedge \neg q)$</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">逻辑等价</h2>
+<p>当 $\phi \models \psi$ 且 $\psi \models \phi$，则 $\phi$ 与 $\psi$ 等价。</p>
+<p>当 $\phi$ 与 $\psi$ 等价，则它们俩的真值表的每一行都一模一样。即对于任何估值函数 $V$，有 $V(\phi)=V(\psi)$。</p>
+</article>>

@@ -1,0 +1,69 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="chapter-3-part-3">Chapter 3 Part 3: 算术运算</h1>
+<p>（共 49 页）</p>
+<h2 id="_1">二进制整数乘法（无符号）</h2>
+<p>$A \times B$，先不考虑交换律，把 $A$ 称作 <em>multiplicand（被乘数）</em>，把 $B$ 称作 <em>multiplier（乘数）</em>。对于乘数的每一位（$i \in [0, w-1]$）分别考虑：</p>
+<ul>
+<li>若第 $i$ 位是 $1$，答案就加上 $A$ 左移 $i$ 位</li>
+<li>若第 $i$ 位是 $0$，答案不变</li>
+</ul>
+<p><img alt="image-20221201221345751" src="https://s2.loli.net/2022/12/06/Tz92lwpm1sPOvgc.png"/></p>
+<p>相当于列竖式计算。</p>
+<p>事实上，把答案右移保留尾位、再把 $A$ 加给答案的最高位，得到结果也是一样的，但是比较麻烦。</p>
+<h2 id="_2">硬件二进制整数乘法（无符号）</h2>
+<p><img alt="image-20221201222941564" src="https://s2.loli.net/2022/12/06/ztcGPQBwYOyDlWk.png"/></p>
+<p>实现 $4$ 位二进制乘法的硬件组合如图所示。将累加器 $Acc$ 和寄存器 $R_1$ 串联起来，得到了一个八位右移寄存器。由于两个 $4$ 位二进制数相乘，得到的结果最大就是 $8$ 位二进制，所以这个八位右移寄存器可以用于存储答案。此外，存在一个加法器 $Adder$，以 $Acc$ 和 $R_2$ 作为输入，再把输出（加法结果）传送给 $Acc$。</p>
+<p>运算过程是：</p>
+<ol>
+<li>$Acc$ 初值赋零。$R_2$ 赋初值为被乘数，$R_1$ 赋为乘数。</li>
+<li>如果 $R_1$ 的最低位是 $1$，就把 $R_2$ 和 $Acc$ 做一次加法，结果存储给 $Acc$。</li>
+<li>八位寄存器 $[Acc, R_1]$ 整体右移。</li>
+<li>第二、三步，重复 $4$ 次。</li>
+<li>最终，八位寄存器整体的值就是答案。用（伪）程序语言来描述就是：</li>
+</ol>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="nf">mul</span><span class="p">(</span><span class="n">uint4_t</span><span class="w"> </span><span class="n">R_1</span><span class="p">,</span><span class="w"> </span><span class="n">uint4_t</span><span class="w"> </span><span class="n">R_2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="c1">// R_2 * R_1</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="n">uint4_t</span><span class="w"> </span><span class="n">Acc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">R_1</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">Acc</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">R_2</span><span class="p">;</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="n">R_1</span><span class="w"> </span><span class="o">&gt;&gt;=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="n">R_1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">Acc</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="n">Acc</span><span class="w"> </span><span class="o">&gt;&gt;=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">Acc</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">R_1</span><span class="p">;</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>下图逐步描述了 $1011 + 0101$ 的硬件级运算过程。</p>
+<p><img alt="image-20221201223957773" src="https://s2.loli.net/2022/12/06/OroKW3psY5jG7xa.png"/></p>
+<h3 id="_3">有符号怎么办？</h3>
+<p>课件上没有说直接当成补码运算是否可行。但是说，可以把符号去掉，运算完之后再加上符号。</p>
+<h2 id="_4">二进制整数除法（无符号）</h2>
+<p>依然是列竖式。但是除法的竖式计算比较麻烦。</p>
+<p>暂时用 $\div$ 表示整数除法。设 $A \div B = C \dots D$，称：$A$ 是 <em>dividend（被除数）</em>，$B$ 是 <em>divisor（除数）</em>，$C$ 是 <em>quotient（商）</em>，$D$ 是 <em>reminder（余数）</em>。</p>
+<h2 id="_5">硬件二进制整数除法（无符号）</h2>
+<p>结构类似于硬件二进制整数乘法。</p>
+<p>注意，对于 $w$ 位二进制无符号整数除法，需要使用三个 $w+1$ 位的寄存器，这一点与只需要 $w$ 位寄存器的乘法有区别。因为需要用额外的一个 bit 来表示执行减法后是否会导致结果小于零（我们还没学如何比较两个二进制数的大小。如果 $A-B&lt;0$ 就表示 $A&lt;B$，而有符号加减法可以直接用补码实现。如果相减得到结果小于零，就撤销这次减法操作，往后一位重新尝试减法）。这里的硬件与乘法还有一点不同，<strong>乘法是 $[Acc, R_1]$ 整体右移，除法是 $[Acc, R_1]$ 整体左移</strong>。</p>
+<p><img alt="image-20221201232706083" src="https://s2.loli.net/2022/12/06/eF4SKQjaYWGzicT.png"/></p>
+<p>当被除数 $\geq$ 除数，则执行运算过程：</p>
+<ol>
+<li>$Acc$ 赋初值为被除数 dividend。$R_2$ 赋值为除数，$R_1$ 赋值为零。</li>
+<li>把 $R_2$ 的最高位与 $Acc$ 对齐（仅需第一次减法前进行一次对齐）</li>
+<li>从 $Acc$ 中减去 $R_2$</li>
+<li>若 $Acc &lt; 0$</li>
+<li>把 $R_2$ 加回去 $Acc$（撤销减法）</li>
+<li>把 $[Acc, R_1]$ 整体左移，右侧补零</li>
+<li>若 $Acc \geq 0$</li>
+<li>把 $[Acc, R_1]$ 整体左移，右侧补一</li>
+<li>重复数次上述过程（3，4，5）。~~重复几次，没看懂~~</li>
+<li>最终 $Acc$ 中存储的是余数（~~可能还需右移几次，没看懂~~），而答案（商）存储在 $R_1$ 中。</li>
+</ol>
+<p><img alt="" src="https://s2.loli.net/2022/12/06/TKbLyoONqWrhklZ.png"/></p>
+<h2 id="_6">浮点数</h2>
+<p>25 页开始</p>
+<h3 id="ieee-754">IEEE 754</h3>
+<p>对于 32 位浮点数（正），表示的范围是：$2^{-149} \sim (1-2^{-23}) \times 2^{126}$。咋算出来的不是很懂。数学真奇妙。</p>
+<p><img alt="" src="https://s2.loli.net/2023/01/07/dxG3H8DZMVT4ErX.png"/></p>
+<h3 id="_7">浮点数加减法</h3>
+<h3 id="_8">浮点数乘除法</h3>
+<h3 id="_9">硬件浮点数性能</h3>
+</article>>

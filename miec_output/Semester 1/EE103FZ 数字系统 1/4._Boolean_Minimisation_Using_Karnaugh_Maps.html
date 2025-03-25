@@ -1,0 +1,58 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="4-boolean-minimisation-using-karnaugh-maps">4. Boolean Minimisation Using Karnaugh Maps</h1>
+<h2 id="_1">最小项与最大项</h2>
+<ul>
+<li>最小项：对于 n 个变量的逻辑函数而言，它的<strong>与项</strong>如果包含全部 n 个变量，即每个变量以原变量或反变量的形式出现一次且只出现一次，那么这个与项就称为该逻辑函数的<strong>最小项</strong>。</li>
+<li>最大项：对于 n 个变量的逻辑函数而言，它的<strong>或项</strong>如果包含全部 n 个变量，即每个变量以原变量或反变量的形式出现一次且只出现一次，那么这个或项就称为该逻辑函数的<strong>最大项</strong>。</li>
+</ul>
+<p>二者之间关系：<strong>最小项取反等于最大项，反过来也成立</strong>，即 $f(a, b, c) = \sum(0, 1, 2, 5, 7) = \Pi(3, 4, 6)$（可用德摩根定律推导）</p>
+<h2 id="_2">卡诺图</h2>
+<p>卡诺图一共有 $2^n$ 个小格，每个小格子都存储一个最小项，小格之间按照<strong>格雷码</strong>排列，即保证了最小项之间<strong>逻辑相邻</strong>以及<strong>几何相邻</strong>。<br/>
+其中，几何相邻包括三种：内相邻（紧挨着）、外相邻（一行或一列的两头）、中心对称</p>
+<p>下图可以直观体现出卡诺图的几何相邻：<br/>
+<img alt="image-20230329212321434" src="https://s2.loli.net/2023/03/29/fyk5MS4hBKFoUwA.png"/></p>
+<p>卡诺图画相邻圈时，应使每个圈包含 $2^n$ 个格子，且圈圈要尽量大。</p>
+<p>下表是可选的卡诺图每个小格的排列样式。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">C'D'</th>
+<th align="center">C'D</th>
+<th align="center">CD</th>
+<th align="center">CD'</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">A'B'</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">A'B</td>
+<td align="center">4</td>
+<td align="center">5</td>
+<td align="center">7</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">AB</td>
+<td align="center">12</td>
+<td align="center">13</td>
+<td align="center">15</td>
+<td align="center">14</td>
+</tr>
+<tr>
+<td align="center">AB'</td>
+<td align="center">8</td>
+<td align="center">9</td>
+<td align="center">11</td>
+<td align="center">10</td>
+</tr>
+</tbody>
+</table>
+<p>五变量卡诺图较为麻烦，可使用重叠画法。</p>
+</article>>

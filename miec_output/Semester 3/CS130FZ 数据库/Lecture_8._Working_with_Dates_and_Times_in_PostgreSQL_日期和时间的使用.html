@@ -1,0 +1,21 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-8-working-with-dates-and-times-in-postgresql">Lecture 8. Working with Dates and Times in PostgreSQL 日期和时间的使用</h1>
+<h2 id="date-time">日期和时间类型 <code>DATE</code> &amp; <code>TIME</code></h2>
+<p>像「YYYY-MM-DD」这种主流的表示时间的格式，来自于 ISO 8601 标准。</p>
+<ul>
+<li><code>timestamp</code>，格式是 YYYY-MM-DD HH:MM:SS</li>
+<li><code>date</code>，格式 YYYY-MM-DD</li>
+<li><code>time</code>， HH:MM:SS</li>
+</ul>
+<p>插入和选择日期（date）类型数据的时候，可以直接用字符串字面量去表示，PostgreSQL 会自动按照 ISO8601 标准解析为对应日期。</p>
+<p>同时，日期类型也可以比较大小。比如选取一段日子之间的天，可以：<code>where day &gt;= 'xxx' and day &lt;= 'yyy'</code>；将询问结果按照日期从新到旧排序，可以写 <code>order by day desc/asc</code></p>
+<h2 id="timestamp">时间戳类型 <code>TIMESTAMP</code></h2>
+<p>时间戳类型相当于日期和时间类型的结合，格式通常是：YYYY-MM-DD HH:MM:SS，甚至可以选择在后面加上 ±XX 表示时区。例如：<code>'2022-10-13 14:58:00+8'</code> 就是撰写这个笔记的时间戳。</p>
+<p>时间戳类型甚至可以跟日期类型直接进行比较。比如，<code>2020-12-31 12:34:56 &gt; 2020-12-30</code> 这个表达式是真的。</p>
+<h2 id="_1">实用函数</h2>
+<ul>
+<li><code>now()</code>，返回现在的时间戳，包含时区信息</li>
+<li><code>date_part(text, timestamp)</code>，用于从时间戳当中提取特定信息，如 <code>date_part('hour', timestamp'2022-10-13 14:58:00')</code> 返回这个时间戳的小时信息，即 14</li>
+<li><code>extract(field from timestamp)</code>，也是用于从时间戳中提取特定信息，如 <code>extract(dow from '2022-10-13')</code> 的值是 4，因为这一天是星期四，是这个星期的第四天。星期天是一个星期的第零天，值是 0；星期一到星期六就是 1~6。DOW 是 date of week 的意思，类似地也有 DOY，表示一年当中的第几天。</li>
+</ul>
+</article>>

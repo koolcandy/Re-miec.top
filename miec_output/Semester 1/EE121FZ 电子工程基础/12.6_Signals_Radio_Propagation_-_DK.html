@@ -1,0 +1,55 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="126-signals-radio-propagation-dk">12.6 Signals Radio Propagation - DK</h1>
+<h2 id="frequency-domain">频域（frequency domain）</h2>
+<p>频域（frequency domain）是指在对函数或信号进行分析时，<strong>分析其和频率有关部分</strong>，而不是和时间有关的部分，和时域一词相对。</p>
+<p>信号在时域下的图形可以显示信号如何随着时间变化，而信号在频域下的图形（一般称为频谱）可以显示信号分布在哪些频率及其比例。</p>
+<p>任何信号都可以用频域或者时域表示，只不过是表现的信号特征不同</p>
+<h2 id="_1">用正弦波构造方波</h2>
+<p>任何波都可以用正弦波来构造，如方波可近似写作</p>
+<p>sinx + sin3x/3 + sin5x/5 + ... </p>
+<h2 id="_2">一些关于信号的概念</h2>
+<ul>
+<li>aperiodic signals，非周期信号</li>
+<li>deterministic signals，确定性信号，在任何时间点的值都没有不确定性</li>
+<li>random signals，完全随机信号，whole uncertainity </li>
+<li>stochastic signal，随机信号，指并不是完全确定的信号，with some kind of uncertainity，可以在概率的基础上根据初始值预测未来值</li>
+</ul>
+<h2 id="antenna">天线 antenna</h2>
+<p>天线是一种能辐射电磁能到空气中，或者从空气中收集电磁能的导体或导体系统。</p>
+<h2 id="_3">电离层</h2>
+<p>电离层是充满了带电粒子的地球上层大气。粒子由太阳风捕获，或由宇宙辐射产生。</p>
+<p>大部分无线电波无法轻易穿过地球大气层。但是少部分频率的无线电波可以。</p>
+<p>电离层能反射电波，也能吸收电波。对频率很高的电波吸收的很少。</p>
+<h2 id="_4">无线电波的传播</h2>
+<p>无线电波主要有三种方式传播。天波、地波、视距传播。</p>
+<h3 id="ground-wave">地波（ground wave）</h3>
+<p>平行于地面传播，传播效果取决于地面的导电性。一般传播 3MHz 以下的波，距离一般只有数十千米。</p>
+<h3 id="sky-wave">天波（sky wave）</h3>
+<p>在电离层和地面当中不断反射传播（类似于镜子），频率一般在 3MHz ~ 30MHz，距离能达到上万千米。</p>
+<p>而由于电离层不断变化，天波传播并不稳定，通常白天电离强，效果不好；夜晚电离层对短波吸收少，传播质量更好。</p>
+<h3 id="line-of-sightlos">视距传播（空间波传播）（line-of-sight，LOS）</h3>
+<p>指发射端和接收端的天线相互能「看见」，在这中间直线传播，一般传输 30MHz 以上的波。</p>
+<p>当地面上的发射接收塔高度为 h，传播距离约等于 4000*sqrt(h)（米）（受地球曲率影响）</p>
+<h2 id="underwater-radio-channel">Underwater Radio Channel</h2>
+<p>电磁信号在水下（尤其是盐水）传播很差</p>
+<p>d = 250 / sqrt(freq)</p>
+<p>如 10kHZ 的信号，在水下集肤深度约为 2.5m，而 100Hz 的信号，趋肤深度高达 250m</p>
+<p>趋肤深度是指信号衰减 1/e 的距离</p>
+<h2 id="dbdbm">分贝与分贝毫瓦（dB、dBm）</h2>
+<p>分贝的计算公式是 $\Large 10\lg{\frac{P_1}{P_2}}$</p>
+<p>例如比值为 2，那么就是 3dB</p>
+<p>由于分贝是对数计算的，所以每增加 3 分贝，信号功率乘以 2（lg2 = 0.3010）</p>
+<p>而分贝毫瓦一般用来表示绝对功率，分贝毫瓦的计算公式是 $\Large 10\lg{\frac{P_\text{W}}{1\text{mW}} = 10\lg(1000P_{\text{W}} \text{W})}$</p>
+<p>例如 1 瓦特用分贝毫瓦表示，就是 30dBm</p>
+<p>相反，把 dBm 转化为 W 的计算公式是：$\huge P_{\text{W}} = \frac{10^{\frac{P_{\text{dBm}}}{10}}}{1000}$</p>
+<p>例如 30dBm 就是 1 W，0dBm 等于 1 mW，1dBm 约为 1.259 mW。</p>
+<p>思考：If I have two signals, each of strength 5 dBm, if I add them together, what is the output signal power level (in dBm)?</p>
+<p>在电信中，若分贝值为负，表示信号 loss；若分贝值正，表示 gain</p>
+<p>使用分贝可以非常方便的计算信号的乘法级别变化。比如信号乘以 2，只需要给分贝值加上 3；信号乘以 10，分贝值加上 10</p>
+<h2 id="_5">自由空间路径损耗公式</h2>
+<p>由弗里斯传输方程（Friis transmission equation）可以推出自由空间路径损耗公式（free space path loss formula），指出路径上损耗的信号</p>
+<p>$\Large \text{Path Loss} = 20\lg\frac{4\pi D}{\lambda} = 20\lg\frac{4\pi Df}{c}$，其中 D 是指发射和接收端之间的距离（米），λ 是指信号的波长（米），c 是指光速（m/s），f 是指频率（Hz），计算结果是分贝</p>
+<p>由此可知，波长越短（频率越高）损耗越大。</p>
+<p>类似的，信号穿墙也会有损耗。</p>
+<p>例如，2.4GHz 信号在空气中传播 100m，信号减弱 80dB；传播 200m 减弱 86dB</p>
+</article>

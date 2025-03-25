@@ -1,0 +1,154 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="l1-math-preliminaries-finate-state-automata">L1. 数学初步与有限状态机 Math Preliminaries &amp; Finate State Automata</h1>
+<h2 id="cs172">数学初步（有些内容 CS172 学过了）</h2>
+<h3 id="sets">集合 sets</h3>
+<p>通常：小写字母代表元素，大写字母代表集合</p>
+<p>$\mathbb{N}$，$\mathbb{Z}$，$\mathbb{Q}$，$\mathbb{R}$，分别表示自然数集、整数集、有理数集、实数集</p>
+<p>这里（包括 Sipser 的教材）认为自然数集 $\mathbb{N}$ 是不包含 $0$ 的</p>
+<p>$\mathbb{N} \subseteq \mathbb{Z} \subseteq \mathbb{Q} \subseteq \mathbb{R}$</p>
+<p>$\mathbb{Q}^c$ 表示无理数集，$\mathbb{C}$ 表示复数集</p>
+<p>$\mathbb{R} = \mathbb{Q} \cup \mathbb{Q}^c$</p>
+<h4 id="_1">集合运算</h4>
+<ul>
+<li>并集，$A \cup B$</li>
+<li>交集，$A \cap B$</li>
+<li><strong>取反</strong>，$\overline A$</li>
+<li>减法，$A \backslash B$</li>
+<li>德摩根律</li>
+<li>$\overline{\overline A} = A$</li>
+<li>$\overline{A \cup B} = \overline A \cap \overline B$</li>
+<li>$\overline{A \cap B} = \overline A \cup \overline B$</li>
+<li>分配律</li>
+<li>$A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$</li>
+<li>$A \cup (B \cap C) = (A \cap B) \cup (A \cap C)$</li>
+<li>笛卡尔积，$A \times B$，也叫做叉积</li>
+</ul>
+<h3 id="functions">函数 functions</h3>
+<p>函数是两个集合之间的二元关系。第一个集合当中的每个元素，最多与第二个集合当中的一个.有关（映射到）。</p>
+<p>从集合 $A$ 到集合 $B$ 的函数 $f$，说白了就是定义域 $A$ 而值域是 $B$，可以表示为 $f: A \rightarrow B$，而这个函数是两个集合的笛卡尔积的子集，即：$f \subseteq (A \times B)$</p>
+<p>若 $(a, b) \in f$ 则 $f(a) = b$，vice versa。</p>
+<h3 id="strings">字符串 strings</h3>
+<h4 id="_2">字符串基础知识</h4>
+<ul>
+<li><em>字母表（alphabet）</em>：任意的非空有限集。通常用 $\Sigma$ 表示</li>
+<li>字母表当中的元素，称之为字母表的 <em>符号（symbols）</em></li>
+<li>字母表上的字符串（a string over an alphabet）是该字母表上的符号的有穷序列，且不含逗号、空格等分隔符</li>
+<li>字符串的集合，称为 <em>语言（language）</em></li>
+<li>字符串 $w$ 的长度表示为 $|w|$，长度为零的是空串，常用 $\epsilon$ 表示</li>
+<li>若字母表 $\Sigma$ 上的字符串 $w$ 的长度为 $n$，则可以写作 $w = w_1 w_2 \cdots w_n$ ，翻转 $w^R = w_n w_{n-1} \cdots w_1$</li>
+<li>原始串当中连续（consecutively）出现的一段字符，是子串（substring）</li>
+</ul>
+<h4 id="concatenation">连接（concatenation）</h4>
+<ul>
+<li>
+<p>假设 $s$ 串的长度是 $n$，$t$ 串的长度是 $m$，则 $s$ 和 $t$ 的连接记作 $st$，$st = s_1 s_2 \cdots s_n t_1 t_2 \cdots t_n$</p>
+</li>
+<li>
+<p>$w^k$ 表示 $k$ 个 $w$ 依次连接，即：$w^{k+1} = ww^k$，$w^0 = \epsilon$</p>
+</li>
+</ul>
+<h4 id="_3">字符串的偏序</h4>
+<ul>
+<li>
+<p>若 $x, y, z$ 是三个字符串且 $y = xz$，则 $x$ 是 $y$ 的 <em>前缀（prefix）</em>，满足 $x \subseteq y$。</p>
+</li>
+<li>
+<p>特殊的，若 $z \not= \epsilon$，则 $x$ 是 $y$ 的 <em>真前缀（proper prefix）</em>，此时满足 $x \subset y$。</p>
+</li>
+<li>
+<p>如果在一个语言中，任何一个成员都不是其他成员的真前缀，则这个语言是前缀无关的 <em>（无前缀的）（prefix-free）</em></p>
+</li>
+</ul>
+<h4 id="_4">语言连接</h4>
+<p>与字符串的连接类似：</p>
+<ul>
+<li>
+<p>若 $A$ 和 $B$ 是两个 <em>语言（language）</em>，则定义 $A \cdot B = \{xy: x \in A, y \in B\}$  ，也可写作 $A \times B$</p>
+</li>
+<li>
+<p>$A^{k+1} = A \cdot A^k$，$A^0 = \{\epsilon\}$。</p>
+</li>
+</ul>
+<h4 id="kleene-star">克莱尼星号 Kleene Star</h4>
+<ul>
+<li>这个星号是一种正则运算（连接）。$A^*$ 可以读作「A-Star」。</li>
+<li>若 $A$ 是一个语言，则定义 $A^<em>=\bigcup_{k \geq 0} A^k$（Sipser 的教材写作 $A^</em> = \{x_1x_2 \cdots x_k | k \geq 0 \text{且每一个} x_i \in A\}$），表示 $A$ 中任意个字符串连接形成的新串们构成的新语言。所以，$\epsilon$ 也是 $A^*$ 的成员。</li>
+<li>$A^*$ 当中有 $\infty$ 个字符串。</li>
+<li>除了 $A^<em>$，还有一种东西叫做 $A^+$，说白了就是把 $\epsilon$ 从 $A^</em>$ 当中删掉。这两种表示和正则表达式当中一致。</li>
+<li>字母表 $\Sigma$ 上的语言（language over an alphabet），都是 $\Sigma ^*$ 的子集。</li>
+</ul>
+<h2 id="_5">有穷自动机和正则</h2>
+<p>有穷自动机是描述能力和资源 <strong>极其有限</strong> 的计算机的 <strong>模型</strong>，经常被用作各种机电设备的控制器，如自动门等。</p>
+<p>马尔科夫链（Markov chain）是一种概率的计算模型，是有限自动机的概率对应物。常用于识别数据中的模式，甚至用于预测金融市场的价格变化。</p>
+<h3 id="_6">定义</h3>
+<p>一个有穷自动机 $M$ 是一个五元组 $(Q, \Sigma, \delta, q_0, F)$：</p>
+<ul>
+<li>$Q$ 是有限的状态集</li>
+<li>$\Sigma$ 是有限的字母表符号的集合</li>
+<li>$\delta$ 是转换函数，$\delta: Q \times \Sigma \rightarrow Q$</li>
+<li>$q_0$ 是初始状态（state）</li>
+<li>$F$ 是有限的接受态的集合（states）</li>
+</ul>
+<p>若有一个有穷自动机 $M_1$ 接受的全部字符串，构成集合 $A$，即 $A$ 是 $M_1$ 接受的全部字符串集合，则称：</p>
+<ul>
+<li>$A$ 是 $M_1$ 的语言（$A$ is the language of $M_1$）</li>
+<li>$M_1$ 识别 $A$（接受了语言当中的所有字符串，即识别该语言）</li>
+<li>$A = L(M_1)$</li>
+</ul>
+<p>因此，一个自动机可以接受许多字符串，但永远只能 <em>识别（recognize）</em> 一个语言。</p>
+<h3 id="_7">正则语言</h3>
+<p><em>正则（regular）</em> 语言是指，存在某个有穷状态机，可以识别它。</p>
+<p>例子：字母表 $\{0,1\}$ 上有三个语言 $A,B,C$，</p>
+<ul>
+<li>
+<p>语言 A：包含子串 11（正则）</p>
+</li>
+<li>
+<p>语言 B：1 的个数是偶数（正则）</p>
+</li>
+<li>
+<p>语言 C：0 与 1 的数量相等（非正则）（上下文无关）</p>
+</li>
+</ul>
+<h3 id="_8">正则运算</h3>
+<p>设 $A$ 和 $B$ 是两个语言，则定义以下三个正则运算：</p>
+<ul>
+<li>并（union）：$A \cup B = \{w \mid w \in A \text { or } w \in B\}$</li>
+<li>连接（concatenation）：$A \circ B = \{x y \mid x \in A \text { and } y \in B\}=A B$</li>
+<li>星号（star）：$A^* = \left\{x_1 \ldots x_k \mid \text { each } x_i \in A \text { for } k \geq 0\right\}$</li>
+</ul>
+<p>正则表达式就是由以上三种正则运算和 $\Sigma, \emptyset, \epsilon$（atomic）构建出来的。（这条表述可能不太严谨，理解意思就好）</p>
+<h3 id="closure">封闭性（closure）</h3>
+<p>正则语言类在三种正则运算下封闭。</p>
+<h4 id="union">正则语言类在 union 运算下封闭</h4>
+<p>若 $A_1, A_2$ 都是正则语言，则 $A_1 \cup A_2$ 也是正则语言。</p>
+<blockquote>
+<p>证明：</p>
+<p>若自动机 $M_1 = (Q_1, \Sigma, \delta_1, q_1, F_1), M_2 = (Q_2, \Sigma, \delta_2, q_2, F_2)$ 分别识别 $A_1, A_2$，则构造 $M = (Q, \Sigma, \delta, q_0, F)$，把 $M_1$ 和 $M_2$ 的所有状态做笛卡尔积（相当于同时记录两边的路径）扔给 $M_3$ 即可。即：</p>
+<ul>
+<li>$Q = Q_1 \times Q_2$</li>
+<li>$q_0 = (q_1, q_2)$</li>
+<li>$\delta((q, r), a) = (\delta_1(q, a), \delta_2(r, a))$</li>
+<li>$F = (F_1 \times Q_2) \cup (Q_1 \times F_2)$，意思是第一个的接受态配上第二个的任意状态，并起来第二个的接受态配第一个的任意状态。这个表达式也可以改写为 $F = \{(q, r) | q \in F_1 \text{或} r \in F_2\}$</li>
+<li>注意 $F \not= F_1 \times F_2$，这种表示方法是交集，因为 pair 中的两个元素必须分别在 $F_1, F_2$ 当中，才能积进 $F$。</li>
+<li>$F = F_1 \cup F_2$ 的写法也不准确。因为直接并起来，元素都是单独的，没有 pair 到一起。</li>
+</ul>
+<p>总而言之，就是升高了一维，变成了二维。</p>
+<p>图示见 Slide 2 的第 10 页。</p>
+</blockquote>
+<p>对应的 NFA：</p>
+<p><img alt="image-20220915230346059" src="https://s2.loli.net/2022/11/10/s1P6M4iKRVQNBrE.png"/></p>
+<h4 id="concatenate">正则语言类在 concatenate 运算下封闭</h4>
+<p>若 $A_1, A_2$ 都是正则语言，则 $A_1 \circ A_2$ 也是正则语言。</p>
+<blockquote>
+<p>证明：</p>
+<p>若 NFA $N_1, N_2$ 分别识别 $A_1, A_2$，则构造 $N$，把 $N_1$ 的接受态连边到 $N_2$ 的初始状态即可，边权是 $\epsilon$。然后把原先的接受态改为普通状态。</p>
+<p>图示见 slide1 的第 38 页（Slide 2 的第 11 页）</p>
+</blockquote>
+<p>对应的 NFA：</p>
+<p><img alt="image-20221124195046035" src="https://s2.loli.net/2022/12/09/pXKUwycTf5Y1AB6.png"/></p>
+<h4 id="star">正则语言类在 star 运算下封闭</h4>
+<p>若 $A$ 是正则语言，则 $A ^ *$ 也是正则语言。</p>
+<p>对应的 NFA：（注意空的时候也可以接受）</p>
+<p><img alt="image-20220915230354918" src="https://s2.loli.net/2022/11/10/n7tvRgJF9sKqdVu.png"/></p>
+</article>>

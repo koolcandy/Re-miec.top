@@ -1,0 +1,83 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-16-fgpa">Lecture 16. 闪存与 FGPA</h1>
+<h2 id="_1">闪存</h2>
+<p>闪存是从 EEPROM 的基础上发展而来的，可以多次写入和擦除。有点像 RAM，但是非易失（non-volatile）</p>
+<h3 id="_2">闪存结构</h3>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/RbQ6yqG1hzMWA3t.png"/></p>
+<p>闪存的结构单元如图所示。主要就是由一个 <em>存储晶体管（storage transistor）</em> 构成，这个晶体管类似于 n 类型的 mosfet。</p>
+<p>这个晶体管里面有两个 gate，一个是 control gate（控制栅极），另一个是 floating gate（浮动栅极）。两个栅极之间由绝缘的金属氧化物隔开。</p>
+<p>浮动栅极当中存有电荷，可以控制电流的流动。</p>
+<h3 id="_3">闪存原理</h3>
+<p>当控制栅极上接了电源正极，S 和 D 当中的电子就会穿过绝缘层，进入浮栅。然后这个晶体管就导电了。这表示“1”。</p>
+<p>假如控制栅极接了负电压（也就是相当于衬底有一个正电压），那么电子就会穿过绝缘层，重新回到 S 和 D。于是不能导电了，表示“0”。</p>
+<p>由于绝缘层的存在，在闪存不通电的时候，电子仍然会保存在浮栅当中，所以闪存是非易失的。</p>
+<h3 id="nand-vs-nor">NAND vs NOR</h3>
+<p>闪存分为 NAND 类型和 NOR 类型的。</p>
+<ul>
+<li>NOR 类型并行连接各个单元，因此可以实现高效率的随机访问</li>
+<li>NAND 晶体管都串在一起，所以比较适合连续访问；而且 nand 类型的存储单元更加紧凑（compact），也就是说同等体积的闪存，NAND 的容量会更大一些</li>
+<li>NOR 的单位是 byte，NAND 的单位是 page</li>
+<li>NOR 的读取很快，但是写入比 NAND 慢</li>
+<li>NOR 的内存单元更贵</li>
+<li>NAND 更省电</li>
+</ul>
+<h3 id="ssd">固态硬盘 SSD</h3>
+<p>固态硬盘是一种闪存。由于闪存跟硅有关，硅是固体，所以叫固态硬盘（好牵强）</p>
+<p>有的 SSD 使用跟 HDD 一样的接口（SATA），有的用 PCIe 接口，还有的用 DIMM 接口，形式很多。</p>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/Dg3c2VY6KNu5QjU.png"/></p>
+<p>有一种怪胎，是把 SSD 和 HDD 混合了，速度快，容量也可以大。</p>
+<h4 id="hdd">与 HDD 的比较（优缺点）</h4>
+<ul>
+<li>SSD 不需要磁头移动就可以存取数据，所以比较快，而且噪声小，而且故障率也低</li>
+<li>SSD 比较贵，而且一旦数据丢失，很难恢复；而且 SSD 的容量比不上 HDD</li>
+</ul>
+<h3 id="_4">闪存优缺点</h3>
+<h4 id="_5">优点</h4>
+<ol>
+<li>所有半导体存储当中，最便宜</li>
+<li>非易失，而且功耗低</li>
+<li>想要高随机访问速度可以选择 NOR，想要高连续读写速度可以选择 NAND</li>
+<li>稳定性高，不怕磕碰</li>
+<li>延迟低</li>
+</ol>
+<h4 id="_6">缺点</h4>
+<ol>
+<li>容量做不了 HDD 那么大</li>
+<li>写入或擦除次数过多会破坏氧化层，因此寿命有限</li>
+<li>如果比较多的位置数据损坏，HDD 可以继续用，但是 SSD 可能整个就废了，难以读取</li>
+</ol>
+<h2 id="fpga">FPGA（现场可编程门阵列）</h2>
+<p>Field Programmable Gate Array。</p>
+<p>FPGA 是一种 SSD 设备。通过硬件描述语言（HDL）描述的电路，可以烧录（burn）FPGA，然后就可以弄到 ASIC 芯片上面。这种芯片非常非常便宜。所以微波炉这样的常见家用电器，用 FPGA 就会很便宜。</p>
+<p>微控制器也可以执行不同的功能，但是微控制器的底层电路是固定不变的，变化的只是微控制器执行的程序；与微控制器不同的是，FPGA 可以通过编程，变成截然不同的电路。</p>
+<h3 id="_7">结构</h3>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/g5BntZjHwLpsoDR.png"/></p>
+<ul>
+<li>I/O 模块允许 FPGA 与外部世界连接。</li>
+<li>软逻辑模块包含查找表、多路复用器和移位寄存器。这使得可以使用它们构建任何组合逻辑或时序电路。</li>
+<li>交换模块、连接模块和路由通道允许在软逻辑模块之间以及不同模块之间进行灵活连接。 内存模块和乘法器构成了本示例中的硬逻辑模块。在实际的 FPGA 中，硬逻辑模块可能包括通信模块、数字信号处理模块，甚至整个微处理器。</li>
+<li>HDL 程序通过使用闪存 RAM 设置不同部件之间的连接，以允许或阻止电流在不同部件之间流动。</li>
+<li>连接可以在需要时被擦除，例如在调试期间或项目完成后，可以将 FPGA 用于其他目的。</li>
+</ul>
+<h3 id="verilog">Verilog</h3>
+<p>是最常见的一种 HDL。</p>
+<p>相比于工业性的 VHDL，Verilog 学起来特别简单，而且 VHDL 该有的功能，Verilog 基本都有。</p>
+<h4 id="verilog-sr">示例：verilog 描述 SR 锁存器</h4>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/uB8T4mA5HqrliNv.png"/></p>
+<div class="language-verilog highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">module</span><span class="w"> </span><span class="n">SRlatch</span><span class="p">(</span><span class="k">output</span><span class="w"> </span><span class="n">Q</span><span class="p">,</span><span class="w"> </span><span class="n">Q_bar</span><span class="p">,</span><span class="w"> </span><span class="k">input</span><span class="w"> </span><span class="n">S</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="p">);</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="k">nor</span><span class="w"> </span><span class="n">N1</span><span class="p">(</span><span class="n">Q_bar</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="p">);</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="k">nor</span><span class="w"> </span><span class="n">N2</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="p">,</span><span class="w"> </span><span class="n">Q_bar</span><span class="p">);</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">endmodule</span>
+</span></code></pre></div>
+<h4 id="verilog-d">示例：verilog 描述 D 触发器</h4>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/LQybcAIdK5etSZY.png"/></p>
+<div class="language-verilog highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">module</span><span class="w"> </span><span class="n">Dff</span><span class="p">(</span><span class="k">output</span><span class="w"> </span><span class="kt">reg</span><span class="w"> </span><span class="n">Q</span><span class="p">,</span><span class="w"> </span><span class="k">output</span><span class="w"> </span><span class="n">Q_bar</span><span class="p">,</span><span class="w"> </span><span class="k">input</span><span class="w"> </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">clr</span><span class="p">,</span><span class="w"> </span><span class="n">clk</span><span class="p">);</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">Q_bar</span><span class="w"> </span><span class="o">~</span><span class="n">Q</span><span class="p">;</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">negedge</span><span class="w"> </span><span class="n">clr</span><span class="p">)</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="n">Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">'b0</span><span class="p">;</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">clr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mh">0</span><span class="p">)</span><span class="w"> </span><span class="n">Q</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">D</span><span class="p">;</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">  </span><span class="k">end</span>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="k">endmodule</span>
+</span></code></pre></div>
+</article>>

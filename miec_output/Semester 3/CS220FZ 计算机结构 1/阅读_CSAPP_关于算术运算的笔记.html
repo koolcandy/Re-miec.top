@@ -1,0 +1,57 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="csapp">阅读 CSAPP 关于算术运算的笔记</h1>
+<h2 id="_1">整数无符号加法</h2>
+<p>定义 $x + _w^u y$ 表示两个 $[0, 2^w)$ 范围内的整数相加，将结果截断为 $w$ 位，且视为 <strong>无符号</strong> 整数。正常运算情况下，即 $x + y &lt; 2^w$ 时，$x + _w^u y = x + y$；但如果发生了溢出，即 $2^w \leq x + y &lt; w^{w+1}$ 的时候，$x + _w^u y = x + y - 2^w$，相当于自动对于 $2^w$ <strong>取模</strong>。</p>
+<h3 id="_2">溢出检查</h3>
+<p>对于范围 $[0, 2^w - 1]$ 内的 $x$ 和 $y$，执行无符号加法，令 $s \doteq x + _w^u y$，当且仅当运算结果 $s &lt; x$（或 $s &lt; y$）发生了溢出。</p>
+<h3 id="_3">求相反数</h3>
+<p>考虑 $w$ 位无符号数的集合，执行运算 $+ _w^u$。对于每个值 $x$，必然存在某个值 $y$ 满足 $x +_w^u y - 0$。这个 $y$ 就是相反数（逆元）。当 $x=0$ 时，对应的 $y=0$。当 $x \not= 0$ 时，$y = 2^w - x$，因为 $x +_w^u y = (x + 2^w - x) \bmod 2^w = 2^w \bmod 2^w = 0$：</p>
+<p>$$ y = -_w^u x = {
+\begin{array}{l}
+x,       &amp; {x = 0}  \\
+2^w - x, &amp; {x &gt; 0}
+\end{array} }. $$</p>
+<h2 id="_4">整数有符号加法（补码加法）</h2>
+<p>定义 $x +_w^t y$ 表示两个 $[-2^{w-1}, 2^{w-1})$ 范围内的整数相加，将结果截断为 $w$ 位，且视为 <strong>补码</strong> 数。</p>
+<p>$$ x + _w^t y = \left\{
+\begin{array}{l}
+x+y-2^w,  &amp; {2^{w-1} \leq x+y}            &amp; \text{正溢出} \\
+x+y,      &amp; {-2^{w-1} \leq x+y &lt; 2^{w-1}} &amp; \text{正常}   \\
+x+y+2^w,  &amp; {x+y &lt; -2^{w-1}}              &amp; \text{负溢出}
+\end{array} \right. $$</p>
+<p>简单地说，当 $x + y$ 的结果达到或者超过了 $2^{w-1}$，就是正溢出，要把结果减去 $2^w$。如果 $x+y$ 的值连 $w$ 位补码表示的最小整数值（$-2^{w-1}$）都达不到，就是负溢出，要加上 $2^w$。</p>
+<p>实际上，大多数计算机使用同样的机器指令来执行无符号或有符号加法，因为补码加法和无符号加法有相同的位级表示。所以，计算两个有符号（补码）加法，完全可以先把两个数当成无符号的，执行无符号加法，再将结果当成补码。经过一番推导，得到：$x + _w^t y = U2T_w[(x + y) \bmod 2^w]$。</p>
+<h3 id="_5">溢出检测</h3>
+<p>对于范围 $[-2^{w-1}, 2^{w-1})$ 内的 $x$ 和 $y$，执行无符号加法，令 $s \doteq x + _w^t y$：</p>
+<ul>
+<li>当且仅当 $x, y &gt; 0$ 而 $s &lt; 0$ 时，发生了正溢出</li>
+<li>当且仅当 $x,y &lt; 0$ 而 $s &gt; 0$ 时，发生了负溢出</li>
+</ul>
+<h3 id="_6">补码的非（相加等于零的数，不是位取反）</h3>
+<p>考虑两段简单的 C++ 代码：</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">-2147483648</span><span class="p">;</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1">// output result is 0, not -4294967296</span>
+</span></code></pre></div>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">-2147483648</span><span class="p">;</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="c1">// output result is -2147483648, not 2147483648</span>
+</span></code></pre></div>
+<p>也就是说，对于 $TMin_w$（$w$ 位补码能表示的最小整数），其补码的非（位取反）是自己本身。也就是指，自己加上自己，结果为 $0$。</p>
+<p>$$ y = -_w^t x = \{
+\begin{array}{l}
+TMin_w,       &amp; {x = TMin_w}  \\
+-x,           &amp; {x &gt; TMin_w}
+\end{array} \}. $$</p>
+<p>其实，$x = TMin_w$ 本身补码的反，也是 $-x$，然而由于发生了溢出，所以最后又变成了 $TMin_w$ 自己本身。</p>
+<p>而补码表示系统当中，一个数的相反数，相当于补码位取反再加上一。所以，在 C/C++ 语言中，表达式 <code>-x</code> 与 <code>~x+1</code> 是完全一样的。</p>
+<h2 id="_7">整数无符号乘法</h2>
+<p>由于溢出，无符号整数每一步运算，都相当于对 $2^w$ 自然溢出取模。所以：$x \times_w^u y = x \times y \bmod 2^w$。</p>
+<h2 id="_8">整数补码乘法</h2>
+<p>与整数的补码加法类似，依然是先把两个数当成无符号的，执行无符号乘法，再将结果当成补码：$x \times_w^t y = U2T_w(x \times y \bmod 2^w)$。</p>
+<p>两个 $w$ 位数的乘法，产生结果最大可能需要 $2w$ 位表示。所以不是很容易搞溢出检测，但依然可以。CSAPP 把这个问题当作习题。</p>
+<h2 id="_9">乘以常数</h2>
+<p>CSAPP 指出，编译器会转化为左移和加法的组合。</p>
+</article>>

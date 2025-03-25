@@ -1,0 +1,117 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-4-regular-expression">Lecture 4: Regular Expression</h1>
+<h2 id="_1">正则表达式的几个符号</h2>
+<table>
+<thead>
+<tr>
+<th align="left">符号</th>
+<th align="left">含义</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>*</code></td>
+<td align="left">零或多次</td>
+<td align="left"><code>x*</code></td>
+</tr>
+<tr>
+<td align="left"><code>+</code></td>
+<td align="left">至少一次</td>
+<td align="left"><code>x+</code></td>
+</tr>
+<tr>
+<td align="left"><code>?</code></td>
+<td align="left">最多一次</td>
+<td align="left"><code>x?</code></td>
+</tr>
+<tr>
+<td align="left"><code>[^]</code></td>
+<td align="left">不含</td>
+<td align="left"><code>[^abc]</code></td>
+</tr>
+<tr>
+<td align="left"><code>[]</code></td>
+<td align="left">其中之一</td>
+<td align="left"><code>[abc]</code></td>
+</tr>
+<tr>
+<td align="left"><code>l-r</code></td>
+<td align="left">范围之一</td>
+<td align="left"><code>A-Z</code></td>
+</tr>
+<tr>
+<td align="left"><code>x{y}</code></td>
+<td align="left">恰好 y 次</td>
+<td align="left"><code>x{3}</code></td>
+</tr>
+<tr>
+<td align="left"><code>x{y,}</code></td>
+<td align="left">至少 y 次</td>
+<td align="left"><code>x{3,}</code></td>
+</tr>
+<tr>
+<td align="left"><code>x{y,z}</code></td>
+<td align="left">y-z 次</td>
+<td align="left"><code>x{3,5}</code></td>
+</tr>
+<tr>
+<td align="left"><code>.</code></td>
+<td align="left">任意字符</td>
+<td align="left"><code>.</code></td>
+</tr>
+<tr>
+<td align="left"><code>\s</code></td>
+<td align="left">空白字符</td>
+<td align="left">N/A</td>
+</tr>
+<tr>
+<td align="left"><code>\S</code></td>
+<td align="left">非空白字符</td>
+<td align="left">N/A</td>
+</tr>
+<tr>
+<td align="left"><code>\d</code></td>
+<td align="left">数字</td>
+<td align="left">N/A</td>
+</tr>
+<tr>
+<td align="left"><code>\D</code></td>
+<td align="left">非数字</td>
+<td align="left">N/A</td>
+</tr>
+<tr>
+<td align="left"><code>\w</code></td>
+<td align="left">字母</td>
+<td align="left">N/A</td>
+</tr>
+<tr>
+<td align="left"><code>\W</code></td>
+<td align="left">非字母</td>
+<td align="left">N/A</td>
+</tr>
+<tr>
+<td align="left"><code>^</code></td>
+<td align="left">行首</td>
+<td align="left"><code>^xxx</code></td>
+</tr>
+<tr>
+<td align="left"><code>$</code></td>
+<td align="left">行尾</td>
+<td align="left"><code>xxx$</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="javautilregex"><code>java.util.regex</code> 包</h2>
+<p>这部分应该不是重点内容，先列出提纲，有时间就复习一下，没时间就算了</p>
+<ul>
+<li><code>Pattern</code> 和 <code>Matcher</code> 类</li>
+<li><code>PatternSyntaxException</code></li>
+</ul>
+<h3 id="capturing-groups">捕获组 Capturing groups</h3>
+<h3 id="start-end"><code>start()</code> 和 <code>end()</code> 方法</h3>
+<h3 id="matches-lookingat"><code>matches</code> 和 <code>lookingAt</code> 方法</h3>
+<h3 id="replacefirst-replaceall"><code>replaceFirst</code> 和 <code>replaceAll</code> 方法</h3>
+<h3 id="appendreplacement-appendtail"><code>appendReplacement</code> 和 <code>appendTail</code> 方法</h3>
+<h3 id="patternsyntaxexception"><code>PatternSyntaxException</code> 的方法</h3>
+</article>>

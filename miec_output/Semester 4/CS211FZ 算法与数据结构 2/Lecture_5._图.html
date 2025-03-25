@@ -1,0 +1,69 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-5">Lecture 5. 图</h1>
+<h2 id="_1">图的表示</h2>
+<p>对于图 $G=(V,E)$，其中 $V$ 是点集，$E$ 是边集。</p>
+<p>对于无向图和有向图，都可以用若干 <em>邻接表（adjacency list）</em> 或 <em>邻接矩阵（adjacency matrix）</em> 表示。</p>
+<ul>
+<li>对于 <em>稀疏（sparse）</em> 图（$|E| \ll |V|^2$），通常选择邻接表</li>
+<li>对于 <em>稠密（dense）</em> 图（$|E| \approx |V|^2$），或需要快速查询两点之间是否有边，则用邻接矩阵</li>
+</ul>
+<h3 id="_2">邻接表</h3>
+<p>是 $|V|$ 个链表构成的数组。$Adj[u]$ 包含了满足 $(u,v) \in E$ 的所有节点 $v$。</p>
+<ul>
+<li>若 $G$ 是有向图，那么所有链表的长度总和，就是 $|E|$</li>
+<li>若 $G$ 是无向图，那么所有链表的长度总和，就是 $2|E|$</li>
+</ul>
+<p>邻接表的缺点是无法快速查找图中是否存在一条边 $(u,v)$。</p>
+<h3 id="_3">邻接矩阵</h3>
+<p>邻接矩阵 $A = (a_{ij})$ 是一个 $|V| \times |V|$ 的零一矩阵，行列标号从 $1$ 到 $|V|$：$$a_{i,j}=\begin{cases}1 &amp; (i,j) \in E \\ 0 &amp; (i,j) \not\in E\end{cases}$$，因此其占用的空间是 $\Theta(|V|^2)$ 级别的。</p>
+<h3 id="_4">边带权图</h3>
+<p>对于边带权的图（有一个函数 $w: E \to \mathbb{R}$），只需要在邻接表里面把这个边权额外存储进去，或者把邻接矩阵的零一改成实数。</p>
+<h2 id="bfs">BFS</h2>
+<p>Dijkstra 最短路算法和 Prim 最小生成树算法都有用到类似 BFS 的思想。</p>
+<p>对于图 $G = (V,E)$，指定起点 $s$，BFS 可以计算出 $s$ 到其他任意节点的距离。BFS 在遍历到距离起点 $k+1$ 的节点之前，一定会先遍历到距离 $k$ 的节点。</p>
+<p>不论是有向图还是无向图，在 <em>广度优先树（breadth-first tree）</em> 当中，节点 $u$ 到 $v$ 的简单路径，都对应着原图当中 $u$ 到 $v$ 的最短路径。</p>
+<h3 id="_5">伪代码</h3>
+<ul>
+<li>$u.color$ 表示节点 $u$ 的状态，黑白灰三种。白表示未处理，灰表示入队，黑表示处理完毕</li>
+<li>$u.d$ 表示节点 $u$ 距离起点的距离</li>
+<li>$u.\pi$ 表示节点 $u$ 在广度优先树当中的前驱节点</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/05/16/OQMZ9kqV6GwhLbH.png"/></p>
+<h3 id="_6">效率分析</h3>
+<ul>
+<li>初始化需要 $O(V)$ 时间。</li>
+<li>每个节点入队出队一次，每次入队出队需要 $O(1)$ 时间，总共需要 $O(V)$ 时间</li>
+<li>需要遍历邻接表。邻接表长度 $\Theta(E)$，需要 $O(E)$ 时间</li>
+<li>故总时间复杂度 $O(V+E)$</li>
+</ul>
+<h2 id="dfs">DFS</h2>
+<h3 id="_7">伪代码</h3>
+<ul>
+<li>$u.color$ 表示节点 $u$ 的状态，黑白灰三种。白表示未处理，灰表示正在处理其子树，黑表示处理完毕</li>
+<li>$u.d$ 表示开始处理的时间戳，是 discovered 的缩写</li>
+<li>$u.f$ 表示处理完毕后的时间戳，是 finished 的缩写</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/05/18/uYBsoj3acbH9EDV.png"/></p>
+<h3 id="_8">效率分析</h3>
+<ul>
+<li>初始化需要 $O(V)$ 的时间</li>
+<li>每个节点记录 $u.d$ 和 $u.f$，总共需要 $O(V)$ 时间</li>
+<li>需要遍历邻接表。邻接表长度 $\Theta(E)$，需要 $O(E)$ 时间</li>
+<li>故总时间复杂度 $O(V+E)$</li>
+</ul>
+<h3 id="_9">括号化定理</h3>
+<p>在无向图或有向图当中，节点 $u$, $v$ 有以下可能的关系</p>
+<ul>
+<li>深度优先森林中，$u$ 不是 $v$ 的后代，$v$ 也不是 $u$ 的后代：$[u.d, u.f]$ 与 $[v.d, v.f]$ 完全分离</li>
+<li>深度优先树中，$u$ 是 $v$ 的后代，$[u.d, u.f] \subset [v.d, v.f]$ </li>
+<li>深度优先树中，$v$ 是 $u$ 的后代，$[v.d, v.f] \subset [u.d, u.f]$</li>
+</ul>
+<h3 id="_10">边的分类</h3>
+<p>一条边 $(u,v)$ 有以下四种分类：</p>
+<ul>
+<li>树边 tree edges，表示 $v$ 是由 $u$ 直接发现的</li>
+<li>后向边 back edges，表示深度优先树中 $u$ 的祖先是 $v$。有向图的自环也算后向边</li>
+<li>前向边 forward edges，表示深度优先树中 $u$ 的后代是 $v$</li>
+<li>横叉边 cross edges，表示所有其他类型的边</li>
+</ul>
+</article>>

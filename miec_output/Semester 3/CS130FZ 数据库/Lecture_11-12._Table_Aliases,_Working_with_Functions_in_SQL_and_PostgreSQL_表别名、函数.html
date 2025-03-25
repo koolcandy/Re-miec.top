@@ -1,0 +1,80 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-11-12-table-aliases-working-with-functions-in-sql-and-postgresql">Lecture 11-12. Table Aliases, Working with Functions in SQL and PostgreSQL 表别名、函数</h1>
+<h2 id="group-by-order-by"><code>GROUP BY</code> 和 <code>ORDER BY</code> 关键字</h2>
+<p>示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName1</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName1</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>作用是，把所有属性值相同的行放在一起，再按照这个值排序，统计每个属性有多少行：</p>
+<p><img alt="image-20221020143936664" src="https://s2.loli.net/2023/03/18/eSosR3nClUkABag.png"/></p>
+<p>也可以捆绑两个甚至更多的属性值。比如：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName2</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName2</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName2</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<p><img alt="image-20221020144455721" src="https://s2.loli.net/2023/03/18/sXyoZYAC8VFWpM3.png"/></p>
+<p>然而，<code>GROUP BY</code> 和 <code>ORDER BY</code> 里面的东西，必须保证在 <code>SELECT</code> 里面有出现过。</p>
+<h2 id="_1">列别名</h2>
+<p>在一个 SQL 语句当中，可以临时的对表或者列进行改名，但是到下一条语句里面，这个名字就失效了。</p>
+<p>有时候原名太长，想要简写。就像 Python 当中，有人喜欢把 <code>numpy</code> 简写成 <code>npy</code>，这种别名可以让代码更简洁。也有时候原名太短，不知道写的啥，就换一个更加清晰的名字。~~比如有人打 ACM 喜欢用变量 <code>abcdefg</code>，不如 <code>cnt, pos</code> 之类的望文生义的变量名。~~</p>
+<p>在数据库中，还有一种额外的功效，就是对原名起到保密作用，比如把 Password 改名成一个不太敏感的名字之类的。</p>
+<p>示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="cm">/* 给列 rrp 取别名 Recommended Price */</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">rrp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="ss">"Recommended Price"</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">rrp</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">rrp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="ss">"Recommended Price"</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="ss">"Recommended Price"</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
+</span></code></pre></div>
+<p>注意，这里需要<strong>双引号</strong>！字符串、时间戳啥的都是单引号，这里是第一次遇到双引号！</p>
+<p>这里可能还感觉不到。但是将来学到 <code>JOIN</code> 关键字之后，别名的重要性就凸显出来了。</p>
+<h2 id="_2">表别名</h2>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">col1</span><span class="p">,</span><span class="w"> </span><span class="n">T1</span><span class="p">.</span><span class="n">col2</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">T1</span><span class="p">;</span>
+</span></code></pre></div>
+<p>观察发现，这里的表别名没有引号，因此，这时候的命名方式就像变量名一样。如果想要让别名包含空格，那就得弄成字符串的形式，双引号。</p>
+<h2 id="_3">函数</h2>
+<p>函数分为两类，aggregate 函数和 operational 函数。<strong>aggregate 函数的参数有多个，operational 函数只有一个参数</strong>。</p>
+<p>有时候 operational 函数是传引用的，可以改变输入参数的值。但是 aggregate 函数不能改变参数的值。</p>
+<p>此外，<strong>aggregate 函数必须要配合 <code>GROUP BY</code>（否则报错），故通常用于 <code>SELECT</code> 语句</strong>。而 operational 语句在 <code>SELECT</code> 和 <code>WHERE</code> 当中都比较常用。</p>
+<p>在本节课开头提到的 <code>COUNT()</code> 函数就是一个 aggregate 函数。然而经常通过 <code>COUNT(*)</code> 的形式传入所有的，对所有的行进行计数。</p>
+<p>还有，aggregate 函数计算的时候，会忽略掉 <code>NULL</code> 值。所以说，<code>COUNT()</code> 的计数结果，不会包含值是 <code>NULL</code> 的那些。</p>
+<h2 id="aggregate">aggregate 函数举例</h2>
+<ul>
+<li><code>MIN()</code></li>
+<li><code>MAX()</code></li>
+<li><code>AVG()</code></li>
+<li><code>SUM()</code></li>
+<li><code>STDDEV()</code></li>
+</ul>
+<p>示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">colName</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tableName</span><span class="p">;</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">colName</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">displayName</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tableName</span><span class="p">;</span>
+</span></code></pre></div>
+<p>SQL 的输出会新建一个列，名字是函数名，或者指定的显示名。</p>
+<p>更加复杂的一个例子：（显示每个组的 sum。）</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">Region</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">RegionName</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">Pop2015</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">TotalPopulation2015</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">PopulationEU</span>
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">Region</span><span class="p">;</span>
+</span></code></pre></div>
+<p><img alt="image-20221021105654850" src="https://s2.loli.net/2023/03/18/G6O9vkAFoJfKU5Y.png"/></p>
+<p>再复杂一点的一个例子（输出结果按照 sum 的值进行排序）：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">Region</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">RegionName</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">Pop2015</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">TotalPopulation2015</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">PopulationEU</span>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">Region</span><span class="w"> </span><span class="cm">/* 这里不一定是函数传进去的列 */</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">TotalPopulation2015</span><span class="w"> </span><span class="k">desc</span><span class="p">;</span>
+</span></code></pre></div>
+<p><img alt="image-20221021110205591" src="https://s2.loli.net/2023/03/18/KqeaUnhWdR19gTL.png"/></p>
+<h2 id="_4">多表查询</h2>
+<p>当查询的两个表当中存在同名的列，在 SELECT 里面就必须要说清楚是哪个表当中的列。如果表名字比较长，用别名就会方便一些了~</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">A1</span><span class="p">.</span><span class="n">Appname</span><span class="p">,</span><span class="w"> </span><span class="n">A2</span><span class="p">.</span><span class="n">Appname</span><span class="p">,</span><span class="w"> </span><span class="n">A2</span><span class="p">.</span><span class="n">usability</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p">.</span><span class="n">usability</span>
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">AliasExample</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">A1</span><span class="p">,</span><span class="w"> </span><span class="n">AliasExample2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">A2</span>
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">A1</span><span class="p">.</span><span class="n">usability</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A2</span><span class="p">.</span><span class="n">usability</span>
+</span></code></pre></div>
+<p><img alt="image-20221021113920191" src="https://s2.loli.net/2023/03/18/3RJhtfmliBqDjkU.png"/></p>
+<p>但是这样的话，输出结果会显示两个列都叫 <code>Appname</code>。为了区分，最好给这两个列也 <code>AS</code>一个别名：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">A1</span><span class="p">.</span><span class="n">Appname</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="ss">"A1 Apps"</span><span class="p">,</span><span class="w"> </span><span class="n">A2</span><span class="p">.</span><span class="n">Appname</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="ss">"A2 Apps"</span><span class="p">,</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">    </span><span class="n">A2</span><span class="p">.</span><span class="n">usability</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="ss">"A2 Usability"</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p">.</span><span class="n">usability</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="ss">"A1 Usability"</span>
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">AliasExample</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">A1</span><span class="p">,</span><span class="w"> </span><span class="n">AliasExample2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">A2</span>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">A1</span><span class="p">.</span><span class="n">usability</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A2</span><span class="p">.</span><span class="n">usability</span>
+</span></code></pre></div>
+<p><img alt="image-20221021113924833" src="https://s2.loli.net/2023/03/18/UDsjiedw13CcpBM.png"/></p>
+<h3 id="cartesian-join">笛卡尔连接 Cartesian Join</h3>
+<p>(A, B) 与 (1, 2, 3) 的连接是：(A, 1)，(A, 2)，(A, 3)，(B, 1)，(B, 2)，(B, 3)。~~这跟笛卡尔积有啥区别？~~</p>
+<p>如果表一有 20 行，表二有 40 行，那么笛卡尔连接就有 800 行。太多了！所以通常都用 <code>WHERE</code> 来加一点限制。这时候的笛卡尔连接，就是原本笛卡尔积的一个子集了~</p>
+<h2 id="_5">多语句查询</h2>
+<p>就是有些问题需要写不止一条 SQL。然后对于多个语句的输出结果，手动结合一下，获得最终答案。比如：第一条语句问 X 有多少，第二条问 Y 有多少。然后手算 X 占 Y 的百分之多少之类的。</p>
+</article>>

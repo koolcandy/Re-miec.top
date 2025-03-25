@@ -1,0 +1,257 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-9-io">Lecture 9. IO 与中断</h1>
+<p><strong>关于中断这一节，区分清楚 中断编号 以及 IRQ 编号，很重要。</strong></p>
+<h2 id="_1">复习：四种周期</h2>
+<p>这里补充说明一下三种周期分别是啥：</p>
+<ul>
+<li>时钟周期 clock cycle，是时钟频率的倒数，是 CPU 最小动作单元</li>
+<li>机器周期 machine cycle，就是机器循环（fetch-decode-execute-store），由若干时钟周期构成</li>
+<li>指令周期 instruction cycle，就是指执行一条指令需要的时间。由于不同指令复杂程度不同，不同指令的指令周期也不一定相同，但至少是一个机器周期</li>
+<li>总线周期 bus cycle，是不同组件中传输数据所需要的时间</li>
+</ul>
+<h2 id="8086">8086 结构</h2>
+<p>先来看看 8086 的长相和引脚布局图：</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/FZnwR9X62iUWhCo.png"/></p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/yN23qxkEgHuBhrK.png"/></p>
+<p>8086 的内存总线是 20 位的，数据总线是 16 位的。</p>
+<p>I/O space 是指用于与外部设备进行通信的地址范围，它跟内存是两码事儿。由于数据总线只有 16 位，所以 I/O space 只有 64K 的大小。</p>
+<p>由于 8086 硬件引脚的局限性，内存总线和数据总线共享引脚。所以需要一条额外的控制线来区分，要访问内存还是数据。</p>
+<p>由于 8086 的地址和数据总线多路复用了，所以处理器通过总线对外部（内存或 I/O 接口）进行一次访问，需要四个时钟周期，即：<strong>8086 的一个总线周期等于四个时钟周期</strong>。</p>
+<h2 id="z80a-cpu">Z80A CPU 的结构</h2>
+<p>相比 8086，Z80A 的数据总线和地址总线分开了，如图。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/pC92Sr8dOYbTUFW.png"/></p>
+<p>有一个巨大的 AND 门充当地址解码器的作用。它有 16 个输入，当且仅当 16 个输入构成了对应设备的地址，才会输出真，否则输出假。此外，还有两根控制线（绿色、紫色），表示是否要对该设备进行操作。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/8kg1jpiynADZW4Y.png"/></p>
+<p>然后，三个值再与一下，作为控制信号传送给一个三态缓冲器。三态缓冲器的作用是，根据控制信号决定，把输入原封不动传给输出，还是高阻态。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/QC4m9yvVDl1XNYr.png"/></p>
+<p>对于输出，也差不多，只不过是三态缓冲器换成了 D 缓存器。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/jmoeEAQp4RLSBwH.png"/></p>
+<h2 id="io">汇编的 IO</h2>
+<h3 id="in-out"><code>IN</code> 与 <code>OUT</code> 指令</h3>
+<p>语法是 <code>in/out ax/al dx/imm8</code>，作用是从指定端口当中读取数据到累加器寄存器。</p>
+<p>当使用 imm 的时候只可以访问 256 个不同的端口，使用 dx 可以访问 64k 个端口。</p>
+<p>==方向反了？？==</p>
+<h4 id="_2">关于权限</h4>
+<p>对外部进行读写，那肯定是需要权限的。</p>
+<p>8086 当中有一个叫做 IOPL（Input/Output Privilege Level）的标志，长度是 2 位，表示 IO 的权限等级。一般来讲 IOPL=2 就够了（最高是 3）。</p>
+<p>此外还有一个叫做 I/O permission bitmap 的东西。这个东西是 8 字节的，总共 64k 个布尔位，分别表示对应的 64k 个端口是否具有权限。</p>
+<h3 id="_3">一些众所周知的端口地址</h3>
+<ul>
+<li>并行打印机锁存器（parallel printer latch），有两个并行端口（parallel port, LPT)，LPT1 的地址是 0x378，LPT2 的地址是 0x278。不过现在这东西不常见了，都是 usb 了</li>
+<li>打印机控制锁存器（printer control latch），0x37a</li>
+<li>打印机状态：0x379，一般是输入</li>
+<li>VDU（video display unit）颜色寄存器，用来控制 DOS 窗口颜色的显示，0x3d9</li>
+</ul>
+<h3 id="dos">DOS 屏幕显示</h3>
+<p>屏幕左上角的地址是 B8000，即 B800:0000。每个位置占用两个子节的内存，DOS 屏幕宽度是 80 个字符，所以每行内容占用 160 字节的内存。DOS 屏幕高度只有 25 行，所以整个屏幕能显示 2000 个字符，占用 4000 字节的内存。</p>
+<p>对于每个字符的两个字节来说，第一个字节用 ASCII 表示这个位置上的字符是谁，第二个字节用来指定显示格式，即文字颜色、背景颜色、是否闪烁、是否增亮：</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/26/XkqF7BExDM4TtIy.png"/></p>
+<p>Lab5 的第二道题实现了屏幕显示控制。</p>
+<h2 id="8259">8259 可编程中断控制器</h2>
+<p>8086 使用两个 8259 芯片（一主一从），可以处理 0~15 共计 16 个中断。</p>
+<p>其中，主 8259 处理中断 0~7，从 8259 芯片处理中断 8~15. 从芯片连接到主芯片的 irq2 引脚上（所以实际上相当于少一个，只能处理 15 个中断）</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/24/WNk3s8ZbnYGIHUD.png"/></p>
+<p>16 个中断都有编号，如表格。</p>
+<p><strong>前 8 个 irq 的 int 编号是从 08 到 0f，后 8 个的 int 编号是从 70 到 77。</strong></p>
+<table>
+<thead>
+<tr>
+<th>int 编号</th>
+<th>irq 编号</th>
+<th>描述</th>
+<th>详述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://www.techhelpmanual.com/105-int_08h__timer_interrupt.html">INT 08H</a></td>
+<td>IRQ 0</td>
+<td>Timer，时钟</td>
+<td>Interrupts every 55ms (18.2 times per second)</td>
+</tr>
+<tr>
+<td><a href="http://www.techhelpmanual.com/106-int_09h__keyboard_interrupt.html">INT 09H</a></td>
+<td>IRQ 1</td>
+<td>Keyboard，键盘</td>
+<td>Interrupts on each press and release of a key and periodically while the   key is held down. See <a href="http://www.techhelpmanual.com/894-at_keyboard_functions.html">Keyboard Ports</a>.</td>
+</tr>
+<tr>
+<td>INT 0aH</td>
+<td>IRQ 2</td>
+<td>cascade，级联从片</td>
+<td>Connected to the secondary 8259a interrupt controller on ATs; may be used   by EGA for vertical retrace.  See EGA   I/O Ports.</td>
+</tr>
+<tr>
+<td>INT 0bH</td>
+<td>IRQ 3</td>
+<td>COM 2/4，串口 2</td>
+<td>Interrupts when COM2 or COM4 has something to say.  See Serial Ports.</td>
+</tr>
+<tr>
+<td>INT 0cH</td>
+<td>IRQ 4</td>
+<td>COM 1/3，串口 1</td>
+<td>Interrupts when COM1 or COM3 has something to say.  See Serial Ports.</td>
+</tr>
+<tr>
+<td>INT 0dH</td>
+<td>IRQ 5</td>
+<td>LPT 2，并口 2</td>
+<td>AT: Interrupts when the printer on LPT2 is ready for another character   (only if printer port 27aH is set up for this).  See Printer Ports. PC/XT: This was used for   the hard disk.  See XT Hard Disk Ports.</td>
+</tr>
+<tr>
+<td>INT 0eH</td>
+<td>IRQ 6</td>
+<td>diskette，软盘</td>
+<td>Interrupts after each action of the floppy diskette controller (read,   write, seek, etc). See FDC Ports.</td>
+</tr>
+<tr>
+<td>INT 0fH</td>
+<td>IRQ 7</td>
+<td>LPT 1，并口 1</td>
+<td>Interrupts when LPT1 is ready for another character (only when controller   port 37aH is set up for this).  See   Printer Ports.</td>
+</tr>
+<tr>
+<td>INT 70H</td>
+<td>IRQ 8</td>
+<td>RT Clock，实时时钟</td>
+<td>Interrupts 1024 times per second (on AT-class or better computers).  This is generated by the same hardware that   handles the non-volatile data in the CMOS Memory.</td>
+</tr>
+<tr>
+<td>INT 71H</td>
+<td>IRQ 9</td>
+<td>redir IRQ2，级联到主片</td>
+<td>On AT-class computers, IRQ 2 is used as the connection to a secondary   8259a interrupt controller.  Actual   occurrences of IRQ 2 are redirected to IRQ 9.    This IRQ may be generated by EGA/VGA.    See EGA I/O Ports.</td>
+</tr>
+<tr>
+<td>INT 72H</td>
+<td>IRQ 10</td>
+<td>(reserved)</td>
+<td>There is no default device for this IRQ.</td>
+</tr>
+<tr>
+<td>INT 73H</td>
+<td>IRQ 11</td>
+<td>(reserved)</td>
+<td>There is no default device for this IRQ.</td>
+</tr>
+<tr>
+<td>INT 74H</td>
+<td>IRQ 12</td>
+<td>(reserved)</td>
+<td>There is no default device for this IRQ.</td>
+</tr>
+<tr>
+<td>INT 75H</td>
+<td>IRQ 13</td>
+<td>math chip，协处理器</td>
+<td>The 80x87 math coprocessor generates this interrupt on exceptions   (errors).</td>
+</tr>
+<tr>
+<td>INT 76H</td>
+<td>IRQ 14</td>
+<td>hard disk，硬盘</td>
+<td>Interrupts when the hard disk controller finishes an operation.  See AT Hard Disk Ports.</td>
+</tr>
+<tr>
+<td>INT 77H</td>
+<td>IRQ 15</td>
+<td>(reserved)</td>
+<td>There is no default device for this IRQ.</td>
+</tr>
+</tbody>
+</table>
+<p>在 <code>int 08h</code> 之前，就是级别更高的中断，比如除以零、NMI、单步调试等。所以课件上说，中断编号 0~7 的（不是 irq 0~7），不归 8259 管。</p>
+<table>
+<thead>
+<tr>
+<th align="left">编号</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">INT 00h</td>
+<td align="left">(0)Divide by 0</td>
+</tr>
+<tr>
+<td align="left">INT 01h</td>
+<td align="left">(1)Single Step</td>
+</tr>
+<tr>
+<td align="left">INT 02h</td>
+<td align="left">(2)Non-Maskable Interrupt (NMI)</td>
+</tr>
+<tr>
+<td align="left">INT 03h</td>
+<td align="left">(3)Breakpoint</td>
+</tr>
+<tr>
+<td align="left">INT 04h</td>
+<td align="left">(4)Overflow</td>
+</tr>
+<tr>
+<td align="left">INT 05h</td>
+<td align="left">(5)Print Screen</td>
+</tr>
+</tbody>
+</table>
+<p>顺带一提，<strong>主 8259 占用地址 0x20~0x3f，从 8259 占用地址 0xa0~0xbf</strong>。~~虽然不知道这个有啥用，但是可能需要记住~~。</p>
+<h2 id="_4">中断</h2>
+<p>就是程序运行期间，被一些外部信号或特殊指令打断，从当前执行的程序，转为去执行 interrupt handler，也叫做 ISR（interrupt service routine）。执行完之后再回来。</p>
+<p>8086 当中有三种类型的中断：</p>
+<ul>
+<li>硬件中断，INTR 引脚接收到一个外部的信号引起，或者是处理器的 NMI 引脚引起</li>
+<li>异常中断，比如遇到了除以零的情况</li>
+<li>软件中断，即汇编代码当中的 <code>int</code> 指令，类似于调用了一个 BIOS 的函数</li>
+</ul>
+<h3 id="_5">中断向量表</h3>
+<p>对于 8086：</p>
+<ul>
+<li>中断向量表的地址是从 0000:0000 到 0000:03ff，换算成十进制一共是 1024 个字节，即内存中最前面的 1k 个字节</li>
+<li>中断向量表当中的每一个 item 都是 4 字节：用两个字节描述 CS，另外两个字节描述 IP。合起来的 CS:IP 就是 ISR 的地址。因此，中断向量表最多存储 256 个中断。<strong>IP 是低位，CS 是高位。</strong></li>
+</ul>
+<p>8086 中断向量表的节选如下：</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/26/GeDv75FJmsnZNr3.png"/></p>
+<h3 id="cpu">CPU 处理中断的详细流程</h3>
+<ol>
+<li>硬件如果想触发一个中断，就把 IRQx 弄成 low</li>
+<li>然后 8259A 通过 INTR 线，把信号传给 CPU</li>
+<li>CPU 作出响应（INTA，interrupt acknowledge 信号）</li>
+<li>8259A 看到 INTA 信号之后，把中断的编号（0~255）放到数据总线上</li>
+<li>CPU 读取中断的编号信息</li>
+<li>CPU 把当前的 CS:IP、SP、Flag 寄存器等内容保存到栈里</li>
+<li>CPU 根据编号，计算出 ISR 在中断向量表里的位置，更新 CS:IP 为 ISR 的。<strong>计算方法是：中断编号乘以四。</strong></li>
+<li>然后 ISR 就开始执行了，遇到 IRET 则结束 ISR，把之前保存到栈的东西恢复</li>
+<li>回到刚刚执行的地方继续执行</li>
+</ol>
+<p><strong>IRQ 编号较小的通常具有更高优先级</strong>。因此可以产生如图所示的嵌套中断：</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/26/GqyREupdJIfKZS9.png"/></p>
+<h2 id="_6">杂项</h2>
+<h3 id="flag">中断 flag</h3>
+<p>就是 flag 寄存器当中的一个位，表示是否响应中断。</p>
+<p>若 IF=1，则表示处理器响应中断；若 IF=0，表示处理器屏蔽中断。</p>
+<p>然而对于 NMI（不可屏蔽中断），不管 IF 取值如何，处理器都会相应。</p>
+<p><code>STI</code> 和 <code>CLI</code> 命令可以用于设置这个 flag 的值。</p>
+<h3 id="mask">中断屏蔽（mask）</h3>
+<p>在 21h 和 a1h 的两个字节的 16 个 bit，可以分别表示，是否启用 0~15 共计 16 个中断。取值 1 表示禁用该中断，取值 0 表示不禁用。</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">; 屏蔽掉 0 号、3 号、7 号共计三个中断</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nf">mov</span><span class="w"> </span><span class="no">al</span><span class="p">,</span><span class="w"> </span><span class="mi">10001001</span><span class="no">b</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">021</span><span class="no">h</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="nf">out</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="no">al</span>
+</span></code></pre></div>
+<h3 id="isr">ISR 的最后</h3>
+<p>ISR 结束之前，必须要有以下几行代码，告知控制器，哦，这个 ISR 要结束了！</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1">; end_of_ISR:</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">al</span><span class="p">,</span><span class="w"> </span><span class="mi">020</span><span class="no">h</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">020</span><span class="no">h</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="nf">out</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="no">al</span>
+</span></code></pre></div>
+<h3 id="isr_1">自定义 ISR</h3>
+<p>像 IRQ0（int 08h），每隔 50ms 左右就会自动执行一次。如果我把 IRQ0 的 ISR 地址改成我自己的一个 ISR 的地址，那么就相当于，每隔 50ms 左右，我自己的那个玩意儿自动执行一次。</p>
+<h3 id="tsr">TSR</h3>
+<p>TSR（Terminate and Stay Resident programs），说白了就是在后台运行的东西。比如 Lab5 第三题那玩意儿。</p>
+<p>TSR 可以用于创建屏幕单词拼写检查器之类的东西。</p>
+<p>但是，如果后台有一个 TSR 在运行，那么可能你进行一些其他的操作（尤其是 critical 的操作）的时候，可能就会出现一些奇奇怪怪的意想不到的问题。解决办法就是重启电脑，这样 TSR 就被自动关闭了。</p>
+<p>Win95 采用了一个叫做事件管理器的东西来通知相应的程序。这比 8086 的 TSR 靠谱多了。</p>
+</article>>

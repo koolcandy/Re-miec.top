@@ -1,0 +1,199 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="_1">计算机基础结构</h1>
+<h2 id="_2">生词</h2>
+<table>
+<thead>
+<tr>
+<th align="left">英文</th>
+<th align="left">中文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Terminology</td>
+<td align="left">术语</td>
+</tr>
+<tr>
+<td align="left">general-purpose</td>
+<td align="left">多功能</td>
+</tr>
+<tr>
+<td align="left">assembly language</td>
+<td align="left">汇编语言</td>
+</tr>
+<tr>
+<td align="left">instruction set</td>
+<td align="left">指令集</td>
+</tr>
+<tr>
+<td align="left">architecture</td>
+<td align="left">架构</td>
+</tr>
+<tr>
+<td align="left">Von Neumann</td>
+<td align="left">冯诺依曼</td>
+</tr>
+<tr>
+<td align="left">Arithmetic &amp; Logic Unit (ALU)</td>
+<td align="left">算术逻辑单元</td>
+</tr>
+<tr>
+<td align="left">Program Counter (PC)</td>
+<td align="left">程序计数器</td>
+</tr>
+<tr>
+<td align="left">volatile</td>
+<td align="left">不稳定的</td>
+</tr>
+<tr>
+<td align="left">firmware</td>
+<td align="left">固件</td>
+</tr>
+<tr>
+<td align="left">scenario</td>
+<td align="left">情景</td>
+</tr>
+<tr>
+<td align="left">mnemonic</td>
+<td align="left">帮助记忆的</td>
+</tr>
+<tr>
+<td align="left">executable</td>
+<td align="left">可执行的</td>
+</tr>
+<tr>
+<td align="left">synchronization</td>
+<td align="left">同步</td>
+</tr>
+<tr>
+<td align="left">communication bus</td>
+<td align="left">通讯总线</td>
+</tr>
+</tbody>
+</table>
+<h2 id="intel-x86">一些 Intel x86 指令</h2>
+<table>
+<thead>
+<tr>
+<th align="left">含义</th>
+<th align="left">指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">move</td>
+<td align="left">MOV</td>
+</tr>
+<tr>
+<td align="left">push</td>
+<td align="left">PUSH</td>
+</tr>
+<tr>
+<td align="left">push all</td>
+<td align="left">PUSHA</td>
+</tr>
+<tr>
+<td align="left">move with sign</td>
+<td align="left">MOVSX</td>
+</tr>
+<tr>
+<td align="left">load address</td>
+<td align="left">LEA</td>
+</tr>
+<tr>
+<td align="left">add</td>
+<td align="left">ADD</td>
+</tr>
+<tr>
+<td align="left">subtract</td>
+<td align="left">SUB</td>
+</tr>
+<tr>
+<td align="left">multiplicate</td>
+<td align="left">MUL</td>
+</tr>
+<tr>
+<td align="left">divide with sign</td>
+<td align="left">IDIV</td>
+</tr>
+<tr>
+<td align="left">logical and</td>
+<td align="left">AND</td>
+</tr>
+<tr>
+<td align="left">bit test</td>
+<td align="left">BTS</td>
+</tr>
+<tr>
+<td align="left">bit scan forward</td>
+<td align="left">BSF</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">冯诺依曼架构</h2>
+<p><img alt="fnym" src="https://z3.ax1x.com/2021/09/14/4ECq91.png"/></p>
+<p>其中：</p>
+<ul>
+<li>CU 是 Control Unit，用于从主存储器获取指令（fetch）到 CPU</li>
+<li>PC 是 Program Counter，用于保存指令的地址</li>
+<li>ALU 是 Arithmetic &amp; Logic Unit</li>
+</ul>
+<p>很多现代计算机都使用冯诺依曼架构</p>
+<h2 id="ascii">ASCII</h2>
+<p>使用 7 个 bits 来表示 128 个字符</p>
+<h2 id="word">word</h2>
+<p>1 word = n bytes = 8n bits</p>
+<h2 id="gb-gib">GB 和 GiB</h2>
+<ul>
+<li>GB: 1000 MB</li>
+<li>GiB: 1024 Mib</li>
+</ul>
+<h2 id="_4">内存寻址</h2>
+<blockquote>
+<p>How much memory can be addressed when using 1-byte memory address?</p>
+<p>Answer: 256 Bytes</p>
+<p>(pdf page 22)</p>
+</blockquote>
+<p>意思是，8 位寻址空间，可用内存 256 字节<br/>
+类似地，如果是 32 位，那就是 4GiB</p>
+<h2 id="_5">汇编语言简介</h2>
+<table>
+<thead>
+<tr>
+<th align="left">指令名称</th>
+<th align="left">简称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">addition</td>
+<td align="left">add</td>
+</tr>
+<tr>
+<td align="left">subtraction</td>
+<td align="left">sub</td>
+</tr>
+<tr>
+<td align="left">load word</td>
+<td align="left">lw</td>
+</tr>
+<tr>
+<td align="left">store word</td>
+<td align="left">sw</td>
+</tr>
+<tr>
+<td align="left">shift right logical</td>
+<td align="left">srl</td>
+</tr>
+<tr>
+<td align="left">branch if not equal</td>
+<td align="left">bne</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pc">注意 PC</h2>
+<p>根据 CPU 架构，程序计数器（PC）可能指向当前正在执行的指令、正在获取的指令或下一条可执行指令。</p>
+<h2 id="_6">机器周期</h2>
+<p><img alt="MachineCycle" src="https://z3.ax1x.com/2021/09/14/4EASMt.png"/></p>
+<p>其中，fetch 和 execute 过程受 CPU 当中 CU 的控制，fetch 到的指令会被安排到 instruction register 当中。每当一条指令被执行，program counter 就会增加，以便存储下一条指令。</p>
+</article>>

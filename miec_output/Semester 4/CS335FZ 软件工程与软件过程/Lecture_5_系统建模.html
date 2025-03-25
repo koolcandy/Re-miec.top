@@ -1,0 +1,171 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-5">Lecture 5 系统建模</h1>
+<p>模型是从某个特定视角对系统的一个抽象，也就是提取最显著特征之后的简化，并不是系统的另一种等价表示。比如，这个笔记就是对这门课的一个抽象。建模可以比较清楚的看到系统的功能、优缺点，还有助于更好的讨论设计方案、文档等。</p>
+<p>一般比较常见的视角有：</p>
+<ul>
+<li>外部视角（external），关注上下文或环境，比如系统是否要使用第三方 API</li>
+<li>交互视角（interaction），关注系统与环境或用户，以及构件之间的交互（方式）</li>
+<li>结构化视角（structural），关注系统组织结构或系统所处理的数据的结构，</li>
+<li>行为视角（behavior），关注系统的动态行为、系统如何响应事件，比如异常怎么处理</li>
+</ul>
+<p>UML（Unified Modelling Language，统一建模语言）面向对象建模的标准语言。UML 当中有多种图的模型，但是只需要其中 5 个就可以描述系统的基本特性：</p>
+<ul>
+<li>活动图（activity diagram）</li>
+<li>用况图（use case diagram）</li>
+<li>顺序图（sequence diagram）</li>
+<li>类图（class diagram）</li>
+<li>状态图（state diagram）</li>
+</ul>
+<h2 id="external-perspective">系统建模：外部视角 external perspective</h2>
+<h3 id="context-model">上下文模型 context model</h3>
+<p>在系统开发的初期（编写规格说明书）的时候，就要确定系统的边界，也就是确定系统应该包含什么、不应该包含什么。然后，用简单的 block 图，或者空的类图，粗略表述一下系统与环境之间的关联（因为 UML 当中没有专门针对上下文模型的图）。</p>
+<h4 id="uml">用 UML 画上下文模型</h4>
+<p>用一个矩形方块表示一个系统（可以是本身也可以是外部的），然后用一条实线把内部外部系统连接起来</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/12/MPakVOhXnUDN1eJ.png"/></p>
+<p>如图，表示了一个精神病住院治疗系统（Mentcare）及其环境中其他系统的上下文模型。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/21/tcGTZDiaYWML3bX.png"/></p>
+<h5 id="stereotype">术语：构造型 stereotype</h5>
+<p>构造型是三种 UML 扩展方式之一。</p>
+<p>在图表中，构造型跟元素紧挨着，用 <code>&lt;&lt;xxx&gt;&gt;</code> 的形式表述，用于描述这个元素是什么类型的，如：<code>&lt;&lt;system&gt;&gt;</code>，<code>&lt;&lt;use&gt;&gt;</code>，<code>&lt;&lt;include&gt;&gt;</code>，<code>&lt;&lt;import&gt;&gt;</code> 等。</p>
+<p>上述示例图当中每一个方块表示的都是一个系统，所以都是 <code>&lt;&lt;system&gt;&gt;</code>。</p>
+<h3 id="business-process-model">业务流程模型 business process model</h3>
+<p>刚才用 UML 画出来的上下文模型，只是体现了系统之间有关系，但是没有具体体现，到底是什么关系，比如，系统 A 给系统 B 提供什么数据？用网络还是什么方式提供？</p>
+<p>业务流程模型，顾名思义，对业务流程进行建模。也就是描述，这个系统怎样参与到业务当中去。</p>
+<p>在 UML 当中可以使用 <strong>活动图</strong> 表示业务流程模型，因为活动图可以描述一个过程。业务流程模型也可以用 <em>业务流程模型和标记法（Business Process Model and Notation，BPMN）</em> 表示。</p>
+<h4 id="activity-diagrams">活动图 activity diagrams</h4>
+<p>活动图显示了过程中的一个活动，以及从一个活动到另一个活动的控制流（flow），用 activity nodes 与 activity edges 描述（就跟状态机似的）。</p>
+<h5 id="_1">图例</h5>
+<ul>
+<li>圆角矩形：表示一个「活动」，也就是必须执行的子过程</li>
+<li>直角矩形：表示一个元素或对象</li>
+<li>菱形：表示一个「决策」，类似于 <code>if</code> 语句，条件在旁边用 <code>[xxx]</code> <code>[yyy]</code> 表示</li>
+<li>黑色实心圆：表示初始节点，也就是工作流的开始</li>
+<li>黑色实心圆外边套个圈圈：表示结束节点</li>
+<li>很粗的实线（或又长又窄的条条）：也是一种控制节点，表示并行活动的开始（分离，split or fork）或结束（汇合，join）</li>
+<li>箭头：从开始走到结束，表示执行的顺序</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/04/12/z1jY5PdDv68sQeb.png"/></p>
+<h5 id="mentcare">示例：活动图描述 Mentcare 系统如何对精神病患者强制拘留住院</h5>
+<p><img alt="" src="https://s2.loli.net/2023/04/21/APTIqW132Npe5nt.png"/></p>
+<h2 id="interaction-perspective">系统建模：交互视角 interaction perspective</h2>
+<p>系统当中可以有多种类型的交互，比如用户交互（输入输出），比如这个系统与环境中其它系统的交互，再比如系统内部不同构件之间的交互…</p>
+<h3 id="use-case">用况（use case）</h3>
+<p>用况是一个任务，可以与系统外部的交互。外部的主体通常是人类，也可以是其它系统。</p>
+<p>用况图相当于用况的一个简单概览。而如果想要详细的描述，可以用表格的方式：</p>
+<table>
+<thead>
+<tr>
+<th align="center">用况</th>
+<th align="center">用户故事管理系统：更新用户故事</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>参与角色 actors</strong></td>
+<td align="center">产品负责人</td>
+</tr>
+<tr>
+<td align="center"><strong>描述 descriptions</strong></td>
+<td align="center">负责人登陆进去管理系统，对用户故事进行修改，然后检查是否合法，检查完毕后保存。更新好之后，可以选择是否刷新界面显示</td>
+</tr>
+<tr>
+<td align="center"><strong>数据 data</strong></td>
+<td align="center">系统当中存储的一个用户故事</td>
+</tr>
+<tr>
+<td align="center"><strong>触发激励 stimulus</strong></td>
+<td align="center">负责人的命令</td>
+</tr>
+<tr>
+<td align="center"><strong>响应 response</strong></td>
+<td align="center">确认用户故事已经被更新、通过合法性检查并保存</td>
+</tr>
+<tr>
+<td align="center"><strong>注解 comments</strong></td>
+<td align="center">必须是负责人才有这个权限</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_2">用况图</h4>
+<h5 id="_3">关系</h5>
+<p>用况图是用户与系统交互的最简表示形式，展现了用户和与他相关的用况之间的关系。</p>
+<p>用况与用况之间，可以有包含（include）和扩展（extend）关系。</p>
+<p>$A \xrightarrow{\text{&lt;<include>&gt;}} B$，表示完成用况 $A$，就必须完成用况 $B$。比如，$A$ 是取钱，$B$ 是输密码。换句话说，$B$ 是 $A$ 的子过程。</include></p>
+<p>$A \xleftarrow{\text{&lt;<extend>&gt;}} C$，表示完成用况 $A$ 之后，可以选择继续完成用况 $C$。比如 $A$ 是取钱，$C$ 是打印凭条。而即使没有完成 $C$，也依然可以完成 $A$。也就是说，相对于 $C$，$A$ 是独立的。</extend></p>
+<p>于是刚才那个表格可以这样表示出来</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/21/9nclK57MbIRyN2X.png"/></p>
+<p>还有一种关系叫做泛化（generalization）。$A \rightarrow B$ 大概含义就是 $A \in B$。比如，经理也是一种员工。利用泛化，可以对用况图进行简化：</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/21/ePfZyDVGAl48Itw.png"/></p>
+<h5 id="_4">图例</h5>
+<p><img alt="" src="https://s2.loli.net/2023/04/12/nSaXGbwhed2f78D.png"/></p>
+<ul>
+<li>小人表示一个角色。注意这个角色可以是人，也可以是物体（比如其它系统）</li>
+<li>实线方框表示一个系统的边界</li>
+<li>椭圆表示用况</li>
+<li>横线与 <code>&lt;&lt;xxx&gt;&gt;</code> 合在一起表示一种关系</li>
+</ul>
+<h3 id="_5">顺序图</h3>
+<p>顺序图可以直观的看出来 actor 与系统以及系统各个构件之间的，按照时间排序的交互。</p>
+<h4 id="_6">图例</h4>
+<p><img alt="" src="https://s2.loli.net/2023/04/12/yUSp3xZlaHnszWA.png"/></p>
+<ul>
+<li>标着 sd 的框，由于 sd 是 sequence diagram 的缩写，顾名思义，是框起来整个图</li>
+<li>标着 alt 的框，alternate，表示分支。条件用 <code>[xxx]</code> 表示。课件画的不对，中间应该是用虚线分隔，而不是实线。</li>
+<li>$\boxed{\text{:类名}}$ 与 $\boxed{\text{对象名:类名}}$ 很好理解</li>
+<li>$\times$ 表示销毁：在 <code>new</code>-<code>delete</code> 的顺序图描述当中可以看到</li>
+<li>line-arrowhead 表示异步消息：sender 发出消息后，继续干自己的事情</li>
+<li>solid-arrowhead 表示同步消息：sender 会等待 receiver 的回应，类似函数调用</li>
+<li>反向的 dashed-arrowhead 表示返回的消息：（貌似也是异步的）</li>
+<li>一个圆加上箭头表示 found message：未知 sender 或 sender 未画出</li>
+<li>一个箭头加上一个圆圈表示 lost message：没有发送到 receiver 或 receiver 未画出</li>
+</ul>
+<p>不好描述。但是看几个顺序图例子就应该能懂的差不多了。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/22/ryTGE3PhM9eqLJj.png"/></p>
+<p>上图橙色圆圈的递归调用，可以理解为重新回到整个蓝色长条的起点</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/22/a3wmBLgHAuIfl4Y.png"/></p>
+<p><img alt="" src="https://s2.loli.net/2023/04/22/NrMfXYlUREIJua1.png"/></p>
+<h2 id="structural-perspective">系统建模：结构视角 structural perspective</h2>
+<p>结构模型，既可以是用来描述系统设计结构的静态结构的模型，也可以是用来描述系统运行时的组织的动态的模型（因为有交互所以动态）。讨论和设计系统结构的时候，系统模型就很有用。</p>
+<h3 id="class-diagram">类图 Class diagram</h3>
+<p>类图可以用来描述系统静态结构的模型。</p>
+<p>这个比前面简单些了。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/09/I7dTP2LgrUmlNjy.png"/></p>
+<h4 id="generalization">泛化 Generalization</h4>
+<p>实线连接，空心三角箭头</p>
+<h4 id="realization">实现 Realization</h4>
+<p>就是「类」实现「接口」。接口在类图当中用 <code>&lt;&lt;interface&gt;&gt;</code> 注明。使用虚线链接的空心三角箭头。</p>
+<h4 id="composition-aggregation-association">Composition &amp; Aggregation &amp; Association</h4>
+<p><strong>聚集在中间</strong>。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/12/9CoIQFfYDm8upJx.png"/></p>
+<p>从左到右，越来越宽泛。</p>
+<p>Association 是最宽泛的，只是表示两个东西有联系。也有的地方把 Association 叫做「相识 acquaintance」。</p>
+<p><em>聚集（aggregation）</em>，可以理解为「part of」。</p>
+<p>composition 表示「whole/part」的关系。如果其中一个移除掉了，那么对应的另一个也要移除掉。</p>
+<p>课件写的太烂了，不是很好理解，所以我咨询了 Chat GPT。以下是它给出的回答：</p>
+<blockquote>
+<p>Q: 如何理解 uml 类图当中的：association、aggregation、composition？</p>
+<p>A: 在 UML 类图中，三个最常用的关系是关联（Association）、聚合（Aggregation）和组合（Composition），它们表示类之间的不同类型关系。</p>
+<p><em>关联（Association）</em>
+关联是一种表示对象之间的连接关系的关系类型。它描述了两个或多个对象之间的关系，它们可以相互交互，但彼此之间没有拥有关系。<strong>关联可以是双向的，也可以是单向的</strong>。在 UML 类图中，关联通常用一条带箭头的线表示，箭头指向关系的终点。例如，一个订单对象和一个客户对象之间的关联可能是一个双向的关联。</p>
+<p><em>聚合（Aggregation）</em>
+聚合是一种表示 “整体 - 部分” 关系的关系类型。它描述了一个对象由多个组成部分组成，但这些组成部分可以从整体中分离出来并存在于其它地方。在 UML 类图中，聚合通常用一条带 <strong>空心菱形</strong> 的线表示，菱形指向整体。<strong>例如，一个车库对象可以包含多个汽车对象，但是汽车可以存在于其他地方，如公路上或停车场。</strong></p>
+<p><em>组合（Composition）</em>
+组合是一种表示 “整体 - 部分” 关系的关系类型，它比聚合更强，因为部分不能从整体中分离出来。组合表示一个对象由其组成部分组成，并且没有部分，该对象将不再存在。在 UML 类图中，组合通常用一条带 <strong>实心菱形</strong> 的线表示，菱形指向整体。<strong>例如，一幅画由多个独立的形状组成，但是形状不能被从画中分离出来。</strong></p>
+</blockquote>
+<h5 id="_7"><a href="https://blog.csdn.net/m0_37989980/article/details/104470064">高赞博客</a> 的解释</h5>
+<ul>
+<li>关联，类 A 使用类 B 作为成员。<img alt="" src="https://s2.loli.net/2023/05/11/bNYKV4e9L1AdUkG.png"/></li>
+<li>聚合，“has-a”的关系。<img alt="" src="https://s2.loli.net/2023/05/11/CBVUxQcqEFHs82M.png"/></li>
+<li>组合，“contains-a”的关系。<img alt="" src="https://s2.loli.net/2023/05/11/DlWqFUydV4bfmI7.png"/></li>
+</ul>
+<h3 id="package-diagram">包图 Package diagram</h3>
+<p>包（package）就像是命名空间（namespace）。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/22/ZN1Gjm6Q7Pa3uI9.png"/></p>
+<p>注意 containment 和 import 是两个不同的东西：
+- containment 有包含的意思。$A -\oplus B$ 表示 $A$ 是 $B$ 的一部分。并不等于 import。
+- import 的意思是，实现一个包，依赖于另一个包，跟 python 差不多。</p>
+<p><img alt="" src="https://s2.loli.net/2023/06/07/5BHVDbPRXwtoINK.png"/></p>
+<h3 id="deployment-diagram">部署图 Deployment diagram</h3>
+<p>用于体现系统当中物理元素、逻辑元素与资源之间的关系。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/22/rOJQkcU4Kz2Swg9.png"/></p>
+</article>>

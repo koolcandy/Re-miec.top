@@ -1,0 +1,76 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-2-26">Lecture 2. 进程管理（26 页）</h1>
+<blockquote>
+<ol>
+<li>程序、进程、处理器</li>
+<li>表示过程抽象</li>
+<li>进程 <em>生命周期（lifecycle）</em></li>
+<li>与操作系统通信 - <em>系统调用（system call）</em></li>
+</ol>
+</blockquote>
+<h2 id="_1">程序、进程、处理器</h2>
+<h3 id="program">程序 program</h3>
+<p>程序是指一系列的具有指定顺序的指令。相当于把一个算法翻译成了编程语言。</p>
+<p><em>编译器（compiler）</em> 会把代码映射转换为特定处理器的一系列的机器指令（目标代码）。这些指令存储在 <em>目标文件（object file）</em> 中。Windows 的目标文件通常是 .obj 扩展名，Linux 通常是 .o 扩展名。</p>
+<p>而 <em>链接器（Linker）</em> 执行链接过程。它接受一个或多个目标文件，对于 C 语言来说，如果程序中有 <code>sqrt()</code> 函数，还会再链接 <code>math.h</code> 库。然后输出 <em>可执行文件（executable file）</em>。</p>
+<p>总结来讲，编译器生成的是目标文件，不能被执行；链接器可以利用目标文件生成可执行文件，这个才能被执行。换句话说，目标文件是中间产物，可执行文件才是想要的东西。</p>
+<p><a href="https://pediaa.com/what-is-the-difference-between-object-file-and-executable-file/">这篇文章</a> 描述了比较详细的目标文件和可执行文件的关系，可以参考。</p>
+<p>CSAPP E3 的章节 1.2 也描述了编译和链接的过程。</p>
+<h3 id="process">进程 process</h3>
+<p>进程是正在运行的程序的一个实例（instance）。它是操作系统的 <em>抽象（abstraction）</em>。执行指令的时候，就会产生一个进程。</p>
+<p>程序的可执行模块会以映像的形式加载到内存当中，然后处理器获取指令。</p>
+<p><em>程序映像（program image）</em> 具有特定于特定操作系统和处理器的格式，包括程序参数、堆栈空间、数据空间和程序代码。</p>
+<p>进程是一个 <em>执行环境（execution context）</em>，是运行时内核管理的信息的集合</p>
+<p>进程是一个动态的实体，持续时间短则几毫秒，长则几个月；<em>系统服务（system service）</em> 比较特殊，是系统启动的时候就加载成为 <em>系统进程（system process）</em> 了，生命周期跟内核一样。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/jryD9k1t5lTeop3.png"/></p>
+<h4 id="_2">中断</h4>
+<p>事件发生通常通过硬件或软件的 <em>中断（interrupt）</em> 来通知。中断，顾名思义，可以理解为暂停当前程序，将控制转移到另一个程序。硬件可以随时通过系统总线向 CPU 发送信号触发中断，而软件可以通过执行 <em>系统调用（system call）</em> 来触发中断。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/jryD9k1t5lTeop3.png"/></p>
+<p>如上图表示。在执行 M 指令的时候发生了中断，那么根据中断的编号，先跳到「中断向量表」中找到指定的「中断向量」，然后再找到中断处理程序的地址（107B），执行中断处理程序的相关代码（执行过程可能还会遇到其他中断）。执行完之后，回去执行紧跟在 M 指令后面的 N 指令。</p>
+<h3 id="processor">处理器 processor</h3>
+<p>处理器可以看作进程运行的代理人，它运行进程的方式是执行内存映像当中存储的指令。大多数个人电脑都只有一个处理器（CPU）。</p>
+<p>现代处理器具有多个 <em>执行核心（execution core）</em>，同一时间可以执行多个指令。</p>
+<p>然而，由于通常情况下，进程的数量会远远多于处理器的数量，所以处理器的资源是进程之间共享的，共享的实现方式是将 CPU 时间分配给 <em>就绪进程（ready process）</em>。</p>
+<h3 id="_3">三种进程状态</h3>
+<p>操作系统的进程状态主要有三个：运行态、就绪态、阻塞态。</p>
+<p><em>运行进程（running process）</em>，顾名思义就是正在使用 CPU 资源并正在 CPU 上运行的进程。</p>
+<p>而 <em>就绪进程（ready process）</em> 就是已经具备了运行条件，但是由于暂时没有 CPU 空闲，所以在暂时等待。上文也提到过，CPU 时间分配给的是就绪进程。</p>
+<p>有时候有的进程可能在等待接收数据、等待用户交互、等待资源分配，这个阶段进程并不使用处理器资源，这些就是 <em>阻塞进程（blocked process）</em>。</p>
+<p>除了这三个状态，还有创建态（new）、结束态（terminated）。这个顾名思义。</p>
+<p>这张图描述了进程状态的转换</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/06/Klap5VXhBzu8R1E.png"/></p>
+<h2 id="_4">表示过程抽象</h2>
+<p>操作系统的一项非常基础的任务就是进程管理，包含创建、控制、终止、管理执行环境等方面。</p>
+<p>操作系统必须分配内存资源和 CPU 时间给进程，并保护资源不受到其他进程活动的影响。此外，对于共享相同资源的进程，还要提供同步机制。</p>
+<p>为了实现进程管理，操作系统会使用数据结构来表示当前处理的进程的状态：操作系统对每一个进程维护一个 <em>PCB（进程控制块，Process Control Block）</em> 或 <em>进程描述符（Process Descriptor）</em>，这样就可以清楚的表示每个进程在干啥、以及执行到了什么状态、它被分配到哪些资源。</p>
+<h3 id="pcb">进程控制块 PCB</h3>
+<p>PCB 用于跟踪执行环境（关于进程及其活动的所有信息），可用于将该进程独立调度到任何可用处理器上。</p>
+<p>PCB 类似编程语言当中的 <code>struct</code>，包括许多与进程相关的信息，可以分为三大类：进程识别数据、处理器状态数据、进程控制数据，如表格：</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/06/UX67kEi8l1roZOs.png"/></p>
+<p>实际上，Linux 当中的 PCB，就是用 <code>struct</code> 表示的，在头文件 <code>&lt;linux/sched.h&gt;</code> 当中。</p>
+<p>当遇到了中断，就把所有信息（<em>上下文 context</em>）保存进 PCB。这样，当该进程重新进入运行状态，可以直接从 PCB 当中读取上一次运行结束时候的状态、继续运行（上下文切换）。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/24/ChkwIMeczRfDv3p.png"/></p>
+<h2 id="_5">进程的生命周期</h2>
+<p>前面提到过了，进程状态的转换。</p>
+<h2 id="_6">与操作系统的通信</h2>
+<p>出于安全性和可靠性的考虑，进程之间的以及进程与硬件或操作系统之间的直接通信，必须使用特定的机制来实现。</p>
+<p>对于进程间通信，操作系统提供了进程间通信的函数，这些函数可以将 <em>消息（message）</em> 从一个进程映射到另一个进程。</p>
+<p>对于与操作系统通信，是通过特殊的系统调用（system call）机制完成的，这个机制可以自动的切换处理器的执行模式的</p>
+<h3 id="_7">执行模式</h3>
+<p>处理器的 <em>运行模式（mode of execution）</em> 至少要分两个等级：<em>用户模式（user mode）</em> 和 <em>内核模式（supervisor mode）</em>（也叫 <em>监视模式</em>、<em>系统模式</em>、<em>特权模式</em>）。用户模式只能执行指令集的一个子集。切换到内核模式才能执行完整指令集。当然这个切换也是受控的。比如为了保护硬件系统，有些处理器的指令必须限制普通用户权限的进程，比如 OS 代码。</p>
+<p>有一个特殊的处理器指令，<em>软件中断（software interrupt）</em>（也叫 <em>陷阱</em> 或 <em>异常</em>），可以实现到内核模式的切换。</p>
+<p>处理器可以拥有多种运行模式，但是至少要满足上述两种。除了模式以外，有的处理器区分多个 <em>特权级别（privilege level）</em> 来区分运行权限，比如 Intel 64 系列的 U。</p>
+<h3 id="system-call">系统调用 System Call</h3>
+<p>进程如果要访问硬件、与其他进程通信、创建新进程，必须要先跟 OS 通信，获取到 <em>系统服务（system service）</em> 才行。</p>
+<p>系统调用是指，运行在用户模式的程序向操作系统内核请求更高权限运行的服务。</p>
+<p><em>包装库（wrapper library）</em> 是一种函数库，可以将其它函数库已存在的接口翻译成另一种兼容接口。</p>
+<p>通常，程序通过包装库当中的包装函数发起系统调用。</p>
+<p>包装 API 还可以帮助应用程序实现跨平台和跨内核。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/06/kGcUnvgqlImsBtN.png"/></p>
+<h4 id="fetch-decode-execute-cycle">指令周期 fetch-decode-execute cycle</h4>
+<p><img alt="" src="https://s2.loli.net/2023/03/06/PjUEJxK8FDgh2Cc.png"/></p>
+<h3 id="hardware-interrupt">硬件中断 hardware interrupt</h3>
+<p>硬件中断可用来实现硬件与 OS 的通信。硬件设备发送电信号，以通知操作系统硬件状态的变化。</p>
+<p>硬件中断机制可以让系统高效的管理大量硬件设备。</p>
+<p>为了防止部分用户程序陷入死循环导致资源持续占用，可以使用定时器（timer）。比如，程序初始化的时候，设置定时器为允许运行的最大时间。每秒滴答一次并产生中断，当倒计时到零，就强制终止该程序运行。</p>
+</article>>

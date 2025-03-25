@@ -1,0 +1,84 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-8-unix-16">Lecture 8. Unix 管道与套接字（16 页）</h1>
+<h2 id="_1">普通管道</h2>
+<p><img alt="" src="https://s2.loli.net/2023/06/09/tL36CXwA2l9nzrg.png"/></p>
+<ul>
+<li><em>管道（pipe）</em> 是一种在所有 Unix 版本中都提供的进程间通信机制。现在先考虑匿名管道（普通管道）。</li>
+<li>对于运行在同一设备上的进程，可以使用管道来实现高速的信息传递。</li>
+<li>管道是 FIFO 的，像一个隧道。由系统内核以有限大小的 <strong>缓冲区实现</strong>。</li>
+<li><strong>匿名管道必须是两个相关的进程才可以访问</strong>。比如父进程和子进程。要让子进程拥有权限，必须先 <strong>创建管道，再创建子进程</strong>。</li>
+<li>一个进程在管道的一端写入数据，另一个进程从管道的另一边读数据。因此，<strong>匿名管道是单向</strong> 的。</li>
+<li><strong>匿名管道的生命周期随进程</strong>，命名管道的生命周期随系统。也就是说当没有进程访问一个匿名管道的时候，这个匿名管道就消失了。但命名管道会像文件一样持续存在。</li>
+</ul>
+<h3 id="c">使用 C 语言操作匿名管道</h3>
+<h4 id="_2">首先，创建</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">fdptr</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="c1">// blabla</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">pipe</span><span class="p">(</span><span class="n">fdptr</span><span class="p">);</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1">// 执行成功后，fdptr[0] 与 fdptr[1] 是两个文件描述符，分别描述管道的两端（0 读，1 写）</span>
+</span></code></pre></div>
+<p><code>stdin</code>，<code>stdout</code>，<code>stderr</code> 分别是 0、1、2，因此 <code>fdptr[0]</code>、<code>fdptr[1]</code> 最小值是 3。</p>
+<p><img alt="" src="https://s2.loli.net/2023/06/09/HEvJ26BwhGxVYIM.png"/></p>
+<h4 id="_3">接着，进行读写</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">strbuff</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="n">write</span><span class="p">(</span><span class="n">fdptr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="s">"welcome"</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span><span class="w">  </span><span class="c1">// 向管道写入数据</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">fdptr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">strbuff</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span><span class="w">  </span><span class="c1">// n 是实际读到的字节数</span>
+</span></code></pre></div>
+<p>关于 <code>read()</code>：</p>
+<ul>
+<li><strong>注意如果管道里面啥都没有，那么 read() 就会被阻塞</strong></li>
+<li>如果管道里面有东西但是不够第三个参数那么多，那么不会被阻塞，返回实际读到的字节数</li>
+</ul>
+<h2 id="named-pipe">命名管道 named pipe</h2>
+<p>对于两个没有直接关联的进程，如果对于同一个 file name space 具有权限，那么可以使用命名管道进行通信。</p>
+<p>命名管道也是 FIFO 的，只不过是以类似于文件的形式存在的。甚至对于使用同样文件系统的不同设备，可以把这个命名管道用 U 盘啊之类的东西拷过去然后再进行跨设备的进程间通信。</p>
+<h3 id="c_1">使用 C 语言操作命名管道</h3>
+<h4 id="_4">首先，创建</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">mknod</span><span class="p">(</span><span class="s">"mypipe"</span><span class="p">,</span><span class="w"> </span><span class="mo">010777</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</span></code></pre></div>
+<p>参数解释：</p>
+<ul>
+<li><code>mknod</code> 用于创建文件（命名管道），名字叫 mypipe</li>
+<li>010777 是八进制的表示。10 表示这个文件比较特殊，777 表示 owner、group、world 三者对此文件的读、写、执行的权限</li>
+<li>0 不用管</li>
+</ul>
+<h4 id="_5">接着，进行读写</h4>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">namedpipe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"mypipe"</span><span class="p">,</span><span class="w"> </span><span class="n">O_WRONLY</span><span class="p">);</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="n">namedpipe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"mypipe"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span><span class="w">  </span><span class="c1">// 只读</span>
+</span></code></pre></div>
+<ul>
+<li>如果没有进程写，那么读的就会阻塞</li>
+<li>如果没有进程读，那么写的就会阻塞</li>
+</ul>
+<h2 id="_6">网络套接字</h2>
+<p>套接字是独立进程之间通信的更加常见的形式。无论是系统内核的数据结构还是文件，都可以通过套接字传输。</p>
+<p>管道与命名管道的通信具有局限性：管道通信必须要求两个进程之间有关联，而命名管道需要使用公共文件系统。对于既不存在关联、也不共享文件系统的进程，要实现通信，就要考虑 <strong>TCP/IP</strong> 等机制。</p>
+<p><strong>套接字是由进程创建的，由 IP 地址与端口号组成。每一对进程需要使用一对（也就是俩）套接字进行通信。</strong></p>
+<p><img alt="" src="https://s2.loli.net/2023/06/09/YmsOAjJNokHpEQW.png"/></p>
+<p>通信服务（比如 TCP/IP），可以为不同进程之间套接字的连接提供方案。</p>
+<p>套接字连接之后，数据（字节）从本地套接字发送到远程套接字。然后远程设备通过监听套接字上的数据变化，来接收数据。</p>
+<p>TCP 套接字是 <em>面向连接（connection-oriented）</em> 的，UDP 套接字是 <em>无连接（connectionless）</em> 的。面向连接就会稳定一些但是牺牲一些速度，vice versa。</p>
+<p>像 FTP 服务器使用 21 号端口，HTTP 服务器使用 80 号端口，这些小于 1024 的端口都是众所周知（well known）的。</p>
+<h3 id="tcp">TCP 套接字连接过程示意图</h3>
+<p><img alt="" src="https://s2.loli.net/2023/06/09/LevKaCBuYtDJwly.png"/></p>
+<ul>
+<li><code>bind()</code> 是指把特定端口和 IP 地址结合起来</li>
+<li><code>listen()</code> 就是开始监听</li>
+<li><code>connect()</code> 过程涉及到了 <strong>三次握手</strong>，图示如下（SYN 表示搞个序列号希望连接，ACK 表示确认）</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/06/09/Xc3uI4wfxO2F7hn.png"/></p>
+<h4 id="_7">三次握手</h4>
+<ul>
+<li>A: 嗨，我想跟你初始化（SYN）一个连接</li>
+<li>B：好，我知道了（ACK），我跟你初始化这个连接（SYN）</li>
+<li>A：OK，我们的连接搞好了（ACK）</li>
+</ul>
+<h4 id="_8">四次挥手</h4>
+<ul>
+<li>A：嗨，我想跟你说的话都说完了（FIN）</li>
+<li>B：哦我知道了（ACK）</li>
+<li>（此时 B 还可以给 A 继续说话）</li>
+<li>B：嗨，我跟你想说的也说完了（FIN）</li>
+<li>A：哦我知道了（ACK）</li>
+</ul>
+</article>>

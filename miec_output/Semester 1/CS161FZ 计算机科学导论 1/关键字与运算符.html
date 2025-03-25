@@ -1,0 +1,213 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="_1">关键字与运算符</h1>
+<h2 id="java">Java 关键字</h2>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center"></th>
+<th align="center"></th>
+<th align="center"></th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">abstract</td>
+<td align="center">assert</td>
+<td align="center">boolean</td>
+<td align="center">break</td>
+<td align="center">byte</td>
+</tr>
+<tr>
+<td align="center">case</td>
+<td align="center">catch</td>
+<td align="center">char</td>
+<td align="center">class</td>
+<td align="center">const</td>
+</tr>
+<tr>
+<td align="center">continue</td>
+<td align="center">default</td>
+<td align="center">do</td>
+<td align="center">double</td>
+<td align="center">else</td>
+</tr>
+<tr>
+<td align="center">enum</td>
+<td align="center">extends</td>
+<td align="center">final</td>
+<td align="center">finally</td>
+<td align="center">float</td>
+</tr>
+<tr>
+<td align="center">for</td>
+<td align="center">goto</td>
+<td align="center">if</td>
+<td align="center">implements</td>
+<td align="center">import</td>
+</tr>
+<tr>
+<td align="center">instanceof</td>
+<td align="center">int</td>
+<td align="center">interface</td>
+<td align="center">long</td>
+<td align="center">native</td>
+</tr>
+<tr>
+<td align="center">new</td>
+<td align="center">package</td>
+<td align="center">private</td>
+<td align="center">protected</td>
+<td align="center">public</td>
+</tr>
+<tr>
+<td align="center">return</td>
+<td align="center">short</td>
+<td align="center">static</td>
+<td align="center">strictfp</td>
+<td align="center">super</td>
+</tr>
+<tr>
+<td align="center">switch</td>
+<td align="center">synchronized</td>
+<td align="center">this</td>
+<td align="center">throw</td>
+<td align="center">throws</td>
+</tr>
+<tr>
+<td align="center">transient</td>
+<td align="center">try</td>
+<td align="center">void</td>
+<td align="center">volatile</td>
+<td align="center">while</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">逻辑 / 位运算符优先级</h2>
+<p><code>!</code> &gt; <code>&amp;&amp;</code> &gt; <code>||</code><br/>
+<code>~</code> &gt; <code>&amp;</code> &gt; <code>|</code></p>
+<h2 id="_3">运算符优先级</h2>
+<p>当两个运算符的优先级相同，则按照结合性的顺序求值</p>
+<table>
+<thead>
+<tr>
+<th align="center">level</th>
+<th align="center">operator</th>
+<th align="center">description</th>
+<th align="center">Associativity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">16</td>
+<td align="center"><code>[]</code> <code>.</code> <code>()</code></td>
+<td align="center">访问数组元素、对象成员、括号</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="center"><code>++</code> <code>--</code></td>
+<td align="center">后置自增自减</td>
+<td align="center">not associative</td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="center"><code>++</code> <code>--</code> <code>+</code> <code>-</code> <code>!</code> <code>~</code></td>
+<td align="center">前置自增自减、一元加减、一元位取反、一元逻辑非</td>
+<td align="center">not associative</td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="center"><code>()</code> <code>new</code></td>
+<td align="center">转换、创建对象</td>
+<td align="center">right to left</td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="center"><code>*</code> <code>/</code> <code>%</code></td>
+<td align="center">乘除法</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center"><code>+</code> <code>-</code> <code>+</code></td>
+<td align="center">加减法、字符串拼接</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center"><code>&lt;&lt;</code> <code>&gt;&gt;</code> <code>&gt;&gt;&gt;</code></td>
+<td align="center">移位运算符</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center"><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code> <code>instanceof</code></td>
+<td align="center">关系运算符</td>
+<td align="center">not associative</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center"><code>==</code> <code>!=</code></td>
+<td align="center">判断等于</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center"><code>&amp;</code></td>
+<td align="center">位与</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center"><code>^</code></td>
+<td align="center">位异或</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><code>\|</code></td>
+<td align="center">位或</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><code>&amp;&amp;</code></td>
+<td align="center">逻辑与</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>\|\|</code></td>
+<td align="center">逻辑或</td>
+<td align="center">left to right</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>?:</code></td>
+<td align="center">三元运算符</td>
+<td align="center">right to left</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>&amp;=</code> <code>^=</code> <code>\|=</code> <code>&lt;&lt;=</code> <code>&gt;&gt;=</code> <code>&gt;&gt;&gt;=</code></td>
+<td align="center">赋值</td>
+<td align="center">right to left</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">德摩根定律</h2>
+<p><code>!(A &amp;&amp; B)</code> = <code>!A || !B</code><br/>
+<code>!(A || B)</code> = <code>!A &amp;&amp; !B</code></p>
+<p><code>!(A &amp;&amp; B &amp;&amp; C)</code> = <code>!A || !B || !C</code><br/>
+<code>!(A || B || C)</code> = <code>!A &amp;&amp; !B &amp;&amp; !C</code></p>
+<h2 id="_5">左移右移</h2>
+<ul>
+<li><code>&lt;&lt;</code>: 左移，右边<strong>补零</strong></li>
+<li><code>&gt;&gt;</code>: 右移，左边<strong>补最高位</strong></li>
+<li><code>&gt;&gt;&gt;</code>: 右移，左边<strong>补零</strong></li>
+</ul>
+<h2 id="_6">不懂的地方</h2>
+<p><strong>L6 PPT P21，P22</strong></p>
+</article>>

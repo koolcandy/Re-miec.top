@@ -1,0 +1,126 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="ieee-754">IEEE 754</h1>
+<p>可以参考：<br/>
+https://www.zhihu.com/question/46432979/answer/221485161<br/>
+https://zh.wikipedia.org/wiki/IEEE_754<br/>
+https://bartaz.github.io/ieee754-visualization/</p>
+<p>在计算机中，根据 IEEE 754 标准，所有浮点数都存储为 $\text{1.xx} \times \text{2}^{\text{yy}} \times \text{±1}$</p>
+<p><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Float_example.svg/590px-Float_example.svg.png"/></p>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">符号位 sign</th>
+<th align="center">指数位 exponent</th>
+<th align="center">分数位 fraction</th>
+<th align="center">固定偏移值 bias</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">float</td>
+<td align="center">1</td>
+<td align="center">8</td>
+<td align="center">23</td>
+<td align="center">127</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">1</td>
+<td align="center">11</td>
+<td align="center">52</td>
+<td align="center">1023</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_1">指数偏移值</h2>
+<p>IEEE 754 规定，设二进制浮点数的指数部分长度为 $e$，则<strong>指数偏移值</strong>的固定值是$2^{e-1}-1$。（一般，指数部分译作<strong>阶码</strong>。）因为指数部分取值实际上是 -126~127，-127 和 128 是特殊值。若指数实际值为 17，则存储为 144。</p>
+<p>同时，采用指数的实际值加上固定的偏移值的办法表示浮点数的指数，还可以带来好处，如直接<strong>使用字典序</strong>比较浮点数大小：正数一定大于负数，无穷大于所有数，非数不能比较大小；除此之外，则可<strong>按指数域和尾数域的字典序比较</strong>。</p>
+<h2 id="_2">规约</h2>
+<p>规约，指用<strong>唯一</strong>确定的浮点形式去表示一个值。</p>
+<p>若指数部分的编码值在 $[1, 2^e-2]$ 之间（00000000001 到 11111111110），且分数部分的最高有效位是 1（000…000 到 111…111（52 位）），则这个浮点数是规约形式的。
+- 最小的规约数是 <code>* - 0000 0001 - 000 0000 0000 0000 0000 0000</code>
+- 最大的规约数是 <code>* - 1111 1110 - 111 1111 1111 1111 1111 1111</code></p>
+<h2 id="_3">非规约形式</h2>
+<p>如果浮点数的指数部分的编码值是 0，分数部分非零，那么这个浮点数将被称为非规约形式的浮点数。</p>
+<p>一般是某个数字<strong>相当接近零时</strong>才会使用非规约型式来表示。所有的非规约浮点数比规约浮点数更接近 0。</p>
+<p>IEEE 754 规定，<strong>非规约形式的浮点数的指数偏移值比规约形式的浮点数的指数偏移值小 1。</strong>举例来说，对于 <code>float</code> 类型，规约形式偏移值是 127，而非规约的偏移值是 126。</p>
+<p>规约浮点数的尾数大于等于 1 且小于 2，而非规约浮点数的尾数小于 1 且大于 0（规约数的尾数是有隐含 1 的，而非规约数则没有）。</p>
+<ul>
+<li>最小的非规约数是 <code>* - 0000 0000 - 000 0000 0000 0000 0000 0001</code></li>
+<li>中间大小非规约数 <code>* - 0000 0000 - 100 0000 0000 0000 0000 0000</code></li>
+<li>最大的非规约数是 <code>* - 0000 0000 - 111 1111 1111 1111 1111 1111</code></li>
+</ul>
+<h2 id="_4">总结</h2>
+<table>
+<thead>
+<tr>
+<th align="center">形式</th>
+<th align="center">指数部分</th>
+<th align="center">小数部分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">正负零</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">非规约</td>
+<td align="center">0</td>
+<td align="center">大于 0 小于 1</td>
+</tr>
+<tr>
+<td align="center">规约</td>
+<td align="center">$[1, 2^e - 2]$</td>
+<td align="center">大于等于 1 小于 2</td>
+</tr>
+<tr>
+<td align="center">正负无穷</td>
+<td align="center">$2^e-1$</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">NaN</td>
+<td align="center">$2^e -1$</td>
+<td align="center">非零</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="https://z3.ax1x.com/2021/10/26/5oh0vF.png"/></p>
+<h2 id="_5">精度</h2>
+<p>IEEE 规定中的小数部分实际上省略了小数点前面的 1，所以实际上 <code>float</code> 与 <code>double</code> 分别是 24、53 位。</p>
+<ul>
+<li><code>float</code>：$\lg{2^{23+1}} = 7.22$，7 位</li>
+<li><code>double</code>：$\lg{2^{52+1}} = 15.95$，15 位</li>
+</ul>
+<h2 id="_6">浮点截断</h2>
+<p>IEEE 754 列出了四种方法，但默认情况下，<strong>舍入到最接近，偶数优先</strong>，意思是会将结果舍入为最接近且可以表示的值，但是当存在两个数一样接近的时候，则取其中的偶数（在二进制中是以 0 结尾的）。</p>
+<h2 id="_7">四舍六入五成双</h2>
+<ol>
+<li>要求保留位数的后一位如果是 4，则舍去。例如 5.214 保留两位小数为 5.21。</li>
+<li>如果保留位数的后一位如果是 6，则进上去。例如 5.216 保留两位小数为 5.22。</li>
+<li><strong>如果保留位数的后一位如果是 5，而且 5 后面不再有数，要根据应看尾数 “5” 的前一位决定是舍去还是进入：如果是奇数则进入，如果是偶数则舍去。例如 5.215 保留两位小数为 5.22； 5.225 保留两位小数为 5.22。</strong></li>
+<li>如果保留位数的后一位如果是 5，而且 5 后面仍有数。例如 5.2254 保留两位小数为 5.23，也就是说如果 5 后面还有数据，则无论奇偶都要进入。</li>
+</ol>
+<p>特例：<br/>
+<img alt="" src="https://z3.ax1x.com/2021/10/26/5TpFv4.jpg"/><br/>
+对于这一段代码，5.225 和 2.225 的保留两位小数输出结果并不相同。</p>
+<p>这是因为，根据 IEEE 754 标准，5.225 和 2.225 分别记作 4 * 1.30625 和 2 * 1.1125，而 0.30625 和 0.1125 表示成二进制都是无限不循环小数，所以会出现浮点截断。截断后，分别是 5.22499999999999964 和 2.22500000000000008。此时再根据四舍六入五成双的规则，得到 5.22，2.23。</p>
+<h2 id="_8">计算示例</h2>
+<p>例一、用 <code>double</code> 存储 78.375：</p>
+<ol>
+<li>首先把 78.375 转化为二进制表示，得到 1001110.011，即 $1.001110011 \times 2^6$</li>
+<li>那么，符号位是 0，小数位是 001110011 0000000…</li>
+<li>6 加上固定偏移量 1023 是 1029，用二进制表示是 10000000101，这是指数位</li>
+<li>所以合起来是，0 - 10000000101 - 001110011 - 00000…</li>
+</ol>
+<p>例二、求 <code>float</code> 数据 0 10000010 01000100000000000000000 的十进制形式</p>
+<ol>
+<li>正数</li>
+<li>指数部分是 130，减去固定偏移值 127 得到实际偏移值 3</li>
+<li>尾数部分是 1.010001，十进制表示为 1.265625，综合前面步骤得到 1.265625*8 = 10.125</li>
+</ol>
+<p>更多示例，在 L18.pptx</p>
+</article>>

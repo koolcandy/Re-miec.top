@@ -1,0 +1,72 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="slide-3">slide 3：命题逻辑</h1>
+<h2 id="_1">蕴含真值表</h2>
+<table>
+<thead>
+<tr>
+<th align="center">$p$</th>
+<th align="center">$q$</th>
+<th align="center">$p \rightarrow q$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p>若 $p$ 非真，则 $p \rightarrow q$ 总是真的。<br/>
+<a href="https://www.zhihu.com/answer/829653720">知乎：如何理解数学里的「若 A 不真，则 A→B 总是真的」这种蕴含关系？</a></p>
+<h2 id="_2">逻辑形式与数学形式</h2>
+<table>
+<thead>
+<tr>
+<th align="left">logic</th>
+<th align="left">arithmetic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">$\neg p$</td>
+<td align="left">$1 - p$</td>
+</tr>
+<tr>
+<td align="left">$p \wedge q$</td>
+<td align="left">$\min(p,q)$</td>
+</tr>
+<tr>
+<td align="left">$p \vee q$</td>
+<td align="left">$\max(p,q)$</td>
+</tr>
+<tr>
+<td align="left">$p \rightarrow q$</td>
+<td align="left">$p \leq q$</td>
+</tr>
+<tr>
+<td align="left">$p \leftrightarrow q$</td>
+<td align="left">$p = q$</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">估值</h2>
+<p>在命题逻辑中，估值对应于真值表中的一行。</p>
+<p>$V \models \phi$ 意思是命题 $\phi$ 在估值 $V$ 下为真<br/>
+$V \not \models \phi$ 指命题 $\phi$ 在估值 $V$ 下为假</p>
+</article>>

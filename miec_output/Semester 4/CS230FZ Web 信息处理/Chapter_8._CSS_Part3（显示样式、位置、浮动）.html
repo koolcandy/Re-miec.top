@@ -1,0 +1,72 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="chapter-8-css-part3">Chapter 8. CSS Part3（显示样式、位置、浮动）</h1>
+<h2 id="box-model">Box Model</h2>
+<p>也就是一个元素占用的区域的范围。每个元素占用的区域都相当于一个矩形。这个 box model 包含 margin、border、padding、content 四个东西。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/24/ztG5gXFAN4dneUV.png"/></p>
+<p>定义的 width 与 height 只是 content 部分的大小。</p>
+<h2 id="display">显示样式 <code>display</code></h2>
+<p>大部分元素的默认 <code>display</code> 值都是 <code>block</code> 和 <code>inline</code>。两者最大的区别是，<code>block</code> 的元素宽度等于父元素的 100%，所以一定会另起一行；<code>inline</code> 内容多宽就占用多宽，所以不会另起一行。</p>
+<p>但是 <code>inline-block</code> 是啥，第九节课件上才有提到。</p>
+<h3 id="block">默认 <code>block</code> 有哪些</h3>
+<ul>
+<li><code>&lt;div&gt;</code></li>
+<li><code>&lt;h1-6&gt;</code></li>
+<li><code>&lt;p&gt;</code></li>
+<li><code>&lt;form&gt;</code></li>
+<li><code>&lt;header&gt;</code> <code>&lt;footer&gt;</code> <code>&lt;section&gt;</code></li>
+<li><code>&lt;li&gt;</code></li>
+</ul>
+<h3 id="inline">默认 <code>inline</code> 有哪些</h3>
+<ul>
+<li><code>&lt;span&gt;</code></li>
+<li><code>&lt;a&gt;</code></li>
+<li><code>&lt;img&gt;</code></li>
+</ul>
+<p>把 <code>&lt;li&gt;</code> 改成 <code>inline</code> 可以实现一个水平菜单。</p>
+<h3 id="displaynone">有点特殊：<code>display:none</code></h3>
+<p>通常结合 JavaScript，控制元素的可见性，比删除或新增元素简单</p>
+<h4 id="displaynone-vs-visibilityhidden"><code>display:none</code> VS <code>visibility:hidden</code></h4>
+<p><code>display:none</code> 会直接把元素所占用的位置给清掉，而 <code>visibility:hidden</code> 仅仅是隐藏，但是该占用多少空间，还是会留着的。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/dS4N6zjZv2bImw5.png"/></p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/ZSDFWfepIhyR4bk.png"/></p>
+<h2 id="css">CSS 的位置</h2>
+<h3 id="position-property"><code>position</code> property</h3>
+<p><code>position</code> 用来指定元素的 positioning method，有四种取值：</p>
+<h4 id="static"><code>static</code></h4>
+<p>默认值，不受 <code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code> 这四个 property 的影响，完全根据页面元素布局流来确定位置。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/6nsDf73ojkdCl5J.png"/></p>
+<h4 id="relative"><code>relative</code></h4>
+<p>会参照默认的位置进行一定的偏移（根据 <code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code>）。于是会产生一些空白。这些空白里不会出现其他的元素。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/oh5aeOyqwZicJM3.png"/></p>
+<h4 id="fixed"><code>fixed</code></h4>
+<p>顾名思义，位置是固定的，也就是说，位置相对于页面来说，固定不变的。即使页面滚动了，它的位置还是会保留不变。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/jilzDAFsPGB1Coe.png"/></p>
+<h4 id="absolute"><code>absolute</code></h4>
+<p>相对最近的 <code>position != static</code> 的祖先进行偏移。如果不存在这个祖先，那么就是 <code>&lt;body&gt;</code>。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/nxSVP5ygDGTcLkE.png"/></p>
+<h3 id="_1">关于元素重叠</h3>
+<p>元素发生重叠之后，哪个在上层，哪个在下层？</p>
+<p><code>z-index</code> property 可以指定遮挡的顺序。这个值越大，就越靠前；值越小，就月靠下，容易被遮挡。</p>
+<h4 id="_2">例：在图片当中放置文字</h4>
+<p>其中 <code>img</code> 的 <code>opacity</code> property 用于指定透明度。这样就不用 <code>z-index</code> 了。</p>
+<p>这里 <code>div.container</code> 的大小和位置其实是跟 <code>&lt;img&gt;</code> 一模一样的</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/WqMDnPr93ysExcK.png"/></p>
+<h5 id="_3">关于居中的奇技淫巧</h5>
+<p>实验课里面那一堆乱七八糟的居中实在是太烦人了！</p>
+<ul>
+<li><code>left</code> 设成 0，同时 <code>width</code> 设成 100%，就相当于实现了水平居中。</li>
+<li><code>top</code> 设成 50%，就实现了垂直居中。</li>
+</ul>
+<p>不过这好像只适用于单行文本。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/5sdCxyDM8iwUr9j.png"/></p>
+<h2 id="css_1">CSS 的浮动</h2>
+<p>涉及到两个特性：<code>float</code> 与 <code>clear</code>。</p>
+<p><code>float</code> 设定一个元素是否要 <code>float</code>。</p>
+<p>一个拥有 <code>float</code> 属性的元素后面的元素，位置也会浮动，这时候可以用 <code>clear</code> 指定一个元素周围指定方向上禁止浮动。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/NbD7vQJyGqCMHcd.png"/></p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/sSIKerZcAoQH5XR.png"/></p>
+<h3 id="clearfix-hack-overflowauto">clearfix hack: 用 <code>overflow:auto</code> 解决</h3>
+<p>听起来很高级但好像不是那么高级。防止悬浮元素的溢出。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/E8tdw6nHB5FTULO.png"/></p>
+<p><img alt="" src="https://s2.loli.net/2023/05/08/PcVEaC6tT3YqIgu.png"/></p>
+</article>>

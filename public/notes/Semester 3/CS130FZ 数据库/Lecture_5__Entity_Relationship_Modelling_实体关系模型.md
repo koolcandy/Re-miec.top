@@ -1,0 +1,40 @@
+# Lecture 5: Entity Relationship Modelling 实体关系模型
+
+小声：一个数据库 ER 模型画图网站，看起来不错 https://erdplus.com/
+
+注意，ER 图是设计数据库的关键。要是 ER 图设计的不好，可能有一天要重新设计整个数据库。主键的选择尤其重要。
+
+## ER 模型的一点点新概念
+
+atomic attributes（原子属性），也叫 simple attributes（简单属性），即不能再继续细分。相反的，hierarchy 表示层次属性，有一些其他属性复合（composite）而来，例如姓名是姓与名的复合。
+
+有一些属性是多值（multivalued）的，比如，一辆汽车的颜色，可能轮子是黑的，车顶是白的，这就有至少两种颜色~
+
+派生属性（derived）是指，两个（或多个）属性之间存在某种关联。比如，生日属性可以推导出年龄属性。那么，生日是存储在数据库中的，年龄是推导出来的。
+
+## 基数比 Cardinality ratio
+
+基数，意思就是这一列的所有值，如果扔到一个集合里面去，集合大小是多少。
+
+基数比是用来分析关系（relationship）的，而不是对于实体（entity）。
+
+感觉好像就是两个 entity 之间的关系是几个对应几个的意思，比如 n 个职员属于 1 个部门
+
+对于二元关系，基数比可以是：
+
+*   One to one (1:1): every time one entity occurs, there is exactly one occurrence of another entity.
+*   One to many (1:m): every time one entity occurs, there are multiple occurrences of another entity.
+*   Many to many (m:m): for each occurrence of an entity, there can be one or many occurrences of another, vice versa.
+
+![image-20220928232444081](https://s2.loli.net/2023/03/18/Ob5GzBAnkZiVW9K.png)
+
+## 键
+
+### 杂记
+
+*   super 的意思是大（big），而不是 perfect
+*   super key 可以包含多余的，但是 candidate key 不允许
+*   primary key，主键，必须是唯一的，就是数据库设计人员挑出来的一个 candidate key，下划线标记
+*   foreign key，外键，与两个表相关，大概是指，在这个表里面不是主键，但在另一个表里面是主键
+*   weak entity 之类的概念，不会在考试中出太多题，可以作为了解
+*   null 并非是零，也不是空白字符，而是代表：当前的值未知，或当前不可用。常用于表示不完整的或者异常的数据。

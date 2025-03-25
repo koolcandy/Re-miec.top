@@ -1,0 +1,66 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-3-124">Lecture 3. 进程调度 1：非抢占式调度（24 页）</h1>
+<blockquote>
+<ol>
+<li>多任务</li>
+<li>多处理器</li>
+<li>调度算法以及性能准则</li>
+<li>FCFS vs SJF</li>
+</ol>
+</blockquote>
+<p>由于在计算机中，需要运行的进程的数量通常比处理器的数量多，而处理器同一时间只能执行一条指令。所以，进程与进程之间存在资源（尤其是 CPU 时间）的竞争。操作系统应当决定如何给这些进程分配资源。</p>
+<p><em>上下文切换（context switch）</em> （前文有提到）意思就是从运行一个进程切换到运行另一个进程。这个过程需要保存前一个进程的信息到 PCB，然后读取后一个进程的 PCB 并执行进程指令。</p>
+<p>上下文切换的执行必须要快。假如切换过程花了 10ms，新进程总共执行了 100ms 又被中断，那么就有接近 10% 的时间被浪费在切换的步骤上了。</p>
+<h2 id="multiprocessing-system">Multiprocessing System 多处理器系统</h2>
+<p>顾名思义，就是有多个 CPU（通常是把一块物理的 U 分成好多个核心 multi core）。</p>
+<p>多处理器系统主要有两种类型，一种是 <em>非对称处理（asymmetric multiprocessing）</em>，另一种是 <em>对称多处理（symmetric multiprocessing）</em>。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/24/u3Xp9SVvZLozCcU.png"/></p>
+<h3 id="asmp">非对称处理 ASMP</h3>
+<p>每个处理器都具有特定的任务。有一个主要处理器（master），负责管理所有的 IO 和中断，并给其他从处理器（slave）分配工作。</p>
+<p>这样的优点在于，可以让操作系统的编程实现更加简单。但是，如果从处理器不够多，主处理器可能无法保持 busy 的状态，也就是说无法发挥出系统的最佳性能。</p>
+<h3 id="smp">对称多处理 SMP</h3>
+<p>相比之下，SMP 更常见。SMP 当中，所有处理器都是对等的，由 OS 控制，没有主从之分，执行相似的工作，且 self schedule。它们通过总线共享物理内存，具有 IO 设备的访问权限。</p>
+<p>然而，所有处理器是并行访问进程队列的。所以，为了保证共享数据的完整性（integrity），编写 OS 代码的时候，需要对这里的并行操作进行非常小心的处理。</p>
+<h2 id="_1">进程调度算法</h2>
+<p>进程调度算法有两大类，<em>抢占类（preemptive）</em> 和 <em>非抢占类（non-preemptive）</em>。</p>
+<h3 id="_2">一点概念</h3>
+<p><em>处理器利用率（processor utilisation）</em>：$\frac{\text{执行时间}}{\text{总时间}}$。
+<em>吞吐量（throughput）</em>：单位时间内进程完成的数量（jobs per unit time）
+<em>周转时间（turnaround time）</em>：从进程提交到进程完成的时间叫做周转时间，这个时间包括在队列中等待的时间和使用 CPU 的时间。
+<em>等待时间（waiting time）</em>：进程在队列中等待的总时间。
+<em>响应时间（response time）</em>：从进程提交请求到第一响应之间的时间，也就是开始响应需要的时间。如果进程等待次数只有一次，那么等待时间与响应时间相等。
+<em>响应比（response ratio）</em>：$\frac{\text{等待时间}}{\text{服务时间}}$。</p>
+<p>进程调度就是要尽量最大化处理器利用率和吞吐量，最小化周转、等待、响应时间。</p>
+<h3 id="gantt">Gantt 图</h3>
+<p>是一种条形图，可以体现进程开始与结束的时间。比如下图表示 P1, P2, P3 三个进程，P1 最先到来直接运行 24ms，P2 等待 24ms 后运行 3ms，P3 从第 27ms 开始运行到 30ms 结束：</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/25/kp6xIB4SH1hVZKa.png"/></p>
+<p>Gantt 图可以用来可视化的观察进行运行的状况，并计算平均等待时间之类的。</p>
+<h2 id="fcfs">先到先服务调度 FCFS</h2>
+<p>是 First Come First Served 的缩写。一旦 CPU 分配给了某个进程，那么在其终止或者等待 IO 之前，会持续不断的使用 CPU。公平。</p>
+<p>按照刚才的例子，假如 P1 P2 P3 三个进程依次到来，按照 FCFS 算法，那么对应的 Gantt 图跟上述一致，而平均的等待、响应、周转时间是：</p>
+<ul>
+<li>等待：$\frac{1}{3}(0+24+27) = 17(\text{ms})$</li>
+<li>响应：$\frac{1}{3}(0+24+27) = 17(\text{ms})$</li>
+<li>周转：$\frac{1}{3}(24+27+30) = 27(\text{ms})$</li>
+</ul>
+<p>对于分时系统（每个用户都需要得到一定的 CPU 时间），FCFS 算法就非常不好，因为它可能会允许一个进程长时间占据 CPU。</p>
+<p>如果有一个 CPU 密集进程和多个 IO 密集进程同时运行，使用 FCFS 算法还会导致 CPU 使用率降低。</p>
+<p>对于交互式系统（interactive system），FCFS 算法也 badly。</p>
+<h2 id="sjf">最短作业优先调度 SJF</h2>
+<p>是 Shortest Job First 的缩写，按照下一次 CPU <em>执行长度（burst length）</em> 的长短排序，来选择先执行哪一个进程。不公平。</p>
+<p>还是刚才 P1 P2 P3 三个进程。按照 SJF，那么 Gantt 图是：</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/26/MdwAJCsanDVzKuS.png"/></p>
+<p>三项平均时间是：</p>
+<ul>
+<li>等待：$\frac{1}{3}(6+0+3) = 3\text{ms}$</li>
+<li>响应：$\frac{1}{3}(6+0+3) = 3\text{ms}$</li>
+<li>周转：$\frac{1}{3}(30+3+6) = 13\text{ms}$</li>
+</ul>
+<p>可以证明，SJF 算法对于一组给定的进程，平均等待时间是最短的（因为短进程减少的等待时间，多于长进程增加的等待时间）。SJF 在吞吐量和响应性能方面也被证明是最优算法。</p>
+<p>SJF 算法有一个巨大的缺陷：<em>饥饿（starvation）</em>。也就是说，如果有一个长时间进程，和大量的短时间进程，那么长时间进程可能永远没有机会运行。</p>
+<h3 id="cpu-burst-length">预测 CPU 执行长度（burst length）</h3>
+<p>由于无法提前预知接下来几个进程有多长，所以实际上 SJF 是不可能真正实现的。一个进程下一次使用 CPU 的时间可以通过之前几次的运行时间来预测出来，并根据这个预测的时间进行排序。</p>
+<p>设 $t_n$ 是第 $n$ 个 CPU 执行长度，$\tau_{n+1}$ 是预测的下一次 CPU 执行长度，对于 $0 \leq \alpha \leq 1$，定义：$$\tau_{n+1} = \alpha t_n + (1-\alpha)\tau_n$$，其中，$t_n$ 是实际的最近信息，而 $\tau_n$ 是包含了历史信息的。参数 $\alpha$ 用于控制权重，通常取值 $\frac{1}{2}$。初始值 $\tau_0$ 可以是常量，也可以是系统的总体平均值。</p>
+<h2 id="hrn">非抢占式 HRN 调度</h2>
+<p>HRN，是 Highest Response-ratio Next 的缩写，意思是具有最高响应比的优先。根据响应比的定义，进程等待的时间越长，就越有机会被执行。</p>
+</article>>

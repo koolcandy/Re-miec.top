@@ -1,0 +1,75 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-8-fet">Lecture 8. 晶体管和 FET</h1>
+<h2 id="npn">NPN 三极管</h2>
+<p>晶体管也是一种电子元件，不过他与二极管不同。晶体管有三个或更多的接线柱，常用来控制电流。</p>
+<p>课件中最先介绍的是 <em>结型晶体管（junction transistor）</em>，貌似也称作 BJT，俗称三极管。顾名思义，由 PN 结构成，且有三个接线柱。</p>
+<p>BJT 由三部分构成：<em>发射极（emitter）</em>、<em>基极（base）</em>、<em>集电极（collector）</em>。课件给出的 BJT 是 NPN 类型的（发射极和集电极是 N，基极是 P），也有 PNP 类型的。</p>
+<p>BJT 有两个 PN 结，两个 PN 结共用的电极就是基极。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/NdKGxMST1FnAUCQ.png"/></p>
+<p>在三极管当中，流经三部分的电流满足关系 $I_E = I_B + I_C$，而 $I_C = \beta I_B$，其中 $\beta$ 取值是数十或数百。也就是说，流经集电极的电流是基极电流的几十几百倍。这个叫做 <em>电流增益 current gain）</em>。所以三极管可以用基极 <strong>对集电极的电流进行控制</strong>。</p>
+<h3 id="nor">应用：构造一个 NOR 门</h3>
+<p>$\operatorname{NOR}(A, B)$ 的输出为真，当且仅当 $A=B=0$。</p>
+<ul>
+<li>如下电路，当且仅当 $I_A = I_B = 0$，$I_E = 0$，此时三极管相当于一个大电阻。于是电流只能流向 Output</li>
+<li>若 $I_A + I_B \not= 0$，则 $I_E \not= 0$，此时输出线被短路，电流全部流向 $I_E$</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/RjegrBa2WCzFQ7S.png"/></p>
+<h2 id="mosfet">金属氧化物半导体场效应管（MOSFET）</h2>
+<p>https://www.elprocus.com/mosfet-as-a-switch-circuit-diagram-free-circuits/</p>
+<ul>
+<li>M 表示金属，O 表示氧化物，S 表示半导体。</li>
+<li>FET 是 field-effect transistor 的缩写，即利用电场对导电性进行控制的晶体管。</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/05/29/sjK1luWRdF9Tp3H.png"/></p>
+<p>通道（Channel）的宽度与 <em>抵消区域（depletion region）</em> 基本相同。</p>
+<p>课件上给的图太简陋了，简直是垃圾。</p>
+<h3 id="_1">原理</h3>
+<p>有一个动画演示网站，可以演示 NMOS 和 PMOS 的</p>
+<ul>
+<li>https://www.falstad.com/circuit/e-nmosfet.html</li>
+<li>https://www.falstad.com/circuit/e-pmosfet.html</li>
+</ul>
+<h4 id="nmos-d-sndsg">NMOS（电流 D --&gt; S，NDS，G 接正）</h4>
+<p>先以 NMOS 为例（课件上给的垃圾例子也是 NMOS）</p>
+<p>NMOS 的衬底是 P 类型的半导体，S 和 D 都连着 N 类型半导体。两个 N+ 之间的区域是 depletion region，也是 channel。现在 G 没有正电压，P 的洞洞跟 N+ 的电子相互抵消，不导电。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/29/pXVZsFxa3zAevfS.png"/></p>
+<p><strong>如果 G 有了正电压</strong>，那么 N+ 里面的电子被吸引到中间来，中间的洞洞被排斥到下面去。于是形成了一条电子可以流动的通道。于是就导电了。</p>
+<p>D 要接电源正极，S 要接电源负极，电流方向 D --&gt; S。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/29/nxg8pS1IByq2tcQ.png"/></p>
+<h4 id="pmos-s-dpsdg">PMOS（电流 S --&gt; D，PSD，G 接负）</h4>
+<p>衬底是 N，S 和 D 连接到两个 P+。</p>
+<p><strong>当 G 电势较低（接地</strong>），则两个 P+ 中间的洞洞被吸引出来，衬底 N 的电子被排斥开，形成了一个洞洞可以自由流动的通道，从而导电。</p>
+<h3 id="mos">MOS 的电路符号</h3>
+<ul>
+<li><strong>增强型，就是 G 实线，SD 虚线</strong></li>
+<li>耗尽型一般不太关注</li>
+</ul>
+<h4 id="nmos">NMOS 增强型器件</h4>
+<p><img alt="" src="https://s2.loli.net/2023/05/29/r5MNDVOaB9LoEYh.png"/></p>
+<h4 id="pmos">PMOS 增强型器件</h4>
+<p><img alt="" src="https://s2.loli.net/2023/05/29/JpzoTNUadGlAbug.png"/></p>
+<h3 id="cmos-not">互补式金属氧化物半导体 (CMOS) 实现 NOT 门（反相器）</h3>
+<p>全称 Complementary Metal Oxide Semiconductor。</p>
+<p>图中从上到下，P 和 N 的四个极，是 SDDS。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/29/qjph3O9RrmDYlkP.png"/></p>
+<ul>
+<li>当 $V_I = 0$，则 PMOS 导通，NMOS 关闭，Vdd 跟 $V_O$ 一样，输出 $1$</li>
+<li>当 $V_I = 1$，则 PMOS 关闭，NMOS 导通，Gnd 跟 $V_O$ 一样，输出 $0$</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/05/29/iuETDeAsXZOaI91.png"/></p>
+<h2 id="_2">硅：应用</h2>
+<h3 id="_3">粗硅提纯</h3>
+<ol>
+<li>捞一把沙子（SiO2）</li>
+<li>高温，用碳还原：SiO2+C = CO2 + Si</li>
+<li>加盐酸：4Si+6HCl = 4HSiCl3+H2，得到硅酸</li>
+<li>把硅酸放在氢气中加热，得到纯硅：4HSiCl3+H2 = 4Si+6HCl</li>
+</ol>
+<p>加热的时候要使用石英坩埚（quartz crucible），避免副反应。</p>
+<h3 id="czochralski-process">Czochralski Process（提拉硅晶体）</h3>
+<p>应该不重要吧，不看了</p>
+<h3 id="_4">刻蚀</h3>
+<p>SiO2+4HF = 2H20+SiF4</p>
+<h3 id="_5">构造设备</h3>
+<p>应该不重要吧，不看了</p>
+</article>>

@@ -1,0 +1,32 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-8-finite-state-machine">Lecture 8: 有限状态机 Finite State Machine</h1>
+<h2 id="_1">概述</h2>
+<p>有限状态机（有时称为有限状态自动机 finite state automaton）是一种可以用硬件或软件实现的计算模型。<br/>
+可以用来模拟<strong>时序逻辑</strong>和一些计算机程序。<br/>
+有限状态自动机生成正则语言。Finite state automata generate regular languages.<br/>
+它可用于对许多领域的问题进行建模，包括数学、人工智能、游戏和语言学。</p>
+<h2 id="_2">两大有限状态机</h2>
+<ul>
+<li>Mealy State Machine 米利型有限状态机：基于它的<strong>当前状态</strong>和<strong>输入</strong>生成输出</li>
+<li>Moore State Machine 摩尔型有限状态机：输出只由<strong>当前的状态</strong>所确定</li>
+</ul>
+<h2 id="_3">有限状态机的特殊类型</h2>
+<ul>
+<li>DFA 确定性有限状态自动机：每个节点的每个字母只有一种转移路径</li>
+<li>NFA 非确定有限状态自动机：每个节点的每个字母有多种可能的转移</li>
+</ul>
+<h2 id="fsm">FSM 的优点</h2>
+<ul>
+<li>灵活</li>
+<li>易于从抽象转移到代码执行</li>
+<li>对处理器的开销比较低</li>
+<li>可以轻松确定状态的可达性</li>
+</ul>
+<h2 id="fsm_1">FSM 的缺点</h2>
+<ul>
+<li>不适用于所有的领域</li>
+<li>在游戏等领域，可能不需要 FSM 的预期特性（expected character）</li>
+<li>状态转移的顺序不灵活</li>
+<li>如果没有设计理念，那么大型的 FSM 将难以管理</li>
+</ul>
+</article>>

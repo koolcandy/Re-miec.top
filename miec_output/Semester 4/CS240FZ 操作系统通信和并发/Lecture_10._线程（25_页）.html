@@ -1,0 +1,58 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-10-25">Lecture 10. 线程（25 页）</h1>
+<h2 id="_1">运行时的进程</h2>
+<p>回顾 PCB 的结构：</p>
+<p><img alt="" src="https://s2.loli.net/2023/06/11/lTEX6ZBFAgGOWcs.png"/></p>
+<p>所以如果用 <code>fork()</code> 创建一个新的进程，整个 PCB 都会被复制一份，开销挺大的。</p>
+<p><code>malloc()</code> 会从堆空间当中找出一块空地分配给当前的结构，然后返回指针。<code>free()</code> 用于释放这些空间。</p>
+<p>进程运行的上下文可以用一点信息表示：</p>
+<ul>
+<li>CPU 里面的 Program Counter</li>
+<li>CPU 里面的各类寄存器（包括 IP 和 SP 等，用于定位指令和栈）</li>
+<li>运行时的栈</li>
+</ul>
+<h2 id="_2">线程</h2>
+<p><img alt="" src="https://s2.loli.net/2023/06/11/VBIqRKcNrbphkwl.png"/></p>
+<p><img alt="" src="https://s2.loli.net/2023/06/11/3x4z21LFADQCOrt.png"/></p>
+<p>创建线程不像创建进程那样需要复制 PCB，而是直接共享进程的堆空间（不过每个线程的栈空间还是独立的），所以会快很多。此外，线程还可以作为 entity 被操作系统管理。</p>
+<h3 id="_3">多线程的好处</h3>
+<ul>
+<li>多线程应用在多核处理器上可以有更好的性能</li>
+<li>GUI 程序使用多线程可以获得更好的反馈体验</li>
+<li>在 RPC 的场景中，对于服务器而言，使用多线程可以减少客户端的等待时间</li>
+</ul>
+<h2 id="_4">多线程模型</h2>
+<ul>
+<li>用户线程（user thread）位于内核之上，它的管理无需内核支持，<strong>编程语言层面</strong> 实现，所以比较快；但是往内核切换的时候，会把进程中的其他线程都 <strong>阻塞</strong> 掉；而且，用户线程是 <strong>不能多核</strong> 运行的，进程中不同线程的调度也是 <strong>不能抢占</strong> 的</li>
+<li>内核线程（kernel thread）由操作系统直接支持与管理，所以调度会慢一些，但是更灵活！比如，要执行系统调用的线程（切换到内核态）<strong>不会阻塞</strong> 掉别的线程，而且还 <strong>可以使用多核</strong> 的 CPU，而且还 <strong>可以抢占</strong>。</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/06/11/iMPVBgp9fhu2bNA.png"/></p>
+<h2 id="c">多线程的 C 语言实现</h2>
+<p><code>pthread</code> 是 POSIX 的一个组件，可以用来实现 Windows/Linux 的多线程编程。</p>
+<ul>
+<li><code>pthread_create(id, attr, fun, argumentList)</code>，用于创建线程，<code>attr</code> 设为 NULL 表示默认</li>
+<li><code>pthread_exit()</code> 用于显式退出线程，但是并不销毁</li>
+<li><code>pthread_join()</code> 可以阻塞原始线程，直到子线程执行完毕</li>
+<li><code>pthread_detach()</code> 和 <code>pthread_join()</code> 都可以收集线程的信息</li>
+</ul>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pthread.h&gt;</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="nf">fun</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">message</span><span class="p">);</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="p">}</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">  </span><span class="n">pthread_t</span><span class="w"> </span><span class="n">thread1</span><span class="p">,</span><span class="w"> </span><span class="n">thread2</span><span class="p">;</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">  </span><span class="n">charge</span><span class="w"> </span><span class="n">msg1</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Thread 1"</span><span class="p">,</span><span class="w"> </span><span class="n">msg2</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Thread 2"</span><span class="p">;</span>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">iret1</span><span class="p">,</span><span class="w"> </span><span class="n">iret2</span><span class="p">;</span>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">  </span><span class="n">iret1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread1</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fun</span><span class="p">,</span><span class="w"> </span><span class="n">msg1</span><span class="p">);</span>
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">  </span><span class="n">iret2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread2</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fun</span><span class="p">,</span><span class="w"> </span><span class="n">msg2</span><span class="p">);</span>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">  </span><span class="n">pthread_join</span><span class="p">(</span><span class="n">thread1</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">  </span><span class="n">pthread_join</span><span class="p">(</span><span class="n">thread2</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>编译的时候需要加入命令 <code>-lpthread</code> 才行。</p>
+</article>>
