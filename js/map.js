@@ -1,4 +1,5 @@
 const nameMapping = {
+    'MIEC_CSSE_课程笔记.md': 'MIEC CSSE 课程笔记',
     '9.13_Electrostatics.md': '9.13 静电学 Electrostatics',
     '12.6_Introduction_to_Telecoms.md': '12.6 电信介绍 Introduction to Telecoms',
     '9.24_Voltage,_Current_and_Resistance.md': '9.24 电压、电流和电阻 Voltage, Current and Resistance',

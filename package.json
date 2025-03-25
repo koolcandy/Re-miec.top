@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "prebuild": "node build.js",
+    "build": "your-existing-build-command"
+  }
+}

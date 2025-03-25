@@ -17,6 +17,9 @@ const MarkdownRenderer = {
         this.loading = document.getElementById("loading");
         this.error = document.getElementById("error");
         
+        // 当前加载的文件路径，不放在URL里
+        this.currentFilePath = null;
+        
         // 设置返回顶部按钮
         const backToTopButton = document.getElementById("back-to-top");
         if (backToTopButton) {
@@ -33,32 +36,41 @@ const MarkdownRenderer = {
             });
         }
         
-        // 获取URL中的文件参数
-        const params = new URLSearchParams(window.location.search);
-        const fileName = params.get("file");
+        // 监听popstate事件，以便支持浏览器的前进后退按钮
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.filePath) {
+                this.loadFile(event.state.filePath, false);
+            } else {
+                this.loading.style.display = "none";
+                this.fileInfo.textContent = "请从左侧导航选择文件";
+                this.preview.innerHTML = "";
+            }
+        });
         
-        // 如果有文件参数，加载该文件
-        if (fileName) {
-            this.loadFile(fileName);
-        } else {
-            this.loading.style.display = "none";
-            this.fileInfo.textContent = "请从左侧导航选择文件";
-        }
+        // 初始加载时显示选择提示
+        this.loading.style.display = "none";
+        this.fileInfo.textContent = "请从左侧导航选择文件";
     },
     
     // 加载文件
-    loadFile: function(fileName) {
-        // 更新URL，但不刷新页面
-        const newUrl = new URL(window.location.href);
-        if (newUrl.searchParams.get('file') !== fileName) {
-            newUrl.searchParams.set('file', fileName);
-            window.history.pushState({}, '', newUrl);
-        }
-        
+    loadFile: function(fileName, pushState = true) {
         this.loading.style.display = "block";
         this.error.style.display = "none";
         this.preview.innerHTML = "";
         this.fileInfo.textContent = `正在加载文件: ${decodeURIComponent(fileName)}`;
+        
+        // 更新当前文件路径
+        this.currentFilePath = fileName;
+        
+        // 如果需要更新浏览历史
+        if (pushState) {
+            // 更新浏览历史但不附加文件名到URL，而是存在state中
+            window.history.pushState(
+                { filePath: fileName }, 
+                '', 
+                window.location.pathname
+            );
+        }
         
         this.loadMarkdownFile(fileName)
             .then((markdown) => {
@@ -105,15 +117,6 @@ const MarkdownRenderer = {
                     link.target = "_blank";
                     link.rel = "noopener noreferrer";
                 }
-            });
-            
-            // 处理图片点击放大
-            document.querySelectorAll("#preview img").forEach((img) => {
-                img.style.cursor = "pointer";
-                img.title = "点击查看原始尺寸";
-                img.addEventListener("click", () => {
-                    window.open(img.src, "_blank");
-                });
             });
             
             // 高亮所有代码块
