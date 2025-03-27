@@ -1,9 +1,33 @@
 const fs = require('fs');
 const path = require('path');
 
+let map;
+
+try {
+    console.log("尝试加载 map.js 文件...");
+    const mapfile = require('./map.js');
+    console.log("map.js 文件加载成功，内容为:", mapfile);
+    map = mapfile.nameMapping;
+    console.log("nameMapping 值为:", map);
+} catch (error) {
+    console.error("加载 map.js 文件时出错:", error);
+    process.exit(1);
+}
+
+console.log(map);
+
 // 配置路径
 const notesDir = path.join(__dirname, 'static', 'note');
 const outputPath = path.join(__dirname, 'directory-structure.json');
+
+function rename(mane) {
+    // console.log(mane);
+    if (map && map.hasOwnProperty(mane)) {
+        return map[mane];
+    } else {
+        return mane;
+    }
+}
 
 // 递归扫描目录并构建结构
 function scanDirectory(dirPath, basePath = '') {
@@ -28,7 +52,7 @@ function scanDirectory(dirPath, basePath = '') {
             });
         } else {
             items.push({
-                name: file,
+                name: rename(file),
                 path: '/static/note/' + relativePath.replace(/\\/g, '/'),
                 type: 'file'
             });
