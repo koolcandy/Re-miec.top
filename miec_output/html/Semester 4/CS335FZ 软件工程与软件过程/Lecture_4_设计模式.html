@@ -1,0 +1,347 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-4">Lecture 4 设计模式</h1>
+<p>【注意】这一节当中有好多长得像 UML 类图的东西，其实并不是。GOF 书上第一章说，这些东西是 OMT 表示法。其中「multiplicity: many」的图示，在后面出现次数挺多的。</p>
+<p><img alt="" src="https://s2.loli.net/2023/06/20/c4JwvnA8ykqFIPY.png"/></p>
+<p>每一个设计模式都描述了环境中反复出现的一个问题以及核心解决方案。于是，这种解决方案就可以被重复利用。</p>
+<p>使用设计模式是为了重用代码（resue）、让代码更容易被他人理解，同时保证代码可靠性。</p>
+<h2 id="_1">动机（设计模式怎样解决设计问题）</h2>
+<ul>
+<li>寻找合适的对象。将系统分解为对象的集合，由于要考虑到的因素太多，所以这个是很难得一个过程。设计模式就描述了这种设计方法。</li>
+<li>确定对象 <em>粒度（granularity）</em>。大的对象可以表示整个系统，小的对象可能只是个硬件。对象在大小和数目上变化极大。应该如何决定一个对象应该是什么？</li>
+<li>运用复用机制，提高可重用性。有继承（inheritance）和组合（composition）两种复用方式。继承就是生成子类（白箱）；组合就是组装一些对象来获得更复杂的（黑箱）。</li>
+<li>design for changes</li>
+</ul>
+<h2 id="_2">分类</h2>
+<p>设计模式的种类有非常多。根据 <em>目的（purpose）</em> 和 <em>范围（scope）</em> 可以进行分类。</p>
+<p>目的有三种：</p>
+<ul>
+<li>创建型（creational），与对象的创建有关</li>
+<li>结构型（structural），处理类或对象的组合</li>
+<li>行为型（behavioral），描述类或对象怎样交互、怎样分配职责</li>
+</ul>
+<p>范围有两项：</p>
+<ul>
+<li>类（class），处理类和子类之间的关系，这些关系在编译的阶段就确定了，是静态的</li>
+<li>对象（object），处理对象之间的关系，比较动态，运行时可变</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/IRlSsPLqByTFfQN.png"/></p>
+<h2 id="_3">模式的基本要素</h2>
+<p>GOF 书当中认为有四个基本要素：</p>
+<ul>
+<li>模式名（pattern name）：用来记忆它</li>
+<li>问题（problem）：就是重复出现的问题，相当于描述了什么时候使用这个设计模式</li>
+<li>解决方案（solution）：描述了设计的组成成分，以及它们之间的关系、职责和协作方式</li>
+<li>效果（consequence）：描述了使用该模式的效果以及权衡（trades-off）</li>
+</ul>
+<p>有的教材认为基本要素只有前三点。</p>
+<h2 id="singleton-pattern">单件模式 Singleton Pattern（对象创建型模式）</h2>
+<blockquote>
+<ul>
+<li>目的：创建型 </li>
+<li>范围：对象</li>
+</ul>
+</blockquote>
+<h3 id="_4">别名</h3>
+<p>无</p>
+<h3 id="_5">意图</h3>
+<p>保证一个类仅有一个实例，并保证这个实例易于访问（全局访问）。</p>
+<h3 id="_6">适用情景</h3>
+<ul>
+<li>只能有一个实例，且客户可以从一个众所周知的访问点去访问（access）</li>
+<li>客户无需对代码进行修改，就可以使用子类（？）</li>
+</ul>
+<h3 id="_7">应用场景</h3>
+<p>课件上列出来了几个，但是 yyf 不太理解。</p>
+<ul>
+<li>线程池</li>
+<li>OS 使用文件系统管理文件</li>
+<li>访问硬件的接口（一个打印机只能有一个驱动实例，要不然两个实例同时打印就乱套了）</li>
+<li>静态的配置数据</li>
+<li>日志记录器</li>
+<li>缓存的访问</li>
+</ul>
+<h3 id="_8">结构</h3>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/i3sF7BqxSbWgka5.png"/></p>
+<p>加号代表 <code>public</code>，减号代表 <code>private</code>。</p>
+<h3 id="_9">优缺点</h3>
+<p>优点：</p>
+<ul>
+<li>可以严格的控制客户如何、何时访问实例</li>
+<li>可以代替全局变量，缩小命名空间</li>
+<li>实例数目可变，根据需要，可以是双件、三件、n 件模式</li>
+</ul>
+<p>缺点就是，在多线程编程当中应当格外小心，比如线程阻塞之类的。</p>
+<h3 id="_10">例子</h3>
+<p>想象一个场景。有一个打印机，假设拥有两个驱动程序。两个用户同一时间对于两个驱动发出了指令。于是两个驱动同事要打印机打印内容。然后，打印机把两个用户的两个文档像洗牌一样混在一起打出来了。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/pin5lTR7EICGZuk.png"/>
+<img alt="" src="https://s2.loli.net/2023/03/22/aPBwKjQY9SNoAeV.png"/></p>
+<p>如何避免这种情况？有两种方案，一个是使用静态方法，另一个是使用 singleton pattern。</p>
+<h4 id="_11">解决方案：使用静态方法</h4>
+<p>这是一种简单粗暴的解决方案。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/pGSUTLtowAsM3eH.png"/></p>
+<p>静态方法就是指，把 <code>print()</code> 设置成静态且同步的（<code>synchronized public</code>），那么他就可以保证同一时间只有一个 <code>print()</code> 的副本在运行。</p>
+<h4 id="_12">解决方案：使用单件模式</h4>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">PrinterDriver</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="c1">// 存储一个自身的静态实例</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">PrinterDriver</span><span class="w"> </span><span class="n">printerDriver</span><span class="p">;</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="c1">// 构造函数是 private 的，那么就没有别的东西可以创建我这个类的实例了</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="c1">// 于是就保证了实例的唯一</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="nf">PrinterDriver</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="c1">// 同步且 public 的方法保证同一时间只会有一个操作人获取到驱动</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="c1">// 但这种写法的缺点是可能会造成线程阻塞</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">PrinterDriver</span><span class="w"> </span><span class="nf">getPrinterDriver</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">printerDriver</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">            </span><span class="n">printerDriver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PrinterDriver</span><span class="p">();</span>
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">printerDriver</span><span class="p">;</span>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">    </span><span class="c1">// 同步且 public</span>
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">print</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">numOfPages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numOfPages</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">            </span><span class="n">Printer</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">",\t Page: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>PS: <code>synchronized</code> 关键字的作用，在 CS240 当中也有提到过。</p>
+<p>上述写法缺点是可能会造成线程阻塞。如果直接使用全局变量（定义实例的时候直接初始化）又会造成资源的浪费。课件中提到，当中 <code>enum</code> 是 Java 当中实现单件模式的最好办法：</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">enum</span><span class="w"> </span><span class="n">PrinterDriver</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="n">PRINTER_DRIVER</span><span class="p">;</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">print</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">numOfPages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numOfPages</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">            </span><span class="n">Printer</span><span class="p">.</span><span class="na">print</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">",\t Page: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="vs">静态方法 vs 单件模式</h3>
+<ul>
+<li>任意一个类都可以访问其他类的静态变量。而单例模式可以更轻松地实现权限控制（谁获取到了 instance 谁就有权限）。</li>
+<li>静态方法只能存在一个 copy，而单件模式如有需要可以扩展成双、三件模式</li>
+<li>在一些编程语言中（C++），静态方法（全局变量）会污染命名空间，而单件模式不用创建变量，所以不需要考虑这个烦人的问题。</li>
+</ul>
+<h3 id="_13">类似的模式</h3>
+<p><img alt="" src="https://s2.loli.net/2023/03/29/qwbPnWBR5rfMTI2.png"/></p>
+<h2 id="factory-method-pattern">工厂方法模式 Factory Method Pattern（类创建型模式）</h2>
+<blockquote>
+<ul>
+<li>目的：创建型 </li>
+<li>范围：类</li>
+</ul>
+</blockquote>
+<h3 id="_14">别名</h3>
+<p>虚拟构造函数（Virtual Constructor）</p>
+<h3 id="_15">意图</h3>
+<p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。换句话说，工厂方法模式使一个类的实例化延迟到子类。</p>
+<h3 id="_16">适用情景</h3>
+<ul>
+<li>当一个类不知道它所必须创建的对象的类的时候</li>
+<li>当一个类希望由它的子类来决定它所创建的对象的时候</li>
+<li>当类把创建对象的责任委托（delegate）给多个帮助子类（helper classes）当中的某一个，并且你希望将「哪一个帮助子类是代理者」这一信息局部化（localize）的时候</li>
+</ul>
+<h3 id="_17">结构</h3>
+<p>工厂方法模式当中，有几个东西：</p>
+<ul>
+<li>Product &amp; Concrete Product</li>
+<li>Creator &amp; Concrete Creator</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/VZHDymlzpTue1At.png"/></p>
+<p>Creator 当中包含了操作和工厂方法（返回产品），Concrete Creator 当中只有工厂方法（返回具体产品）</p>
+<p>回顾 UML 类图的记号：</p>
+<ul>
+<li>空心箭头表示「实现」或「泛化」</li>
+<li>UML 类图没有明确实心虚线箭头的含义。但是有说虚线箭头含义：「依赖」。</li>
+</ul>
+<h3 id="_18">例子</h3>
+<p>想象一个场景。Linux 当中有好多种不同的日志文件，有的是内核日志，有的是权限日志，还有其他类型的一堆日志。如何根据日志文件的类型，创建对应的日志解析器？</p>
+<h4 id="_19">解决方案：根据上下文实例化对象</h4>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/aX3FN6ygq2LbiKD.png"/>
+<img alt="" src="https://s2.loli.net/2023/04/23/CDyGAPHmKEs3qIw.png"/></p>
+<p>在这个例子当中：</p>
+<ul>
+<li><code>interface LogParser</code> 是 Product，仨具体的 <code>xxLogParser</code> 是 Concrete Product</li>
+<li><code>class LogDisplayer</code> 是 Creator，仨具体的 <code>xxLogDisplayer</code> 是 Concrete Creator</li>
+</ul>
+<h4 id="_20">解决方案：工厂方法模式：参数化</h4>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/jHWMUEIF8POKy7t.png"/>
+<img alt="" src="https://s2.loli.net/2023/04/23/6banHIEXT2Nwlt7.png"/></p>
+<p>YYF 虽然能理解工厂方法的含义了，但是感觉代码里面这一堆乱七八糟的继承很乱。</p>
+<h2 id="facade-pattern">外观模式 Facade Pattern（对象结构型模式）</h2>
+<blockquote>
+<ul>
+<li>目的：结构型 </li>
+<li>范围：对象</li>
+</ul>
+</blockquote>
+<h3 id="_21">别名</h3>
+<p>无</p>
+<h3 id="_22">意图</h3>
+<p>它为子系统中的一组接口，提供一个一致的界面。Facade 模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/GZNLRanuKsPCAId.png"/></p>
+<h3 id="_23">结构</h3>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/j1nfqmgz9hZpBQl.png"/></p>
+<h3 id="_24">适用情景</h3>
+<ul>
+<li>当要为一个复杂的子系统提供一个简单的接口的时候</li>
+<li>由于客户程序与抽象类的实现部分之间，存在很大的依赖性，因此将一个子系统与其他子系统分离，可以提高子系统的独立性和可移植性</li>
+<li>使用 Facade 模式定义子系统每层的入口点（一个层次的系统）</li>
+</ul>
+<p>如果理解不了，就尝试结合一下图示。</p>
+<h3 id="_25">应用场景</h3>
+<ul>
+<li>OS 用 Facade 模式把好多框架都弄成了一个</li>
+<li>编译器，把汇编语言隐藏起来</li>
+<li>Web 服务</li>
+<li>数据库连接器使用 Facade 模式把建立连接的复杂操作隐藏起来</li>
+</ul>
+<p>编译器的 Facade：
+<img alt="" src="https://s2.loli.net/2023/04/23/UiXus5bPV2y8cNJ.png"/></p>
+<h2 id="adapter-pattern">适配器模式 Adapter Pattern（类对象结构型模式）</h2>
+<blockquote>
+<ul>
+<li>目的：结构型 </li>
+<li>范围：类和对象</li>
+</ul>
+</blockquote>
+<h3 id="_26">别名</h3>
+<p>包装器（wrapper）</p>
+<h3 id="_27">意图</h3>
+<p>将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不 <em>兼容（compatible）</em> 而不能一起工作的那些类，可以一起工作。</p>
+<p>想象：不同国家的电源适配器。</p>
+<h3 id="_28">结构</h3>
+<p>俩 Target 都是接口，俩 Adaptee 都是接口的实现。</p>
+<h4 id="_29">类适配器</h4>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/rIG5msypY41zOPZ.png"/></p>
+<h4 id="_30">对象适配器</h4>
+<p>注意这里 Adapter 从 Adaptee 那里的继承关系变成了普通的 Association 关系</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/CA8g2XYH5FUuwnx.png"/></p>
+<h3 id="_31">适用情景</h3>
+<ul>
+<li>想使用一个存在的类，但是它的接口不符合要求</li>
+<li>想要创建一个可以复用的类，让这个类与其他不相关的类以及不可预见的类（即不一定兼容接口的类）能够协同工作</li>
+<li>（仅适用于对象适配器）想要使用一些已经存在的子类，但是不可能对每一个都进行子类化以匹配它们的接口。对象适配器可以适配父类接口。</li>
+</ul>
+<h3 id="_32">应用场景</h3>
+<ul>
+<li>数据库多用户权限控制</li>
+<li>toolkit class 的接口不兼容</li>
+<li>接口连接不兼容的，内存卡、电源适配器等。</li>
+</ul>
+<h3 id="_33">例子</h3>
+<p>想象一个情景：现在有一个文件操作工具，针对文本文件，可以打开、显示内容、显示文件大小、显示文本行数。</p>
+<p>但是，假如现在新增了一个音乐文件，这个文件操作工具就不适配了！</p>
+<p>也就是说对于文本文件和音乐文件，它们的操作是不尽相同的。文本需要显示，音乐需要播放。显示和播放，应当使用不同的 API。而它们也有共有的操作，比如显示文件名、计算文件大小等。</p>
+<p>对于类，则使用继承。对于对象，则使用组合。</p>
+<h4 id="_34">解决方案：继承文本操作器得到一个音乐适配器</h4>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/5CYoRpae8riIHcl.png"/>
+<img alt="" src="https://s2.loli.net/2023/04/23/YQW6Ra3XOyZsFdA.png"/></p>
+<h4 id="_35">解决方案：</h4>
+<p>绿色部分没有发生变化。由于蓝色部分，没有了类的继承，所以要多写几个 Override 来实现接口。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/wia17vz2WHJdBsc.png"/>
+<img alt="" src="https://s2.loli.net/2023/04/23/8ud5O2legYZvamS.png"/></p>
+<h3 id="vs_1">比较：类适配器 vs 对象适配器</h3>
+<h4 id="_36">类适配器</h4>
+<ul>
+<li>当我们想要适配一个类及其 <strong>所有子类</strong> 时，类适配器将 <strong>不</strong> 起作用。</li>
+<li>适配器会 <strong>覆盖 Adaptee</strong> 的某些行为。</li>
+</ul>
+<h4 id="_37">对象适配器</h4>
+<ul>
+<li>单个 Adapter 可与多个 Adaptee 配合使用</li>
+<li>Adapter 还可以一次为所有 Adaptee 添加功能</li>
+<li>更难覆盖 Adaptee 的行为。</li>
+</ul>
+<h2 id="observer-pattern">观察者模式 Observer Pattern（对象行为型模式）</h2>
+<blockquote>
+<ul>
+<li>目的：行为型</li>
+<li>范围：对象</li>
+</ul>
+</blockquote>
+<h3 id="_38">别名</h3>
+<ul>
+<li>依赖（Dependents）</li>
+<li>发布-订阅（Publish-Subscribe）</li>
+</ul>
+<h3 id="_39">意图</h3>
+<p>定义了对象之间的一种一对多的依赖关系。当一个对象的状态发生改变时，所有依赖于它的对象都会得到通知，并自动更新。</p>
+<h3 id="_40">结构</h3>
+<p>这个的结构好像不是很好理解。</p>
+<ul>
+<li>Subject 相当于发布者（目标），它知道它的观察者。它要提供注册和删除观察者对象的接口。</li>
+<li>Observer 相当于订阅者（观察者）。为那些在目标发生改变时需要获得通知的对象，定义一个更新接口</li>
+<li>具体目标，将有关状态存入各个具体目标对象，且状态发生改变的时候，向它的各个订阅者发出通知</li>
+<li>具体观察者，维护一个指向具体观察者对象的引用，存储有关状态，这些状态应当与目标的状态保持一致。此外还要实现观察者的更新接口，以使自身状态与目标状态保持一致。</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/7WtE8iUVvONlGQd.png"/></p>
+<h3 id="_41">适用情景</h3>
+<ul>
+<li>改变一个对象的时候也需要同时改变其他的对象，但是不知道有哪些要改变</li>
+<li>一个对象需要通知其他对象，但是这个对象不一定知道要通知谁们</li>
+<li>一个抽象模型有两个方面，其中一个依赖于另一个</li>
+</ul>
+<h3 id="_42">例子</h3>
+<p>有两个（也可能不止）不同的人，都关注了一个项目，希望项目发生改变的时候收到通知。</p>
+<p>但是代码好像不好懂。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/ErcfuixbQd2aRpY.png"/></p>
+<h2 id="_43">设计模式的选择</h2>
+<ul>
+<li>考虑设计模式是如何帮助你解决问题的</li>
+<li>分析各个设计模式的意图（intent），找到合适的</li>
+<li>了解不同设计模式之间的关系</li>
+<li>思考如何让代码可重用</li>
+</ul>
+<h2 id="23">23 种设计模式概述</h2>
+<p><img alt="" src="https://s2.loli.net/2023/04/23/S4pBeWqOUsagM6E.png"/></p>
+<h2 id="java">补充知识：Java 当中类和接口的区别？</h2>
+<p>https://www.geeksforgeeks.org/differences-between-interface-and-class-in-java/</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Interface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The keyword used to create a class is “class”</td>
+<td>The keyword used to create an interface is “interface”</td>
+</tr>
+<tr>
+<td>A class can be instantiated i.e., objects of a class can be created.</td>
+<td>An <strong>Interface cannot be instantiated</strong> i.e. objects cannot be created.</td>
+</tr>
+<tr>
+<td>Classes <strong>do not</strong> support multiple inheritance.</td>
+<td>The interface supports <strong>multiple inheritance</strong></td>
+</tr>
+<tr>
+<td>It can be inherited from another class.</td>
+<td>It cannot inherit a class.</td>
+</tr>
+<tr>
+<td>It can be inherited by another class using the keyword <code>extends</code>.</td>
+<td>It can be inherited by a class by using the keyword <code>implements</code> and it can be inherited by an interface using the keyword <code>extends</code>.</td>
+</tr>
+<tr>
+<td>It can contain constructors.</td>
+<td>It cannot contain constructors.</td>
+</tr>
+<tr>
+<td>It cannot contain abstract methods.</td>
+<td>It <strong>contains abstract methods only</strong>.</td>
+</tr>
+<tr>
+<td>Variables and methods in a class can be declared using any access specifier(<code>public</code>, <code>private</code>, <code>default</code>, <code>protected</code>).</td>
+<td><strong>All</strong> variables and methods in an interface are declared as <code>public</code>.</td>
+</tr>
+<tr>
+<td>Variables in a class can be <code>static</code>, <code>final</code>, or <strong>neither</strong>.</td>
+<td>All variables are <code>static</code> and <code>final</code>.</td>
+</tr>
+</tbody>
+</table>
+</article>>

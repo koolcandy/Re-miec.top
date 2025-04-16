@@ -1,0 +1,38 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-3-structured-query-language">Lecture 3: Structured Query Language</h1>
+<h2 id="sql">SQL 语法</h2>
+<h3 id="_1">创建</h3>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="k">table</span><span class="w"> </span><span class="n">name</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="o">&lt;</span><span class="k">column</span><span class="w"> </span><span class="n">name</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="k">data</span><span class="w"> </span><span class="k">type</span><span class="o">&gt;</span><span class="w"> </span><span class="p">[(</span><span class="o">&lt;</span><span class="k">size</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;</span><span class="k">column</span><span class="w"> </span><span class="k">constraint</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="p">...</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="o">&lt;</span><span class="n">keys</span><span class="o">&gt;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>其中，data type 有数种类型：</p>
+<ul>
+<li><code>INTEGER</code>，有符号整数，可以跟上 <code>(size)</code> 表示最多有多少位</li>
+<li><code>DECIMAL</code>，分数（浮点数），可以用 <code>(size1, size2)</code> 表示小数点前后分别多少位</li>
+<li><code>REAL</code>，实数</li>
+<li><code>BIT</code>，一串 bits</li>
+<li><code>DATE</code>，日期</li>
+<li><code>TIME</code>，二十四小时制时间</li>
+<li><code>TIMESTAMP</code>，时间戳，日期和时间</li>
+<li><code>CHAR</code>，必须跟上 <code>(size)</code> 表示长度，表示定长字符串</li>
+<li><code>VARCHAR</code>，必须跟上 <code>(size)</code> 表示最大长度，表示不定长字符串</li>
+</ul>
+<p>而 column constraint 是用来指定数据性质的。有数种类型：</p>
+<ul>
+<li><code>UNIQUE</code>，表示列中每一行的数据都必须互不相同。用于 id 等信息</li>
+<li><code>NOT NULL</code>，表示这一列不能含有 NULL 值</li>
+<li><code>PRIMARY KEY</code>，这个属性是主键的一部分</li>
+<li><code>REFERENCES &lt;table name&gt;</code>，这个属性是外键（指定 table 的主键）的一部分。</li>
+<li><code>DEFAULT &lt;data value&gt;</code>，若插入的时候没有指定值，则赋值为默认值</li>
+<li><code>CHECK &lt;condition&gt;</code>，每次修改这个值的时候，都会检查是否满足条件</li>
+</ul>
+<p>至于 keys，就是 <code>PRIMARY KEY</code> 或 <code>FOREIGN KEY</code></p>
+<h3 id="_2">查找</h3>
+<p><code>SELECT &lt;column name1&gt;, [&lt;column name2&gt;, ...] FROM &lt;table name&gt; [WHERE &lt;expr&gt;]</code>，相当于在 table 中找到所有满足 expr 的 column 并显示出来。</p>
+<p>其中，expr 部分的表达式相当于筛选条件，可以用 <code>NOT</code>，<code>AND</code> 以及 <code>OR</code> 连接，以构造更完整的描述。</p>
+<h3 id="_3">字符串</h3>
+<p>当使用 <code>STRING</code> 或 <code>VARCHAR</code> 的时候，要用单引号 <code>''</code> 括起来。而且字符串是大小写敏感的。然而，<code>Select</code> 之类的关键字是大小写不敏感的。</p>
+<p>注意，数字不需要用引号。</p>
+</article>>

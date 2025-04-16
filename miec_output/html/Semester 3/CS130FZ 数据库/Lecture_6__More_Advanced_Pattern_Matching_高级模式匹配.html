@@ -1,0 +1,44 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-6-more-advanced-pattern-matching">Lecture 6: More Advanced Pattern Matching 高级模式匹配</h1>
+<p>https://xkcd.com/208/</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/18/p6ZzjJyxrBo7CP5.png"/></p>
+<h2 id="similar-to">模式匹配和正则表达式（使用 <code>SIMILAR TO</code> 运算符和 <code>~</code> / <code>~*</code>）</h2>
+<p>说白了，就是把 <code>LIKE</code> 替换成 <code>SIMILAR TO</code> 或者 <code>~</code>或者 <code>~*</code>，然后模式串换成了正则表达式。</p>
+<p>其中，好像 <code>SIMILAR TO</code> 只适用于模式匹配，正则表达式要用波浪线~~（具体我也搞不明白）~~</p>
+<p>PostgreSQL 的正则表达式可以使用 <code>%</code>。也提供了 <code>.*</code> 用于匹配任意内容。两者是等价的。</p>
+<p>除此以外，还提供下划线 <code>_</code>，用来当占位符用，匹配任意字符。大概相当于常规正则当中的 <code>.</code>。</p>
+<p><code>\d</code> 用于匹配单个数字，<code>\s</code> 用于匹配空白；<code>\D</code> 表示非数字，<code>\S</code> 表示非空白。</p>
+<p><code>&lt;xxx&gt;{l,r}</code> 表示对于 xxx，至少匹配 l 个，最多 r 个。<code>&lt;xxx&gt;{l,}</code> 表示匹配至少 l 个。<code>&lt;xxx&gt;{y}</code> 表示匹配 y 个。</p>
+<p><strong>注意，如果是用正则表达式，一定要加上：<code>^</code> 表示行首，<code>$</code> 表示行末！如果不加，可能会导致 LAB 出错扣分！</strong></p>
+<p><code>*</code> 是零个或多个，<code>+</code> 是一个或多个，<code>?</code> 是零个或一个。</p>
+<h3 id="_1">非贪婪匹配</h3>
+<p>正则表达式默认是使用贪婪匹配的，即任何一个规则，它总是尽可能多地向后匹配</p>
+<p>在正则表达式后面加上一个 <code>?</code> 可以表示非贪婪（non-greedy）匹配，即尽量少匹配呗。</p>
+<p>可以参考廖雪峰的博客 https://www.liaoxuefeng.com/wiki/1252599548343744/1306046731649057</p>
+<h2 id="_2">大小写敏感（<code>~*</code> 和 <code>~</code>）</h2>
+<ul>
+<li>区分大小写：<code>~'&lt;str&gt;'</code></li>
+<li>不区分大小写：<code>~*'&lt;str&gt;'</code></li>
+</ul>
+<h2 id="_3">实用函数和关键字</h2>
+<ul>
+<li><code>char_length(colName)</code>：顾名思义，字符串长度</li>
+<li><code>power(a, b)</code>：顾名思义，计算 $a^b$。</li>
+<li><code>log(x)</code>：计算 $\log_{10} x$。~~竟然不是以 e 为底，太奇怪了~~</li>
+<li><code>sqrt(x)</code>：$\sqrt{x}$。</li>
+<li><code>abs(x)</code>：$|x|$。</li>
+<li><code>pi()</code>：$\pi$。</li>
+<li><code>BETWEEN ... AND ...</code>，例如 <code>a between x and y</code> 意思是 $x \leq a \leq y$，而 <code>a not between x and y</code> 意思是 $a<x \vee="" a=""> y$ </x></li>
+<li><code>... IN (...)</code>，跟 python 里面 <code>in</code> 比较类似，意思就是，前者是否在后者（数组）当中，例如：<code>col in (4,5,6)</code> 等价于 <code>(col = 4) or (col = 5) or (col = 6)</code>。</li>
+</ul>
+<h2 id="_4">列与列之间的比较（非静态值）</h2>
+<p>示例：找出所有 $A &gt; B+C$ 的行（这里假设 ABC 都是数字类型）：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">tableName</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="p">(</span><span class="n">colA</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">colB</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">colC</span><span class="p">);</span>
+</span></code></pre></div>
+<h2 id="_5">查询时显示计算值</h2>
+<p>示例</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">colA</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">col2</span><span class="o">*</span><span class="mi">4</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">tableName</span><span class="p">;</span>
+</span></code></pre></div>
+<p>效果：在后面显示了这几列</p>
+<p><img alt="image-20220930104722107" src="https://s2.loli.net/2023/03/18/4d2b5FwySBXlNpa.png"/></p>
+</article>>

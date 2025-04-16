@@ -1,0 +1,70 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="slide-10-predicate-logic">slide 10: 谓词逻辑 Predicate Logic</h1>
+<h2 id="the-formal-language-of-predicate-logic">谓词逻辑的形式语言 The Formal Language of Predicate Logic</h2>
+<ul>
+<li>常量符号：$a, b, c, dots$</li>
+<li>变量符号：$x, y, z, dots$</li>
+<li>谓词符号：$A, B, C, \dots, P, Q, R, \dots$</li>
+<li>五个<em>命题</em>运算符（propositional operator）：$\wedge, \vee, \neg, \rightarrow, \leftrightarrow$</li>
+<li>两个<em>量词</em>（quantifier）：$\forall, \exists$</li>
+</ul>
+<h2 id="_1">三段式陈述的表示</h2>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="left">语言陈述</th>
+<th align="left">谓词逻辑形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">A</td>
+<td align="left">All A are B</td>
+<td align="left">$(\forall x \cdot Ax \rightarrow Bx)$</td>
+</tr>
+<tr>
+<td align="center">I</td>
+<td align="left">Some A are B</td>
+<td align="left">$(\exists x \cdot Ax \wedge Bx)$</td>
+</tr>
+<tr>
+<td align="center">E</td>
+<td align="left">All A are not B</td>
+<td align="left">$(\forall x \cdot A x \rightarrow \neg B x)$</td>
+</tr>
+<tr>
+<td align="center">E</td>
+<td align="left">No A is B</td>
+<td align="left">$\neg(\exists x \cdot A x \wedge B x)$</td>
+</tr>
+<tr>
+<td align="center">O</td>
+<td align="left">Some A are not B</td>
+<td align="left">$(\exists x \cdot A x \wedge \neg B x)$</td>
+</tr>
+<tr>
+<td align="center">O</td>
+<td align="left">Not all A are B</td>
+<td align="left">$\neg(\forall x \cdot A x \rightarrow B x)$</td>
+</tr>
+</tbody>
+</table>
+<p>通过观察不难发现，所有的 $\forall$ 都对应着 $\rightarrow$，而所有的 $\exists$ 都对应 $\wedge$。</p>
+<h2 id="wff">谓词逻辑式子（WFF，合式公式）的构成</h2>
+<ol>
+<li>项（term）是指变量（$x, y, z$）或常量（$a, b, c$）。</li>
+<li>式（formula）按照如下规则构成：</li>
+<li>若 $t_1, t_2, \dots, t_n$ 是项，而 $P$ 是一个谓词符号，则 $P_{t_1, t_2, \dots, t_n}$ 是一个式；</li>
+<li>若 $\phi$ 和 $\psi$ 是式，那么以下五个东西也是式：$\neg \phi$，$\phi \wedge \psi$，$\phi \vee \psi$，$\phi \rightarrow \psi$，$\phi \leftrightarrow \psi$；</li>
+<li>若 $\phi$ 是式而 $x$ 是一个变量，则 $(\forall x \cdot \phi)$，$(\exists x \cdot \phi)$ 也是式。</li>
+</ol>
+<h2 id="scope">变量辖域（scope）</h2>
+<p>大概是类似编程语言当中，变量作用域的概念。</p>
+<ul>
+<li>在辖域内的变量，是 <em>bound</em> 的，约束出现</li>
+<li>在辖域外的变量，是 <em>free</em> 的，自由出现</li>
+</ul>
+<h2 id="_2">驴句</h2>
+<p>详见 slide 10 最后一页。</p>
+</article>>

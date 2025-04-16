@@ -1,0 +1,26 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-3-equivalence-class-testing">Lecture 3. Equivalence Class Testing</h1>
+<h2 id="junit">JUnit 测试框架</h2>
+<p>上机课需要用。</p>
+<h3 id="_1">实用方法</h3>
+<ul>
+<li><code>assertEquals(val1, val2)</code></li>
+</ul>
+<h3 id="_2">参数化测试</h3>
+<ul>
+<li><code>@DisplayName("TestName")</code></li>
+<li><code>@ParameterizedTest</code></li>
+<li><code>@CsvSource(resources="file.csv")</code></li>
+</ul>
+<h3 id="_3">等价类设计示例</h3>
+<p><img alt="" src="https://s2.loli.net/2022/11/10/73LN2e5shzj49ET.png"/></p>
+<ul>
+<li>第一列标注星号的，表示无效等价类通常是取值不合法或高达无穷的。输入的无效等价类需要单独测，也就是说一组测试数据的输入中不能同时包含两个星号等价类。</li>
+<li>第三列 partition，对于 bool 类型，取值是 true/false，而 int 应该填写取值范围（区间）</li>
+</ul>
+<h3 id="_4">小注记</h3>
+<ul>
+<li>每个新的测试点，都尽量多的覆盖未被测试的等价类</li>
+<li>有几种输出，就至少需要有多少个测试数据</li>
+</ul>
+</article>>

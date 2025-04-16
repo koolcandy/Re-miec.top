@@ -1,0 +1,29 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-18-tables-as-sets-in-sql">Lecture 18. Tables as Sets in SQL 表集合</h1>
+<p>主要讨论五个方面：</p>
+<ul>
+<li><code>ALL</code></li>
+<li><code>DISTINCT</code></li>
+<li><code>UNION</code>：集合并</li>
+<li><code>EXCEPT</code>/<code>MINUS</code>：集合差</li>
+<li><code>INTERSECT</code>：集合交</li>
+</ul>
+<p>有时候的 SQL 查询结果当中会有一些重复的东西，比如查询一堆人的工资，虽然人与人的名字之类的可能不一样，但是如果我只查工资，可能有好几个 5000 的，好几个 6000 的。</p>
+<h2 id="distinct"><code>DISTINCT</code> 关键字</h2>
+<p>如果想要在询问结果中消除掉重复的数据，只需要在 <code>SELECT</code> 语句的里面加上一个 <code>DISTINCT</code>：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tableName</span><span class="p">;</span>
+</span></code></pre></div>
+<p>如果 <code>DISTINCT</code> 后面由两个列名的话，那么考虑的是所有列构成的 tuple 去重，而不仅仅是紧跟在 <code>DISTINCT</code> 后面的那一个：</p>
+<p><img alt="image-20221125105613900" src="https://s2.loli.net/2023/03/18/73zUs1eTFQfbyD2.png"/></p>
+<h2 id="_1">集合操作</h2>
+<h3 id="union"><code>UNION</code></h3>
+<p>之前关于查询级联删除影响多少行的时候，已经使用过 <code>UNION</code>。这里展示 <code>UNION</code> 的另一种用法（并集）：</p>
+<p><img alt="image-20221125110106765" src="https://s2.loli.net/2023/03/18/ZOaRSFGdBbJhvfX.png"/></p>
+<p>根据题意，第一个查询是关于 manager 的，第二个查询是关于 worker 的。</p>
+<h3 id="all"><code>ALL</code></h3>
+<p>这个关键字与多重集（multiset）有关。</p>
+<p><img alt="image-20221125112242886" src="https://s2.loli.net/2023/03/18/wXog1z8NYhjGVl9.png"/></p>
+<h2 id="_2">参照完整性</h2>
+<p>这部分在课件上就是几张手绘图。</p>
+<p>永远要记得外键的重要性。外键必须是另一个表里面存在的主键。违反参照完整性的操作（插入、删除等）将会触发错误。</p>
+</article>>

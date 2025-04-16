@@ -1,0 +1,31 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-14-altering-data-in-a-database-table">Lecture 14. Altering Data in a Database TABLE 修改表</h1>
+<h2 id="drop"><code>DROP</code>：销毁表</h2>
+<p>通常的用法是</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span>
+</span></code></pre></div>
+<p>这样做不仅会清空表的数据，还会销毁表的结构</p>
+<h2 id="alter-table"><code>ALTER TABLE</code>：修改表</h2>
+<h3 id="_1">表改名</h3>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="o">&lt;</span><span class="n">newName</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>改名前，可以用 <code>SELECT FROM &lt;tableName&gt;</code> 查找数据，改名后就只能用 <code>SELECT FROM &lt;newName&gt;</code> 了。</p>
+<p>表的改名要非常谨慎，因为改名后之前 join 的结构完整性可能会遭到破坏。</p>
+<h3 id="_2">列改名</h3>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="o">&lt;</span><span class="n">oldColName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="o">&lt;</span><span class="n">newColName</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<h3 id="_3">删除列</h3>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">DROP</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>该操作不可撤销。</p>
+<h3 id="_4">新增列</h3>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colType</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<h3 id="_5">修改列的类型</h3>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ALTER</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">&lt;</span><span class="n">newColType</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>修改后的类型必须兼容已有的数据才行，比如 <code>VARCHAR(10)</code> 可以修改为 <code>VARCHAR(20)</code>。</p>
+<h3 id="_6">增设主键（原本没有）</h3>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="o">&lt;</span><span class="n">colName</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+</article>>

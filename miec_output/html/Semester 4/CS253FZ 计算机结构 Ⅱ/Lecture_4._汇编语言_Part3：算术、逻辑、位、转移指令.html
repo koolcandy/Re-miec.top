@@ -1,0 +1,856 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-4-part3">Lecture 4. 汇编语言 Part3：算术、逻辑、位、转移指令</h1>
+<p>汇编指令可以分很多种类。有二进制算术指令、十进制算术指令、逻辑指令、数据传输指令、栈指令、控制传输指令、字符串指令、指针指令、IO 指令、前缀指令、系统指令、浮点指令…</p>
+<p>注意：在这份笔记表格的「示例」列中，为了简洁，有些操作数用 A/B/X 等来表示，也有的用含义来表示。但是这并不准确，应当说明是寄存器、内存还是立即数等。更精确的表示还要带上位数等信息。</p>
+<p>可以参考 <a href="https://www.scs.stanford.edu/05au-cs240c/lab/i386/c17.htm">斯坦福大学的手册</a>，内含 80836 指令集详情。然而这门课学的主要是 8086，它们之间存在一定差异。（80836 是 1985 年的，8086 是 1978 的，80836 更强大）</p>
+<h2 id="_1">二进制算术指令</h2>
+<table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">示例</th>
+<th align="left">含义</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>add</code></td>
+<td align="left"><code>add A, B</code></td>
+<td align="left">整数加法</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>adc</code></td>
+<td align="left"><code>adc A, B</code></td>
+<td align="left">带进位的整数加法，即 <code>add A, B+CF</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>sub</code></td>
+<td align="left"><code>sub A, B</code></td>
+<td align="left">减法</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>cmp</code></td>
+<td align="left"><code>cmp A, B</code></td>
+<td align="left">计算 A-B 的值，结果反映给标志寄存器</td>
+<td align="left">不修改 A</td>
+</tr>
+<tr>
+<td align="left"><code>inc</code></td>
+<td align="left"><code>inc A</code></td>
+<td align="left">加一</td>
+<td align="left">不影响 CF</td>
+</tr>
+<tr>
+<td align="left"><code>dec</code></td>
+<td align="left"><code>dec A</code></td>
+<td align="left">减一</td>
+<td align="left">不影响 CF</td>
+</tr>
+<tr>
+<td align="left"><code>div</code></td>
+<td align="left"><code>div X</code></td>
+<td align="left">无符号除法</td>
+<td align="left">有坑，见下文</td>
+</tr>
+<tr>
+<td align="left"><code>idiv</code></td>
+<td align="left"><code>idiv X</code></td>
+<td align="left">有符号除法</td>
+<td align="left">有坑，见下文</td>
+</tr>
+<tr>
+<td align="left"><code>mul</code></td>
+<td align="left"><code>mul X</code></td>
+<td align="left">无符号乘法</td>
+<td align="left">有坑，见下文</td>
+</tr>
+<tr>
+<td align="left"><code>imul</code></td>
+<td align="left"><code>imul X</code></td>
+<td align="left">有符号乘法</td>
+<td align="left">有坑，见下文</td>
+</tr>
+</tbody>
+</table>
+<h3 id="div-idiv"><code>DIV</code> 与 <code>IDIV</code> 的坑</h3>
+<p>这两条指令的操作数只有除数，而被除数是隐含的，由除数的类型决定。</p>
+<p>特别注意，当除数是字（16）字节的时候，被除数是 32 位的 <code>DX:AX</code>。也就是说，如果 <code>DX</code> 没有赋零，使用字作为除数，可能会导致意想不到的错误。因此，<strong>进行字的除法前，一定要把 <code>DX</code> 清零</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>规模</th>
+<th>Dividend 被除数</th>
+<th>Divisor 除数</th>
+<th>Quotient 商</th>
+<th>Remainder 余数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td>AX</td>
+<td>r/m8</td>
+<td>AL</td>
+<td>AH</td>
+</tr>
+<tr>
+<td><strong>word</strong></td>
+<td><strong>DX:AX</strong></td>
+<td><strong>r/m16</strong></td>
+<td><strong>AX</strong></td>
+<td><strong>DX</strong></td>
+</tr>
+<tr>
+<td>dword</td>
+<td>EDX:EAX</td>
+<td>r/m32</td>
+<td>EAX</td>
+<td>EDX</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mul-imul"><code>MUL</code> 与 <code>IMUL</code> 的坑</h3>
+<p>像刚刚一样，被乘数是隐含的，由乘数的类型决定。</p>
+<p>特别注意，两个 16 位相乘，产生运算结果是 32 位的。低 16 位保存在 <code>AX</code> 里面，高 16 位溢出到 <code>DX</code> 里面。因此，<strong>执行字的乘法，可能会污染 <code>DX</code> 寄存器</strong>！</p>
+<table>
+<thead>
+<tr>
+<th>规模</th>
+<th>被乘数</th>
+<th>乘数</th>
+<th>积</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td>AL</td>
+<td>r/m8</td>
+<td>AX</td>
+</tr>
+<tr>
+<td><strong>word</strong></td>
+<td><strong>AX</strong></td>
+<td><strong>r/m16</strong></td>
+<td><strong>DX:AX</strong></td>
+</tr>
+<tr>
+<td>dword</td>
+<td>EAX</td>
+<td>r/m32</td>
+<td>EDX:EAX</td>
+</tr>
+</tbody>
+</table>
+<p><code>IMUL</code> 指令比较特殊，它可以拥有两个操作数或者三个操作数。不过这比较复杂，就不研究了。</p>
+<h2 id="_2">十进制算术指令</h2>
+<blockquote>
+<p>课件上说这些东西了解即可</p>
+</blockquote>
+<p>分析这些指令，一定要记得：AL AH 是 8 字节的，而最小分析单位（nibble）是四字节的。不要把 AL AH 跟 nibble 弄混。</p>
+<table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">时钟周期</th>
+<th align="left">示例</th>
+<th align="left">含义</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>AAA</code></td>
+<td align="left">4</td>
+<td align="left"><code>AAA</code></td>
+<td align="left">加法后调整</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>AAD</code></td>
+<td align="left">19</td>
+<td align="left"><code>AAD</code></td>
+<td align="left">除法<strong>前</strong>调整</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>AAM</code></td>
+<td align="left">17</td>
+<td align="left"><code>AAM</code></td>
+<td align="left">乘法后调整</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>AAS</code></td>
+<td align="left">4</td>
+<td align="left"><code>AAS</code></td>
+<td align="left">减法后调整</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>DAA</code></td>
+<td align="left">4</td>
+<td align="left"><code>DAA</code></td>
+<td align="left">加法后调整</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>DAS</code></td>
+<td align="left">4</td>
+<td align="left"><code>DAS</code></td>
+<td align="left">减法后调整</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="aaaascii-adjust-for-addition">分析：AAA（ASCII Adjust for Addition）</h3>
+<p>众所周知，字符表示的数字，ASCII 值比数字大 0x30。</p>
+<h4 id="_3">例一</h4>
+<p>如，'5' 的 ASCII 是 53，'9' 的 ASCII 是 57。设 AL 是 53（0011 0101），BL 是 57（0011 1001），执行：</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nf">add</span><span class="w"> </span><span class="no">al</span><span class="p">,</span><span class="w"> </span><span class="no">bl</span>
+</span></code></pre></div>
+<p>此时 AL 就会变成 110，即 <strong>0110 1110</strong>。两个 0x30 合在一起，组成了高四位的 0110。若只看低四位，1110，等于 14，恰好就是 5+9 的值。</p>
+<p>再执行：</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nf">aaa</span>
+</span></code></pre></div>
+<p>此时的 AL 就会变成 <strong>0000 0100</strong>（清零高四位；若低四位的值在 10~15 之间或 AF 已经为 1，就把低四位加上 6，AF 与 CF 位设 1，AH 自增）。按照 BCD 的解码规则来分析现在的 AL，就是 0 4。由于进位标志被设置了，所以高位其实是 1，即表示 14。</p>
+<p>加上 6 是因为，十六进制逢十六进一，而十进制是逢十进一，而四位二进制相当于十六进制，因此值少了 6。所以加上 6 结果就对了。避开 A~F 共计 6 个无效数。</p>
+<h4 id="_4">例二</h4>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nf">mov</span><span class="w"> </span><span class="no">al</span><span class="p">,</span><span class="w"> </span><span class="err">'</span><span class="mi">5</span><span class="err">'</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nf">add</span><span class="w"> </span><span class="no">al</span><span class="p">,</span><span class="w"> </span><span class="err">'</span><span class="mi">7</span><span class="err">'</span><span class="w">  </span><span class="c1">; 此时 al 是 0110 1100 = 110，不能直接当作 BCD，需要调整</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nf">aaa</span><span class="w">          </span><span class="c1">; 清零高四位，低四位在 A~F 之间</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">             </span><span class="c1">; 于是低四位加上 6，AL 变成 0010</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">             </span><span class="c1">; 并 AH+=1，AF=CF=1，AL = 0000 0010，BCD 解析为 0 2</span>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">             </span><span class="c1">; 算上进位，即表示 12 = 5+7</span>
+</span></code></pre></div>
+<h3 id="aasascii-adjust-for-subtraction">分析：AAS（Ascii Adjust for Subtraction）</h3>
+<p>与 aaa 几乎一样。区别是：</p>
+<ul>
+<li>aaa 低四位 A~F 之间则加上 6，aas 是减去 6</li>
+<li>aaa 低四位 A~F 之间则让 ah 加上 1，aas 让 ah 减去 1。</li>
+</ul>
+<h3 id="aadascii-adjust-for-division">分析：AAD（Ascii Adjust for Division）</h3>
+<p>这是六条指令当中，唯一一个要在运算指令 <strong>之前</strong> 执行的指令。</p>
+<p>用于除法运算之前，把未打包的 BCD 码调整为打包的 BCD。</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nf">mov</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0703</span><span class="no">h</span><span class="w">  </span><span class="c1">; 未压缩的 BCD，ah = 07h, al = 03h，表示十进制 73</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nf">mov</span><span class="w"> </span><span class="no">bl</span><span class="p">,</span><span class="w"> </span><span class="mi">02</span><span class="no">h</span><span class="w">    </span><span class="c1">; 除数</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nf">aad</span><span class="w">            </span><span class="c1">; BCD 调整为二进制，al = 70+3 = 73 = 49h, ah = 0</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nf">div</span><span class="w"> </span><span class="no">bl</span><span class="w">         </span><span class="c1">; 由于操作单位是字节，al 保存商（al=24h)，ah 保存余数（ah=1）</span>
+</span></code></pre></div>
+<p>由于 al 和 ah 都是 8421 码，最大是 9，所以调整后，最大是 99，在 127 范围内，不会爆。</p>
+<h3 id="aamascii-adjust-for-multiplication">分析：AAM（Ascii Adjust for Multiplication）</h3>
+<p>两个未打包的 BCD 相乘（$[0, 9]$ 范围内），结果必定在 $[0, 81]$ 范围内。使用 AAM 调整后，AH=AL/10，存储十进制的十位数，AL=AL%10，存储个位数。</p>
+<p>AAM 只能在两个未打包的 BCD 相乘后执行。</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nf">mov</span><span class="w"> </span><span class="no">al</span><span class="p">,</span><span class="w"> </span><span class="mi">07</span><span class="no">h</span><span class="w">  </span><span class="c1">; AL = 07h</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nf">mov</span><span class="w"> </span><span class="no">bl</span><span class="p">,</span><span class="w"> </span><span class="mi">09</span><span class="no">h</span><span class="w">  </span><span class="c1">; BL = 09h</span>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nf">mul</span><span class="w"> </span><span class="no">bl</span><span class="w">       </span><span class="c1">; AX = 003fh = 63 = 7*9</span>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nf">aam</span><span class="w">          </span><span class="c1">; AH = 6，AL = 3</span>
+</span></code></pre></div>
+<h3 id="_5">应用：输出一百以内的整数</h3>
+<p>刚才提到过，字符表示的数字，ASCII 值比数字大 0x30。因此：</p>
+<ul>
+<li>想要把 <strong>半个字节</strong> 的未压缩 BCD 转换成一个对应的字符，只需要 <strong>或上 0x30</strong></li>
+<li>想要把 <strong>一个字节</strong> 的压缩 BCD 转换成两个对应的字符，只需要 <strong>或上 0x3030</strong>。</li>
+</ul>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nf">mov</span><span class="w"> </span><span class="no">al</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nf">mov</span><span class="w"> </span><span class="no">bh</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span>
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="nf">mul</span><span class="w"> </span><span class="no">bh</span><span class="w">        </span><span class="c1">; AX = 45</span>
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="nf">aam</span><span class="w">           </span><span class="c1">; AH = 4, AL = 5</span>
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a>
+</span><span id="__span-5-6"><a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="nf">or</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">3030</span><span class="no">h</span><span class="w">  </span><span class="c1">; 转化成字符</span>
+</span><span id="__span-5-7"><a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a>
+</span><span id="__span-5-8"><a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="nf">mov</span><span class="w"> </span><span class="no">dl</span><span class="p">,</span><span class="w"> </span><span class="no">ah</span><span class="w">    </span><span class="c1">; dl 是 21h 的参数，先输出高位</span>
+</span><span id="__span-5-9"><a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="nf">mov</span><span class="w"> </span><span class="no">dh</span><span class="p">,</span><span class="w"> </span><span class="no">al</span><span class="w">    </span><span class="c1">; 由于 al 的值会随时改变，先备份到 dh 里面</span>
+</span><span id="__span-5-10"><a href="#__codelineno-5-10" id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="nf">mov</span><span class="w"> </span><span class="no">ah</span><span class="p">,</span><span class="w"> </span><span class="mi">02</span><span class="no">h</span><span class="w">   </span><span class="c1">; 设置 21h 中断到输出 dl 的模式</span>
+</span><span id="__span-5-11"><a href="#__codelineno-5-11" id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="nf">int</span><span class="w"> </span><span class="mi">21</span><span class="no">h</span><span class="w">       </span><span class="c1">; 输出高位：4</span>
+</span><span id="__span-5-12"><a href="#__codelineno-5-12" id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="nf">mov</span><span class="w"> </span><span class="no">dl</span><span class="p">,</span><span class="w"> </span><span class="no">dh</span><span class="w">    </span><span class="c1">; 把 dl 的值赋成刚刚备份的低位</span>
+</span><span id="__span-5-13"><a href="#__codelineno-5-13" id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="nf">int</span><span class="w"> </span><span class="mi">21</span><span class="no">h</span><span class="w">       </span><span class="c1">; 输出低位：5</span>
+</span></code></pre></div>
+<h2 id="_6">逻辑指令</h2>
+<table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">示例</th>
+<th align="left">含义</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>AND</code></td>
+<td align="left"><code>AND A, B</code></td>
+<td align="left">按位与</td>
+<td align="left">可以用来掩码（mask）</td>
+</tr>
+<tr>
+<td align="left"><code>OR</code></td>
+<td align="left"><code>OR A, B</code></td>
+<td align="left">按位或</td>
+<td align="left">常用于 BCD 转 ASCII</td>
+</tr>
+<tr>
+<td align="left"><code>XOR</code></td>
+<td align="left"><code>XOR A, B</code></td>
+<td align="left">异或</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>BT</code></td>
+<td align="left"><code>BT Base, Offset</code></td>
+<td align="left">指定地址的值赋给 CF</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>BTC</code></td>
+<td align="left"><code>BTC Base, Offset</code></td>
+<td align="left">指定地址位的值赋给 CF，该位取反</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>BTR</code></td>
+<td align="left"><code>BTR Base, Offset</code></td>
+<td align="left">指定地址位的值赋给 CF，该位设零</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>BTS</code></td>
+<td align="left"><code>BTS Base, Offset</code></td>
+<td align="left">指定地址位的值赋给 CF，该位设一</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>BSF</code></td>
+<td align="left"><code>BSF A, B</code></td>
+<td align="left">B 最低的 1 是第几位，赋给 A</td>
+<td align="left">影响 ZF</td>
+</tr>
+<tr>
+<td align="left"><code>BSR</code></td>
+<td align="left"><code>BSR A, B</code></td>
+<td align="left">B 最高的 1 是第几位，赋给 A</td>
+<td align="left">影响 ZF</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意：课件里关于 BSF 和 BSR 的描述好像错了。跟网络资源很不一样。而且，这俩好像是 80386 而不是 8086 的。</strong></p>
+<h2 id="_7">移位指令</h2>
+<table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">示例</th>
+<th align="left">含义</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>SHL</code></td>
+<td align="left"><code>SHL r/m, 1/CL</code></td>
+<td align="left">首位给 CF，尾位置零</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>SHR</code></td>
+<td align="left"><code>SHR r/m, 1/CL</code></td>
+<td align="left">尾位给 CF，首位置零</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>SAL</code></td>
+<td align="left"><code>SAL r/m, 1/CL</code></td>
+<td align="left">算术，首位给 CF，尾位维持不变</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>SAR</code></td>
+<td align="left"><code>SAR r/m, 1/CL</code></td>
+<td align="left">算术，尾位给 CF，首位维持不变</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>ROL</code></td>
+<td align="left"><code>ROL r/m, 1/CL</code></td>
+<td align="left">循环左移，最高位同时给 CF 和最低位（w）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>ROR</code></td>
+<td align="left"><code>ROR r/m, 1/CL</code></td>
+<td align="left">循环右移，最低位同时给 CF 和最高位（w）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>RCL</code></td>
+<td align="left"><code>RCL r/m, 1/CL</code></td>
+<td align="left">循环左移，把 CF 视作额外最高位（w+1）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>RCR</code></td>
+<td align="left"><code>RCR r/m, 1/CL</code></td>
+<td align="left">循环右移，把 CF 视作额外最高位（w+1）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>SHLD</code></td>
+<td align="left"><code>SHLD A, B, cnt</code></td>
+<td align="left">双精度左移，缺位由 B 的高位填充，B 不变</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>SHRD</code></td>
+<td align="left"><code>SHRD A, B, cnt</code></td>
+<td align="left">双精度右移，缺位由 B 的低位填充，B 不变</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p><code>SHLD</code> 和 <code>SHRD</code> 好像 8086 不支持。</p>
+<p>其他几个移位指令的操作数，好像只能是 1，或者寄存器 <code>CL</code>。到 80836 上可以是立即数。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/10/P6E3pJzTG2QUuZ8.png"/></p>
+<h2 id="_8">标志位指令</h2>
+<table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">示例</th>
+<th align="left">含义</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>CLC</code></td>
+<td align="left"><code>CLC</code></td>
+<td align="left">进位标志置零</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>STC</code></td>
+<td align="left"><code>STC</code></td>
+<td align="left">进位标志设一</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>CMC</code></td>
+<td align="left"><code>CMC</code></td>
+<td align="left">进位标志取反</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>CLD</code></td>
+<td align="left"><code>CLD</code></td>
+<td align="left">方向标志置零</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>STD</code></td>
+<td align="left"><code>STD</code></td>
+<td align="left">方向标志设一</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>CLI</code></td>
+<td align="left"><code>CLI</code></td>
+<td align="left">IF 置零，关闭中断</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>STI</code></td>
+<td align="left"><code>STI</code></td>
+<td align="left">IF 设一，打开中断</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">分支控制转移</h2>
+<p>指令指针（IP）可以视作当前执行第几行代码，执行指令后自动递增。</p>
+<p>对于分支指令，就修改 IP；而对于调用指令，相当于把当前 IP 压入栈中，然后再修改 IP，然后再弹栈。</p>
+<p>汇编代码中，<strong>一个字符串后面跟上冒号，表示一个标签（label）</strong>。比如：<code>haha:</code> 就是一个标签。标签可以清晰的表示代码片段结构和作用，转移指令当中也可以指定跳转到哪一个标签。</p>
+<h3 id="conditional-jump">条件跳转 conditional jump</h3>
+<p>条件转移指令通常都是接在 <code>cmp</code> 指令之后。所有的 J 都是「Jump if」的意思，后面的字母代表条件的英文首字母缩写。</p>
+<p>条件转移的操作数是单字节的，所以 <strong>不能跳太远</strong>，范围是向前 128 到向后 127（-128~127）。</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>含义</th>
+<th>flag</th>
+<th>反指令</th>
+<th>反含义</th>
+<th>反 flag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JA</code></td>
+<td>Above</td>
+<td><code>ZF=0 and CF=0</code></td>
+<td><code>JNA</code></td>
+<td>Not Above</td>
+<td><code>ZF=1 or CF=1</code></td>
+</tr>
+<tr>
+<td><code>JAE</code></td>
+<td>Above or Equal</td>
+<td><code>CF=0</code></td>
+<td><code>JNAE</code></td>
+<td>Not Above or Equal</td>
+<td><code>CF=1</code></td>
+</tr>
+<tr>
+<td><code>JB</code></td>
+<td>Below</td>
+<td><code>CF=1</code></td>
+<td><code>JNB</code></td>
+<td>Not Below</td>
+<td><code>CF=0</code></td>
+</tr>
+<tr>
+<td><code>JBE</code></td>
+<td>Below or Equal</td>
+<td><code>ZF=1 or CF=1</code></td>
+<td><code>JNBE</code></td>
+<td>Not Below or Equal</td>
+<td><code>ZF=0 and CF=0</code></td>
+</tr>
+<tr>
+<td><code>JC</code></td>
+<td><strong>Carry</strong></td>
+<td><code>CF=1</code></td>
+<td><code>JNC</code></td>
+<td><strong>Not Carry</strong></td>
+<td><code>CF=0</code></td>
+</tr>
+<tr>
+<td><code>JCXZ</code></td>
+<td>CX is Zero</td>
+<td><code>CX=0</code></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>JE</code></td>
+<td>Equal</td>
+<td><code>ZF=1</code></td>
+<td><code>JNE</code></td>
+<td>Not Equal</td>
+<td><code>ZF=0</code></td>
+</tr>
+<tr>
+<td><code>JG</code></td>
+<td>Greater</td>
+<td><code>ZF=0 and SF=OF</code></td>
+<td><code>JNG</code></td>
+<td>Not Greater</td>
+<td><code>ZF=1 or SF!=OF</code></td>
+</tr>
+<tr>
+<td><code>JGE</code></td>
+<td>Greater or Equal</td>
+<td><code>SF = OF</code></td>
+<td><code>JNGE</code></td>
+<td>Not Greater or Equal</td>
+<td><code>SF != OF</code></td>
+</tr>
+<tr>
+<td><code>JL</code></td>
+<td>Less</td>
+<td><code>SF != OF</code></td>
+<td><code>JNL</code></td>
+<td>Not Less</td>
+<td><code>SF = OF</code></td>
+</tr>
+<tr>
+<td><code>JLE</code></td>
+<td>Less or Equal</td>
+<td><code>ZF=1 or SF!=OF</code></td>
+<td><code>JNLE</code></td>
+<td>Not Less or Equal</td>
+<td><code>ZF=0 and SF=OF</code></td>
+</tr>
+<tr>
+<td><code>JO</code></td>
+<td>Overflow</td>
+<td><code>OF=1</code></td>
+<td><code>JNO</code></td>
+<td>No Overflow</td>
+<td><code>OF=0</code></td>
+</tr>
+<tr>
+<td><code>JP</code></td>
+<td>Parity</td>
+<td><code>PF=1</code></td>
+<td><code>JNP</code></td>
+<td>Not Parity</td>
+<td><code>PF=0</code></td>
+</tr>
+<tr>
+<td><code>JPE</code></td>
+<td>Parity is Even</td>
+<td><code>PF=1</code></td>
+<td><code>JPO</code></td>
+<td>Parity is Odd</td>
+<td><code>PF=0</code></td>
+</tr>
+<tr>
+<td><code>JS</code></td>
+<td>Signed</td>
+<td><code>SF=1</code></td>
+<td><code>JNS</code></td>
+<td>Not Signed</td>
+<td><code>SF=0</code></td>
+</tr>
+<tr>
+<td><code>JZ</code></td>
+<td><strong>Zero</strong></td>
+<td><code>ZF=1</code></td>
+<td><code>JNZ</code></td>
+<td><strong>Not Zero</strong></td>
+<td><code>ZF=0</code></td>
+</tr>
+</tbody>
+</table>
+<p>其中：</p>
+<ul>
+<li><code>JA</code>，<code>JB</code> 系列比较的是无符号数，<code>JG</code>，<code>JL</code> 系列比较的是有符号数</li>
+<li>如果不支持 <code>JB</code> 和 <code>JNB</code>，可以用 <code>JC</code> 表示 <code>A &lt; B</code>，用 <code>JNC</code> 表示 <code>A &lt;= B</code>，这些其实是等价的</li>
+<li><code>JG</code>，<code>JL</code> 系列的 flag 要求不是很好理解。课件上 <code>JG</code> 的条件是 <code>ZF=0 and SF=0</code>，<code>JGE</code> 的条件是 <code>SF=0</code>，<code>JL</code> 和 <code>JLE</code> 的条件明显写错了。</li>
+</ul>
+<h4 id="_10">可移植性</h4>
+<p>汇编语言不像 C，Java 那样具有可移植性。因为，许多微处理器，只有基于 C 和 Z 的 jump。</p>
+<p>这门课学习的汇编是 x86 的一个子集。</p>
+<h3 id="unconditional-jump">无条件跳转 unconditional jump</h3>
+<p><code>JMP</code> 指令，啥都不管，直接跳过去。可以跳的远一些（范围 -32768~32767），甚至可以把目标地址存进寄存器再跳到寄存器去（<code>jmp ax</code>）。</p>
+<h3 id="_11">循环</h3>
+<p>主要有三种：</p>
+<ul>
+<li><code>LOOP</code>，相当于 <code>do {} while ((cx!=0) &amp;&amp; (--cx||true));</code></li>
+<li><code>LOOPZ</code>，相当于 <code>do {} while ((cx!=0 &amp;&amp; ZF=1) &amp;&amp; (--cx||true));</code></li>
+<li><code>LOOPNZ</code>，相当于 <code>do {} while ((cx!=0 &amp;&amp; ZF=0) &amp;&amp; (--cx||true));</code></li>
+</ul>
+<h2 id="_12">时钟周期与延迟计算</h2>
+<p><img alt="" src="https://s2.loli.net/2023/04/07/fK1mDOFibqNtYAW.png"/>
+<img alt="" src="https://s2.loli.net/2023/04/07/FU1bChBasN5du96.png"/></p>
+<h3 id="_13">短延迟（一层循环）</h3>
+<p>对于如下程序</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">cx</span><span class="p">,</span><span class="w"> </span><span class="no">N</span><span class="w">  </span><span class="c1">; 消耗 4 时钟周期，这里 N 是字面量，但是取值还未确定</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nl">tag:</span>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">    </span><span class="nf">nop</span><span class="w">        </span><span class="c1">; 消耗 3 时钟周期</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="nf">nop</span><span class="w">        </span><span class="c1">; 消耗 3 时钟周期</span>
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">    </span><span class="nf">loop</span><span class="w"> </span><span class="no">tag</span><span class="w">   </span><span class="c1">; 消耗 17 个时钟周期，退出循环时仅 5 个时钟周期</span>
+</span></code></pre></div>
+<p>那么，循环体总共消耗 3+3+17 = 23 个时钟周期。</p>
+<p>这个程序总周期消耗是：$C_T = 4 + 23 \cdot N - 12$。</p>
+<p>假设现在有一台机器，时钟频率是 100MHz（每个时钟周期 $10^{-8}$ 秒），想让他睡 25 微秒（$2.5 \times 10^{-5}$ 秒），该如何取 $N$ 的值？</p>
+<p>首先容易计算：25 微秒是 2500 个时钟周期。也就是说需要计算：$N$ 取什么值，可以让时钟周期数 $C_T = 2500$？</p>
+<p>刚才那个式子移项可以得到：$$N = \frac{C_T - 4 + 12}{23} = 109$$，即需要 <code>mov cx, 109</code>，睡 25 微秒。</p>
+<h3 id="_14">长延迟（两层甚至更多层循环）</h3>
+<p>考虑如下程序</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">bx</span><span class="p">,</span><span class="w"> </span><span class="mi">30000</span><span class="w">  </span><span class="c1">; 4 个周期</span>
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="nl">lp1:</span><span class="w">               </span><span class="c1">; 外层循环开始</span>
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">cx</span><span class="p">,</span><span class="w"> </span><span class="mi">30000</span><span class="w">  </span><span class="c1">; 4 个周期</span>
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="nl">lp2:</span><span class="w">               </span><span class="c1">; 内层循环开始</span>
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="nf">nop</span><span class="w">            </span><span class="c1">; 3 个周期</span>
+</span><span id="__span-7-6"><a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">    </span><span class="nf">loop</span><span class="w"> </span><span class="no">lp2</span><span class="w">       </span><span class="c1">; 17/5 个周期；内层循环结束</span>
+</span><span id="__span-7-7"><a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">    </span><span class="nf">dec</span><span class="w"> </span><span class="no">bx</span><span class="w">         </span><span class="c1">; 2 个周期；cx 被占用，这里只能用 dec 配合 jnz 了</span>
+</span><span id="__span-7-8"><a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">    </span><span class="nf">jnz</span><span class="w"> </span><span class="no">lp1</span><span class="w">        </span><span class="c1">; 16/4 个周期；外层循环结束</span>
+</span></code></pre></div>
+<p>对于内层循环，$C_I = 4 + 30000 \times 20 - 12 = 599992$。</p>
+<p>对于总循环，$C_T = 4 + 30000 \times (599992 + 2 + 16) - 12 = 1.8 \times 10^{10}$。</p>
+<p>有一台实验机，标 300MHz，跑了 15s。</p>
+<p>然而，跑 15s 说明频率高达 1.2GHz，与标注的 300MHz 不符。这说明，这台机器每秒执行四条指令。这个现象可能是由于多核。</p>
+<h2 id="_15">打印数字</h2>
+<h3 id="_16">方案一：取模</h3>
+<p>在「十进制算术指令」一节当中，提到了输出 100 以内整数的方法。这里再补充一个输出 16 位无符号整数即 $[0, 65535]$ 范围内整数的方法。</p>
+<p>这种方法的缺陷是，如果不到 10000，打印出来会带前导零。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/07/d1MiqmDvXeSacP8.png"/></p>
+<h4 id="_17">代码实现一：用减法实现取模（源自课件）</h4>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="na">.MODEL</span><span class="w"> </span><span class="no">medium</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="na">.STACK</span>
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="na">.DATA</span>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="na">.CODE</span>
+</span><span id="__span-8-5"><a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="na">.STARTUP</span>
+</span><span id="__span-8-6"><a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">12345</span>
+</span><span id="__span-8-7"><a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">    </span><span class="nf">call</span><span class="w"> </span><span class="no">Print</span><span class="w">     </span><span class="c1">; 调用 Print 过程，打印 ax</span>
+</span><span id="__span-8-8"><a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="na">.EXIT</span>
+</span><span id="__span-8-9"><a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a>
+</span><span id="__span-8-10"><a href="#__codelineno-8-10" id="__codelineno-8-10" name="__codelineno-8-10"></a>
+</span><span id="__span-8-11"><a href="#__codelineno-8-11" id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="nl">Print:</span>
+</span><span id="__span-8-12"><a href="#__codelineno-8-12" id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">bx</span><span class="w">        </span><span class="c1">; 过程开始，把所有的寄存器都存栈备份</span>
+</span><span id="__span-8-13"><a href="#__codelineno-8-13" id="__codelineno-8-13" name="__codelineno-8-13"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-8-14"><a href="#__codelineno-8-14" id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-8-15"><a href="#__codelineno-8-15" id="__codelineno-8-15" name="__codelineno-8-15"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span>
+</span><span id="__span-8-16"><a href="#__codelineno-8-16" id="__codelineno-8-16" name="__codelineno-8-16"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">cx</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span>
+</span><span id="__span-8-17"><a href="#__codelineno-8-17" id="__codelineno-8-17" name="__codelineno-8-17"></a><span class="nl">NXTCH:</span>
+</span><span id="__span-8-18"><a href="#__codelineno-8-18" id="__codelineno-8-18" name="__codelineno-8-18"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-8-19"><a href="#__codelineno-8-19" id="__codelineno-8-19" name="__codelineno-8-19"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">ax</span>
+</span><span id="__span-8-20"><a href="#__codelineno-8-20" id="__codelineno-8-20" name="__codelineno-8-20"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-8-21"><a href="#__codelineno-8-21" id="__codelineno-8-21" name="__codelineno-8-21"></a>
+</span><span id="__span-8-22"><a href="#__codelineno-8-22" id="__codelineno-8-22" name="__codelineno-8-22"></a><span class="w">    </span><span class="c1">; save (num / pw10) into stack</span>
+</span><span id="__span-8-23"><a href="#__codelineno-8-23" id="__codelineno-8-23" name="__codelineno-8-23"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">cx</span><span class="p">,</span><span class="w"> </span><span class="no">dx</span><span class="w">     </span><span class="c1">; 此时 cx 就是 pw10</span>
+</span><span id="__span-8-24"><a href="#__codelineno-8-24" id="__codelineno-8-24" name="__codelineno-8-24"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="no">h</span>
+</span><span id="__span-8-25"><a href="#__codelineno-8-25" id="__codelineno-8-25" name="__codelineno-8-25"></a><span class="w">    </span><span class="nf">div</span><span class="w"> </span><span class="no">cx</span><span class="w">         </span><span class="c1">; ax /= pw10</span>
+</span><span id="__span-8-26"><a href="#__codelineno-8-26" id="__codelineno-8-26" name="__codelineno-8-26"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">ax</span><span class="w">        </span><span class="c1">; 存栈 (num / pw10)</span>
+</span><span id="__span-8-27"><a href="#__codelineno-8-27" id="__codelineno-8-27" name="__codelineno-8-27"></a>
+</span><span id="__span-8-28"><a href="#__codelineno-8-28" id="__codelineno-8-28" name="__codelineno-8-28"></a><span class="w">    </span><span class="c1">; 求出 num 该减去多少</span>
+</span><span id="__span-8-29"><a href="#__codelineno-8-29" id="__codelineno-8-29" name="__codelineno-8-29"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">bl</span><span class="p">,</span><span class="w"> </span><span class="no">al</span><span class="w">     </span><span class="c1">; bl 存首位</span>
+</span><span id="__span-8-30"><a href="#__codelineno-8-30" id="__codelineno-8-30" name="__codelineno-8-30"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">bh</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="no">h</span>
+</span><span id="__span-8-31"><a href="#__codelineno-8-31" id="__codelineno-8-31" name="__codelineno-8-31"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="no">h</span>
+</span><span id="__span-8-32"><a href="#__codelineno-8-32" id="__codelineno-8-32" name="__codelineno-8-32"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="no">cx</span><span class="w">     </span><span class="c1">; cx 此时还是 pw10</span>
+</span><span id="__span-8-33"><a href="#__codelineno-8-33" id="__codelineno-8-33" name="__codelineno-8-33"></a><span class="w">    </span><span class="nf">mul</span><span class="w"> </span><span class="no">bx</span><span class="w">         </span><span class="c1">; 让 ax 变成 x0000 的形式</span>
+</span><span id="__span-8-34"><a href="#__codelineno-8-34" id="__codelineno-8-34" name="__codelineno-8-34"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">bx</span><span class="p">,</span><span class="w"> </span><span class="no">ax</span><span class="w">     </span><span class="c1">; 把 ax 赋给 bx，此时 bx 就是该减去多少</span>
+</span><span id="__span-8-35"><a href="#__codelineno-8-35" id="__codelineno-8-35" name="__codelineno-8-35"></a>
+</span><span id="__span-8-36"><a href="#__codelineno-8-36" id="__codelineno-8-36" name="__codelineno-8-36"></a><span class="w">    </span><span class="c1">; pop (num / pw10) into dx, putchar(dx)</span>
+</span><span id="__span-8-37"><a href="#__codelineno-8-37" id="__codelineno-8-37" name="__codelineno-8-37"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">dx</span><span class="w">         </span><span class="c1">; 此时 dx 是刚刚的 ax（对应 Line26）</span>
+</span><span id="__span-8-38"><a href="#__codelineno-8-38" id="__codelineno-8-38" name="__codelineno-8-38"></a><span class="w">    </span><span class="nf">or</span><span class="w"> </span><span class="no">dl</span><span class="p">,</span><span class="w">  </span><span class="mi">30</span><span class="no">h</span><span class="w">    </span><span class="c1">; 转 ASCII</span>
+</span><span id="__span-8-39"><a href="#__codelineno-8-39" id="__codelineno-8-39" name="__codelineno-8-39"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ah</span><span class="p">,</span><span class="w"> </span><span class="mi">02</span><span class="no">h</span>
+</span><span id="__span-8-40"><a href="#__codelineno-8-40" id="__codelineno-8-40" name="__codelineno-8-40"></a><span class="w">    </span><span class="nf">int</span><span class="w"> </span><span class="mi">021</span><span class="no">h</span>
+</span><span id="__span-8-41"><a href="#__codelineno-8-41" id="__codelineno-8-41" name="__codelineno-8-41"></a>
+</span><span id="__span-8-42"><a href="#__codelineno-8-42" id="__codelineno-8-42" name="__codelineno-8-42"></a><span class="w">    </span><span class="c1">; pw10 /= 10</span>
+</span><span id="__span-8-43"><a href="#__codelineno-8-43" id="__codelineno-8-43" name="__codelineno-8-43"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">ax</span><span class="w">         </span><span class="c1">; 此时 ax 是 NXTCH 开始时的 dx，即 pw10（对应 Line20）</span>
+</span><span id="__span-8-44"><a href="#__codelineno-8-44" id="__codelineno-8-44" name="__codelineno-8-44"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="no">h</span>
+</span><span id="__span-8-45"><a href="#__codelineno-8-45" id="__codelineno-8-45" name="__codelineno-8-45"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">cx</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span>
+</span><span id="__span-8-46"><a href="#__codelineno-8-46" id="__codelineno-8-46" name="__codelineno-8-46"></a><span class="w">    </span><span class="nf">div</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-8-47"><a href="#__codelineno-8-47" id="__codelineno-8-47" name="__codelineno-8-47"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="no">ax</span><span class="w">     </span><span class="c1">; 现在 dx 保存了新的 pw10，可以给下一轮循环用</span>
+</span><span id="__span-8-48"><a href="#__codelineno-8-48" id="__codelineno-8-48" name="__codelineno-8-48"></a>
+</span><span id="__span-8-49"><a href="#__codelineno-8-49" id="__codelineno-8-49" name="__codelineno-8-49"></a><span class="w">    </span><span class="c1">; 用减法实现 ax %= old_pw10</span>
+</span><span id="__span-8-50"><a href="#__codelineno-8-50" id="__codelineno-8-50" name="__codelineno-8-50"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">ax</span><span class="w">         </span><span class="c1">; 此时 ax 就是一开始的 num（对应 Line19）</span>
+</span><span id="__span-8-51"><a href="#__codelineno-8-51" id="__codelineno-8-51" name="__codelineno-8-51"></a><span class="w">    </span><span class="nf">sub</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="no">bx</span><span class="w">     </span><span class="c1">; 删掉 ax 的最高位</span>
+</span><span id="__span-8-52"><a href="#__codelineno-8-52" id="__codelineno-8-52" name="__codelineno-8-52"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">cx</span><span class="w">         </span><span class="c1">; 此时 cx 就是一开始的 cx（对应 Line18），即恢复原值，循环变量值不能乱</span>
+</span><span id="__span-8-53"><a href="#__codelineno-8-53" id="__codelineno-8-53" name="__codelineno-8-53"></a><span class="w">    </span><span class="nf">loop</span><span class="w"> </span><span class="no">NXTCH</span><span class="w">     </span><span class="c1">; 循环</span>
+</span><span id="__span-8-54"><a href="#__codelineno-8-54" id="__codelineno-8-54" name="__codelineno-8-54"></a>
+</span><span id="__span-8-55"><a href="#__codelineno-8-55" id="__codelineno-8-55" name="__codelineno-8-55"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">dx</span><span class="w">         </span><span class="c1">; 过程结束，恢复栈当中的备份</span>
+</span><span id="__span-8-56"><a href="#__codelineno-8-56" id="__codelineno-8-56" name="__codelineno-8-56"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-8-57"><a href="#__codelineno-8-57" id="__codelineno-8-57" name="__codelineno-8-57"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">bx</span>
+</span><span id="__span-8-58"><a href="#__codelineno-8-58" id="__codelineno-8-58" name="__codelineno-8-58"></a><span class="w">    </span><span class="nf">ret</span>
+</span><span id="__span-8-59"><a href="#__codelineno-8-59" id="__codelineno-8-59" name="__codelineno-8-59"></a>
+</span><span id="__span-8-60"><a href="#__codelineno-8-60" id="__codelineno-8-60" name="__codelineno-8-60"></a>
+</span><span id="__span-8-61"><a href="#__codelineno-8-61" id="__codelineno-8-61" name="__codelineno-8-61"></a><span class="nf">END</span>
+</span></code></pre></div>
+<h4 id="_18">代码实现二：从寄存器中直接提取余数（源自期中考试）</h4>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="w">    </span><span class="na">.MODEL</span><span class="w"> </span><span class="no">medium</span>
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="w">    </span><span class="na">.STACK</span>
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">    </span><span class="na">.DATA</span>
+</span><span id="__span-9-4"><a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="nf">count</span><span class="w">   </span><span class="no">byte</span><span class="w">    </span><span class="mi">5</span>
+</span><span id="__span-9-5"><a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="nf">ten</span><span class="w">     </span><span class="no">word</span><span class="w">    </span><span class="mi">10</span>
+</span><span id="__span-9-6"><a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">    </span><span class="na">.CODE</span>
+</span><span id="__span-9-7"><a href="#__codelineno-9-7" id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">    </span><span class="na">.STARTUP</span>
+</span><span id="__span-9-8"><a href="#__codelineno-9-8" id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">12345</span>
+</span><span id="__span-9-9"><a href="#__codelineno-9-9" id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">    </span><span class="nf">call</span><span class="w"> </span><span class="no">Print</span>
+</span><span id="__span-9-10"><a href="#__codelineno-9-10" id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="w">    </span><span class="na">.EXIT</span>
+</span><span id="__span-9-11"><a href="#__codelineno-9-11" id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="nl">Print:</span>
+</span><span id="__span-9-12"><a href="#__codelineno-9-12" id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">bx</span><span class="w">        </span><span class="c1">; 存栈</span>
+</span><span id="__span-9-13"><a href="#__codelineno-9-13" id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-9-14"><a href="#__codelineno-9-14" id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-9-15"><a href="#__codelineno-9-15" id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">bx</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span>
+</span><span id="__span-9-16"><a href="#__codelineno-9-16" id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="nl">again:</span>
+</span><span id="__span-9-17"><a href="#__codelineno-9-17" id="__codelineno-9-17" name="__codelineno-9-17"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="no">h</span><span class="w">     </span><span class="c1">; 除法前清空 dx</span>
+</span><span id="__span-9-18"><a href="#__codelineno-9-18" id="__codelineno-9-18" name="__codelineno-9-18"></a><span class="w">    </span><span class="nf">div</span><span class="w"> </span><span class="no">bx</span><span class="w">         </span><span class="c1">; dx:ax /= bx</span>
+</span><span id="__span-9-19"><a href="#__codelineno-9-19" id="__codelineno-9-19" name="__codelineno-9-19"></a><span class="w">    </span><span class="nf">or</span><span class="w"> </span><span class="no">al</span><span class="p">,</span><span class="w"> </span><span class="mi">030</span><span class="no">h</span><span class="w">    </span><span class="c1">; 数字转 ASCII</span>
+</span><span id="__span-9-20"><a href="#__codelineno-9-20" id="__codelineno-9-20" name="__codelineno-9-20"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">dx</span><span class="w">        </span><span class="c1">; 保存余数</span>
+</span><span id="__span-9-21"><a href="#__codelineno-9-21" id="__codelineno-9-21" name="__codelineno-9-21"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dl</span><span class="p">,</span><span class="w"> </span><span class="no">al</span><span class="w">     </span><span class="c1">; 传参给 21h 中断</span>
+</span><span id="__span-9-22"><a href="#__codelineno-9-22" id="__codelineno-9-22" name="__codelineno-9-22"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ah</span><span class="p">,</span><span class="w"> </span><span class="mi">02</span><span class="no">h</span><span class="w">    </span><span class="c1">; 输出字符模式</span>
+</span><span id="__span-9-23"><a href="#__codelineno-9-23" id="__codelineno-9-23" name="__codelineno-9-23"></a><span class="w">    </span><span class="nf">int</span><span class="w"> </span><span class="mi">021</span><span class="no">h</span>
+</span><span id="__span-9-24"><a href="#__codelineno-9-24" id="__codelineno-9-24" name="__codelineno-9-24"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="no">h</span><span class="w">     </span><span class="c1">; 除法前清空 dx</span>
+</span><span id="__span-9-25"><a href="#__codelineno-9-25" id="__codelineno-9-25" name="__codelineno-9-25"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="no">bx</span><span class="w">     </span><span class="c1">; bx /= 10</span>
+</span><span id="__span-9-26"><a href="#__codelineno-9-26" id="__codelineno-9-26" name="__codelineno-9-26"></a><span class="w">    </span><span class="nf">div</span><span class="w"> </span><span class="no">ten</span>
+</span><span id="__span-9-27"><a href="#__codelineno-9-27" id="__codelineno-9-27" name="__codelineno-9-27"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">bx</span><span class="p">,</span><span class="w"> </span><span class="no">ax</span>
+</span><span id="__span-9-28"><a href="#__codelineno-9-28" id="__codelineno-9-28" name="__codelineno-9-28"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">ax</span>
+</span><span id="__span-9-29"><a href="#__codelineno-9-29" id="__codelineno-9-29" name="__codelineno-9-29"></a><span class="w">    </span><span class="nf">dec</span><span class="w"> </span><span class="no">count</span>
+</span><span id="__span-9-30"><a href="#__codelineno-9-30" id="__codelineno-9-30" name="__codelineno-9-30"></a><span class="w">    </span><span class="nf">jnz</span><span class="w"> </span><span class="no">again</span>
+</span><span id="__span-9-31"><a href="#__codelineno-9-31" id="__codelineno-9-31" name="__codelineno-9-31"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">dx</span><span class="w">         </span><span class="c1">; 恢复</span>
+</span><span id="__span-9-32"><a href="#__codelineno-9-32" id="__codelineno-9-32" name="__codelineno-9-32"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-9-33"><a href="#__codelineno-9-33" id="__codelineno-9-33" name="__codelineno-9-33"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">bx</span>
+</span><span id="__span-9-34"><a href="#__codelineno-9-34" id="__codelineno-9-34" name="__codelineno-9-34"></a><span class="w">    </span><span class="nf">ret</span><span class="w">            </span><span class="c1">; 必须记得返回，否则会出问题</span>
+</span><span id="__span-9-35"><a href="#__codelineno-9-35" id="__codelineno-9-35" name="__codelineno-9-35"></a><span class="w">    </span><span class="nf">END</span>
+</span></code></pre></div>
+<h3 id="_19">方案二：使用栈</h3>
+<p><img alt="" src="https://s2.loli.net/2023/04/07/OC6KXVRNjalk5bU.png"/></p>
+<h4 id="_20">代码实现一：带前导零（根据课件伪代码）</h4>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="w">    </span><span class="na">.MODEL</span><span class="w"> </span><span class="no">medium</span>
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">    </span><span class="na">.STACK</span>
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="na">.DATA</span>
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="nf">ten</span><span class="w"> </span><span class="no">word</span><span class="w"> </span><span class="mi">10</span>
+</span><span id="__span-10-5"><a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">    </span><span class="na">.CODE</span>
+</span><span id="__span-10-6"><a href="#__codelineno-10-6" id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">    </span><span class="na">.STARTUP</span>
+</span><span id="__span-10-7"><a href="#__codelineno-10-7" id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="__span-10-8"><a href="#__codelineno-10-8" id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">    </span><span class="nf">call</span><span class="w"> </span><span class="no">Print</span>
+</span><span id="__span-10-9"><a href="#__codelineno-10-9" id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">    </span><span class="na">.EXIT</span>
+</span><span id="__span-10-10"><a href="#__codelineno-10-10" id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="nl">Print:</span>
+</span><span id="__span-10-11"><a href="#__codelineno-10-11" id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">bx</span>
+</span><span id="__span-10-12"><a href="#__codelineno-10-12" id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-10-13"><a href="#__codelineno-10-13" id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-10-14"><a href="#__codelineno-10-14" id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">cx</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span>
+</span><span id="__span-10-15"><a href="#__codelineno-10-15" id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="nl">again:</span>
+</span><span id="__span-10-16"><a href="#__codelineno-10-16" id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="__span-10-17"><a href="#__codelineno-10-17" id="__codelineno-10-17" name="__codelineno-10-17"></a><span class="w">    </span><span class="nf">div</span><span class="w"> </span><span class="no">ten</span>
+</span><span id="__span-10-18"><a href="#__codelineno-10-18" id="__codelineno-10-18" name="__codelineno-10-18"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-10-19"><a href="#__codelineno-10-19" id="__codelineno-10-19" name="__codelineno-10-19"></a><span class="w">    </span><span class="nf">loop</span><span class="w"> </span><span class="no">again</span>
+</span><span id="__span-10-20"><a href="#__codelineno-10-20" id="__codelineno-10-20" name="__codelineno-10-20"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">cx</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span>
+</span><span id="__span-10-21"><a href="#__codelineno-10-21" id="__codelineno-10-21" name="__codelineno-10-21"></a><span class="nl">again2:</span>
+</span><span id="__span-10-22"><a href="#__codelineno-10-22" id="__codelineno-10-22" name="__codelineno-10-22"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-10-23"><a href="#__codelineno-10-23" id="__codelineno-10-23" name="__codelineno-10-23"></a><span class="w">    </span><span class="nf">or</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="no">h</span>
+</span><span id="__span-10-24"><a href="#__codelineno-10-24" id="__codelineno-10-24" name="__codelineno-10-24"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ah</span><span class="p">,</span><span class="w"> </span><span class="mi">02</span><span class="no">h</span>
+</span><span id="__span-10-25"><a href="#__codelineno-10-25" id="__codelineno-10-25" name="__codelineno-10-25"></a><span class="w">    </span><span class="nf">int</span><span class="w"> </span><span class="mi">021</span><span class="no">h</span>
+</span><span id="__span-10-26"><a href="#__codelineno-10-26" id="__codelineno-10-26" name="__codelineno-10-26"></a><span class="w">    </span><span class="nf">loop</span><span class="w"> </span><span class="no">again2</span>
+</span><span id="__span-10-27"><a href="#__codelineno-10-27" id="__codelineno-10-27" name="__codelineno-10-27"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-10-28"><a href="#__codelineno-10-28" id="__codelineno-10-28" name="__codelineno-10-28"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-10-29"><a href="#__codelineno-10-29" id="__codelineno-10-29" name="__codelineno-10-29"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">bx</span>
+</span><span id="__span-10-30"><a href="#__codelineno-10-30" id="__codelineno-10-30" name="__codelineno-10-30"></a><span class="w">    </span><span class="nf">ret</span>
+</span><span id="__span-10-31"><a href="#__codelineno-10-31" id="__codelineno-10-31" name="__codelineno-10-31"></a><span class="w">    </span><span class="nf">END</span>
+</span></code></pre></div>
+<h4 id="_21">代码实现二：不带前导零（修改一下）</h4>
+<p>弹栈的时候特判一下，就不带前导零了。</p>
+<p>但是也要特判，如果要输出的本来就是零，怎么办。</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="w">    </span><span class="na">.MODEL</span><span class="w"> </span><span class="no">medium</span>
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="w">    </span><span class="na">.STACK</span>
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="w">    </span><span class="na">.DATA</span>
+</span><span id="__span-11-4"><a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="nf">ten</span><span class="w"> </span><span class="no">word</span><span class="w"> </span><span class="mi">10</span>
+</span><span id="__span-11-5"><a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="w">    </span><span class="na">.CODE</span>
+</span><span id="__span-11-6"><a href="#__codelineno-11-6" id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="w">    </span><span class="na">.STARTUP</span>
+</span><span id="__span-11-7"><a href="#__codelineno-11-7" id="__codelineno-11-7" name="__codelineno-11-7"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">2345</span>
+</span><span id="__span-11-8"><a href="#__codelineno-11-8" id="__codelineno-11-8" name="__codelineno-11-8"></a><span class="w">    </span><span class="nf">call</span><span class="w"> </span><span class="no">Print</span>
+</span><span id="__span-11-9"><a href="#__codelineno-11-9" id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="w">    </span><span class="na">.EXIT</span>
+</span><span id="__span-11-10"><a href="#__codelineno-11-10" id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="nl">Print:</span>
+</span><span id="__span-11-11"><a href="#__codelineno-11-11" id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">bx</span>
+</span><span id="__span-11-12"><a href="#__codelineno-11-12" id="__codelineno-11-12" name="__codelineno-11-12"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-11-13"><a href="#__codelineno-11-13" id="__codelineno-11-13" name="__codelineno-11-13"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-11-14"><a href="#__codelineno-11-14" id="__codelineno-11-14" name="__codelineno-11-14"></a><span class="w">    </span><span class="nf">cmp</span><span class="w"> </span><span class="no">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="__span-11-15"><a href="#__codelineno-11-15" id="__codelineno-11-15" name="__codelineno-11-15"></a><span class="w">    </span><span class="nf">jz</span><span class="w"> </span><span class="no">iszero</span><span class="w">    </span><span class="c1">; 特判，如果要输出的是零</span>
+</span><span id="__span-11-16"><a href="#__codelineno-11-16" id="__codelineno-11-16" name="__codelineno-11-16"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">cx</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span>
+</span><span id="__span-11-17"><a href="#__codelineno-11-17" id="__codelineno-11-17" name="__codelineno-11-17"></a><span class="nl">again:</span>
+</span><span id="__span-11-18"><a href="#__codelineno-11-18" id="__codelineno-11-18" name="__codelineno-11-18"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="__span-11-19"><a href="#__codelineno-11-19" id="__codelineno-11-19" name="__codelineno-11-19"></a><span class="w">    </span><span class="nf">div</span><span class="w"> </span><span class="no">ten</span>
+</span><span id="__span-11-20"><a href="#__codelineno-11-20" id="__codelineno-11-20" name="__codelineno-11-20"></a><span class="w">    </span><span class="nf">push</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-11-21"><a href="#__codelineno-11-21" id="__codelineno-11-21" name="__codelineno-11-21"></a><span class="w">    </span><span class="nf">loop</span><span class="w"> </span><span class="no">again</span>
+</span><span id="__span-11-22"><a href="#__codelineno-11-22" id="__codelineno-11-22" name="__codelineno-11-22"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">cx</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span>
+</span><span id="__span-11-23"><a href="#__codelineno-11-23" id="__codelineno-11-23" name="__codelineno-11-23"></a><span class="nl">again2:</span>
+</span><span id="__span-11-24"><a href="#__codelineno-11-24" id="__codelineno-11-24" name="__codelineno-11-24"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-11-25"><a href="#__codelineno-11-25" id="__codelineno-11-25" name="__codelineno-11-25"></a><span class="w">    </span><span class="nf">cmp</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="__span-11-26"><a href="#__codelineno-11-26" id="__codelineno-11-26" name="__codelineno-11-26"></a><span class="w">    </span><span class="nf">je</span><span class="w"> </span><span class="no">ignore</span><span class="w">    </span><span class="c1">; 忽略前导零</span>
+</span><span id="__span-11-27"><a href="#__codelineno-11-27" id="__codelineno-11-27" name="__codelineno-11-27"></a><span class="w">    </span><span class="nf">or</span><span class="w"> </span><span class="no">dx</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="no">h</span>
+</span><span id="__span-11-28"><a href="#__codelineno-11-28" id="__codelineno-11-28" name="__codelineno-11-28"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ah</span><span class="p">,</span><span class="w"> </span><span class="mi">02</span><span class="no">h</span>
+</span><span id="__span-11-29"><a href="#__codelineno-11-29" id="__codelineno-11-29" name="__codelineno-11-29"></a><span class="w">    </span><span class="nf">int</span><span class="w"> </span><span class="mi">021</span><span class="no">h</span>
+</span><span id="__span-11-30"><a href="#__codelineno-11-30" id="__codelineno-11-30" name="__codelineno-11-30"></a><span class="nl">ignore:</span>
+</span><span id="__span-11-31"><a href="#__codelineno-11-31" id="__codelineno-11-31" name="__codelineno-11-31"></a><span class="w">    </span><span class="nf">loop</span><span class="w"> </span><span class="no">again2</span>
+</span><span id="__span-11-32"><a href="#__codelineno-11-32" id="__codelineno-11-32" name="__codelineno-11-32"></a><span class="w">    </span><span class="nf">jmp</span><span class="w"> </span><span class="no">notzero</span>
+</span><span id="__span-11-33"><a href="#__codelineno-11-33" id="__codelineno-11-33" name="__codelineno-11-33"></a><span class="nl">iszero:</span>
+</span><span id="__span-11-34"><a href="#__codelineno-11-34" id="__codelineno-11-34" name="__codelineno-11-34"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ah</span><span class="p">,</span><span class="w"> </span><span class="mi">02</span><span class="no">h</span>
+</span><span id="__span-11-35"><a href="#__codelineno-11-35" id="__codelineno-11-35" name="__codelineno-11-35"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">dl</span><span class="p">,</span><span class="w"> </span><span class="err">'</span><span class="mi">0</span><span class="err">'</span>
+</span><span id="__span-11-36"><a href="#__codelineno-11-36" id="__codelineno-11-36" name="__codelineno-11-36"></a><span class="w">    </span><span class="nf">int</span><span class="w"> </span><span class="mi">021</span><span class="no">h</span>
+</span><span id="__span-11-37"><a href="#__codelineno-11-37" id="__codelineno-11-37" name="__codelineno-11-37"></a><span class="nl">notzero:</span>
+</span><span id="__span-11-38"><a href="#__codelineno-11-38" id="__codelineno-11-38" name="__codelineno-11-38"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">dx</span>
+</span><span id="__span-11-39"><a href="#__codelineno-11-39" id="__codelineno-11-39" name="__codelineno-11-39"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">cx</span>
+</span><span id="__span-11-40"><a href="#__codelineno-11-40" id="__codelineno-11-40" name="__codelineno-11-40"></a><span class="w">    </span><span class="nf">pop</span><span class="w"> </span><span class="no">bx</span>
+</span><span id="__span-11-41"><a href="#__codelineno-11-41" id="__codelineno-11-41" name="__codelineno-11-41"></a><span class="w">    </span><span class="nf">ret</span>
+</span><span id="__span-11-42"><a href="#__codelineno-11-42" id="__codelineno-11-42" name="__codelineno-11-42"></a><span class="w">    </span><span class="nf">END</span>
+</span></code></pre></div>
+</article>>

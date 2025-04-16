@@ -1,0 +1,135 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-3">Lecture 3 敏捷软件开发</h1>
+<p>增量开发可以包含「迭代」和「敏捷」两种类型。其中，敏捷是指快速软件开发，顾名思义，就是要快速的产出有用的软件。</p>
+<p>敏捷开发的主要特点是，规格说明、设计、实现三个过程交织在一起，不像瀑布模型那样在最开始就把详尽的说明搞好了。</p>
+<p>敏捷开发需要 <strong>客户参与</strong>，以便获得需求变化的快速反馈。通过聊天等不太严格的交流，可以免去撰写文档的麻烦。</p>
+<h2 id="_1">敏捷方法</h2>
+<h3 id="manifesto-for-agile">敏捷宣言 Manifesto for Agile</h3>
+<p>由敏捷方法的主要提出者发表的敏捷宣言，如下：</p>
+<blockquote>
+<ul>
+<li>个体和互动 高于 流程和工具（Individuals and interactions over processes and tools）</li>
+<li>工作的软件 高于 详尽的文档（Working software over comprehensive documentation）</li>
+<li>客户合作 高于 合同谈判（Customer collaboration over contract negotiation）</li>
+<li>响应变化 高于 遵循计划（Responding to change over following a plan）</li>
+</ul>
+<p>也就是说，尽管右项有其价值，我们更重视左项的价值。</p>
+</blockquote>
+<p><a href="https://agilemanifesto.org/iso/en/manifesto.html">英文原文</a> <a href="https://agilemanifesto.org/iso/zhchs/manifesto.html">官方中译</a></p>
+<h3 id="_2">敏捷开发的原则</h3>
+<ul>
+<li>客户参与（customer collaboration）：客户应当紧密参与到整个过程中，提供新的系统需求及其优先级，并对系统迭代进行评价</li>
+<li>拥抱变化（embrace change）：系统需求随时都会变，要尽量更好的融入这些改变</li>
+<li>增量交付（incremental delivery）：软件开发和交付是增量的，客户需要描述对于每个增量的要求</li>
+<li>保持简洁（maintain simplicity）：自始至终，无论是软件本身还是软件过程，尽量保持简洁，不要让系统太复杂。比如，软件写好交付就完事儿了，文档不用搞太麻烦。</li>
+<li>人而不是过程（people, not process）：开发团队成员应当充分发挥技能，按照自己喜欢的方式进行工作。</li>
+</ul>
+<h2 id="extreme-programming">极限编程 eXtreme Programming</h2>
+<p>是一种注重于编程技术、团队的沟通与合作的开发风格。</p>
+<h3 id="14">极限编程的原则（14 条）</h3>
+<p><a href="https://zhuanlan.zhihu.com/p/84988404">参考知乎</a></p>
+<ol>
+<li>人性化（humanity），每个人都尽可能发挥自己的价值</li>
+<li>经济化（economics），系统和团队要注重经济价值</li>
+<li>互惠互利（mutual benefit），每一项任务尽量让所有人收益，提倡先测试再编码等</li>
+<li>自相似性（self similarity），将一个解决方案结构应用于新的场景，即使颗粒度不同</li>
+<li>改进（improvement），没有绝对完美，应当持续改进</li>
+<li>多样性（diversity），所有人的意见都应当被重视，不能因为跟自己不一样就排斥</li>
+<li>反省（reflection），也就是反思之前成功或失败的原因</li>
+<li>流（flow），小增量，持续集成，一段工作要连续，而不应离散</li>
+<li>机遇（opportunity），将面对的问题视作提升与改变的机会（能力、关系等）</li>
+<li>冗余（redundancy），用多种方式解决困难（比如结对测试），以此保障可靠性</li>
+<li>失败（failure），不要惧怕失败，假如有三种方案不知道选哪一个，都试试</li>
+<li>质量（quality），不能追求速度从而牺牲产品质量</li>
+<li>小步（baby step），一次只测试一个东西，一次集成只是一段小修改</li>
+<li>接受责任（accepted responsibility），责任不是分配的，是自己决定是否要接受的</li>
+</ol>
+<h3 id="_3">极限编程的过程</h3>
+<ol>
+<li>首先，产品经理、用户（可能也包括开发者）写下用户卡片</li>
+<li>开发团队对每个用户故事进行评估、计算时间成本。如果太久，就让用户细分故事；如果没看懂，就 init 一个 spike</li>
+<li>产品经理与用户共同商讨决定，大的背景（可能是一个季度 quarterly）要做哪些事情</li>
+<li>开发人员再选取少量可有可无的任务。如果进度比较快就做，进度慢就不做，放在一周的计划内进行。这叫松弛（slack）</li>
+</ol>
+<p><img alt="" src="https://s2.loli.net/2023/04/19/bheuEvzTNxlXF6L.png"/></p>
+<p>于是极限编程的周期，基本就是：选取几个要实现的用户故事、拆解成任务、开发、集成并测试、发布、评估。</p>
+<h3 id="_4">开发者每天要做什么？</h3>
+<ul>
+<li>早上先开个短会，分析一下，今天干什么</li>
+<li>找个同事开始 <strong>结对编程</strong>。一个思考，一个实现，适时交换；而且每行代码都俩人看，安全</li>
+<li>编写测试。<strong>测试先行</strong>，也就是说正式编码前要先把测试编写好。这样编码就会轻松</li>
+<li>编写代码。通过测试后，还要进行一定的重构，满足代码风格规范等</li>
+<li>集成，然后测试，如果跑过了，那么任务就完成了，可以下班或者干点别的，否则丢弃</li>
+</ul>
+<h2 id="_5">用户故事</h2>
+<p><em>用户故事（user story）</em> 是从用户的角度来描述用户渴望得到的功能。</p>
+<p>开发者从众多用户故事当中选取一个，将其划分成若干个任务，将其实现、测试、发布，然后再选一个用户故事，如此循环。</p>
+<p>可参考 <a href="https://www.jianshu.com/p/7fb8104c5cec">简书</a> 上面的解释。</p>
+<h3 id="_6">用户故事撰写格式</h3>
+<p>作为 <xxx 角色=""> 我想要做 <yyy 的功能="">，以便 &lt;实现 zzz 的好处&gt;。此外，也可以包含一些备注等。</yyy></xxx></p>
+<p>一条用户故事只能有一个角色。</p>
+<h2 id="scrum">Scrum</h2>
+<p>是一种敏捷模型，得名于橄榄球赛（一大堆人围成一个圈圈，共同努力，想要抢球）。</p>
+<p>而且 Scrum 是比较透明的，流程对所有成员都可见。</p>
+<h3 id="scrum_1">Scrum 流程</h3>
+<p><img alt="" src="https://s2.loli.net/2023/04/20/TxEKHs2iUIhDlBo.png"/></p>
+<h4 id="1-vision">1. 愿景 vision</h4>
+<p>这个阶段涉及到几乎所有利益相关者。他们要分析以下问题（愿景）：</p>
+<ul>
+<li>这个软件系统是干嘛的？</li>
+<li>这个软件系统有啥好处？</li>
+<li>用户是谁？</li>
+<li>有哪些高级功能？</li>
+<li>要遵守哪些约束？</li>
+<li>有哪些更高的目标？</li>
+</ul>
+<p>然后把得出的功能需求等，写进用户故事。</p>
+<h4 id="2-product-backlog-management">2. 产品待定项管理 product backlog management</h4>
+<p><em>待办事项（backlog）</em> 实际上就是一个包含了优先级的 todolist。开发团队负责评估，而产品 <em>负责人（owner）</em> 负责确定优先级。</p>
+<p>backlog 是动态的，其中可以随时添加新项，这就是变更的引入。引入变更之后，可能要重新评估优先级。</p>
+<p>backlog 当中的每一个 item，都要有描述信息、优先级信息、评估、point、验收标准等。根据其属性，可以分入若干个大类（theme）中。而优先级较高的 item，通常描述会更清晰。</p>
+<h4 id="3-backlog-item-sprint">3. 从 backlog 当中选择 item 并准备进行 sprint</h4>
+<p>这是一个准备阶段，几个小时就完事儿了，主要是要为下一个迭代周期做一个初步的思考和规划。比如，思考这次迭代需要完成什么目标。</p>
+<p>然后开发者从 backlog 当中选出一个或几个 item，把他们加入冲刺待办事项（sprint backlog），准备冲刺。</p>
+<p>冲刺待办事项当中的每一个 item 要做的比较细，精确到每天，于是可以用来监视开发进度。可能是以用户故事的形式体现的。下图就是一个冲刺待办事项的例子。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/20/6cROZC7qAGm8U5k.png"/></p>
+<p>目前是第一轮冲刺，这一轮还有 17 天。截至目前，一项已完成，正在做两项，还有三项未开始。它们加起来一共是 28 points，这些 points 表示了每一个 item 估计的时间成本。</p>
+<h4 id="4-sprint">4. 冲刺 sprint</h4>
+<p>这个阶段所有人像一个团队开始工作。</p>
+<p>一般冲刺过程是一个月左右，不能太短，也不能太长，于是风险就被降低了。</p>
+<p>这个过程当中，不允许有变更，这为开发人员提供了短期的稳定环境。除非发生意外，或者管理人员说，的的确确有更重要的事情需要去做。</p>
+<p>每个冲刺的最后阶段是回顾（retrospective）。回顾之后，下一个冲刺就开始了。</p>
+<h5 id="scrum_2">每日 scrum 例会</h5>
+<p>冲刺过程中每天都要召开例会，十来分钟，所有人凑在一起，由 scrum <em>主管（master）</em>（相当于产品经理）来主持会议。</p>
+<p>会议中需要分析三件事情：</p>
+<ul>
+<li>昨天干了什么</li>
+<li>今天要干什么</li>
+<li>有没有遇到困难</li>
+</ul>
+<p>这不仅能实现进度的检查，还可以对以后做出更好的规划。</p>
+<h5 id="_7">冲刺中的用户故事</h5>
+<p>在冲刺待办事项当中，列出所有的用户故事，方便查看管理。</p>
+<p>右侧小数字（point）代表的是这一条任务大约需要耗费多少时间，而非优先级。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/n9PAzFVtM7hi42a.png"/></p>
+<h5 id="burndown-chart">根据用户故事画出燃尽图（burndown chart）</h5>
+<p>燃尽图是用于表示剩余工作量的工作图表，由横轴（X）和纵轴（Y）组成，横轴表示时间，纵轴表示工作量，即上述的 points。</p>
+<p>一般燃尽图当中应当至少有两条线，一条表示理想状态下的剩余工作量，一条记录实际。于是还可以显示出，每天的进度是快于理想值，还是慢于计划。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/8ODhwsfAMJWtdeI.png"/></p>
+<h4 id="5-sprint-review">5. 评审 sprint review</h4>
+<p>这个会议也是只有几个小时。会议主持人依然是主管（master），而负责人（owner）负责说明这个阶段做了什么。<em>利益相关者</em> 可能也是在场的。<strong>主要就是演示</strong>、交付增量。</p>
+<p>除此以外，还可以讨论一下待办事项、预算等一些事情。</p>
+<h4 id="6-sprint-retrospective">6. 回顾 sprint retrospective</h4>
+<p>这个 retrospective 和 review 比较容易混淆。retrospective 主要是对内部的（其他利益相关者不应该参与），开发人员相互总结、反思、鼓励，思考哪里可以改进，等等。</p>
+<h2 id="devops">DevOps</h2>
+<p>不是重点内容，了解一下即可。</p>
+<p>DevOps（Development 和 Operations 的组合词），即同时重视开发和运行。</p>
+<p>它希望需求变更很少，可以把更多精力集中在测试上，以此来保障更好的产品质量和更快的交付周期。</p>
+<p>由于测试比较多，DevOps 很可能依赖于自动化工具。这个自动化工具不仅仅是自动 verification，还要自动 validation。</p>
+<h2 id="_8">敏捷开发总结存在的问题</h2>
+<ul>
+<li>并不适用于嵌入式系统（瀑布模型）或大型项目（没有正式合同）</li>
+<li>敏捷开发注重的是项目的开发过程，对日后的维护，不太关注</li>
+<li>只适用于小型团队，对于大型团队（尤其是多个不同办公地点的团队）搞这个很不方便</li>
+</ul>
+</article>>

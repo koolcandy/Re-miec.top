@@ -1,0 +1,77 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-23-methods">Lecture 2&amp;3: Methods</h1>
+<p>有时候，方法也叫做过程（无返回值）、函数（有返回值）等。</p>
+<p>方法的名字也跟变量、类一样：must begin with a letter, or with <code>_</code> or <code>$</code></p>
+<h2 id="_1">访问权限</h2>
+<p>方法的访问权限分为 <code>private</code>，<code>protected</code>，<code>public</code> 以及未指定四类。
+- <code>private</code>: 仅可以在类的内部访问
+- <code>protected</code>: 仅可以在自己和子类当中访问
+- <code>public</code>: 无限制
+- 未指定：仅可以在当前 package 内访问</p>
+<h2 id="_2">存根类</h2>
+<p>函数体为空的方法称作 stub（存根）。</p>
+<p>通常，stub 是 <code>void</code> 类型；或者在接口（<code>interface</code>）中被声明，用于表达 common operations。</p>
+<h2 id="static"><code>static</code> 关键字</h2>
+<p>如果一个方法没有被 <code>static</code> 修饰，那么必须创建一个对象才能执行它（instance method 实例方法）。</p>
+<p>如果想要从类的外面执行一个 <code>static</code> 方法，需要写成：<code>&lt;ClassName&gt;.&lt;StaticMethodName&gt;</code>。</p>
+<h2 id="_3">形式参数和实际参数</h2>
+<ul>
+<li>形式参数（formal parameter），函数头那个位置的</li>
+<li>实际参数（actual parameter），调用的时候传进去的</li>
+</ul>
+<h2 id="method-signature">方法签名（method signature）</h2>
+<p>方法签名是指，<code>方法名(参数类型, 参数类型, 参数类型 ...)</code>。</p>
+<h2 id="method-overloading">方法重载（method overloading）</h2>
+<p>同一个类当中可以由多个重名的方法，只要参数列表的数量和类型不完全相同即可。</p>
+<p>但如果只是返回值不同，不能重载。</p>
+<h2 id="interface">接口 interface</h2>
+<h3 id="_4">接口是啥</h3>
+<p>Java 当中的接口，是一组有关联的方法，方法体为空。这些方法定义了对象与外界的交互。<br/>
+例如，电视机上的电源按钮，就是人类世界与其内部导线的接口。<br/>
+例如，下面这段代码，就是一个接口：<br/>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">interface</span> <span class="nc">Bicycle</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">changeCadence</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">val</span><span class="p">);</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">changeGear</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">val</span><span class="p">);</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">speedUp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">inc</span><span class="p">);</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">applyBrakes</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">dec</span><span class="p">);</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<h3 id="_5">接口咋用</h3>
+<p>如果要在一个类当中使用某个接口，则类的定义需要用关键字 <code>implements</code> 修饰。例如：<br/>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">class</span> <span class="nc">ACMEBycycle</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Bicycle</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">cadence</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">gear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">changeCadence</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cadence</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">val</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">changeGear</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">gear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">val</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">speedUp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">inc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">inc</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">applyBrakes</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">dec</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">dec</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p>不过 YYF 目前还没太理解，接口到底是干啥的。。</p>
+<h2 id="_6">关于传值和传引用</h2>
+<p>原生数据类型是传值，对象是传引用。</p>
+<p>引用，是指，对象的内存地址。而接受了引用的方法，会根据这个引用找到相应的内存地址，直接对那里的内容进行操作。</p>
+<h2 id="string-immutable"><code>String</code> 是不可修改的（immutable）</h2>
+<p>比如，有<br/>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">String</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"hello"</span><span class="p">;</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">String</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">String</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"world"</span><span class="p">;</span>
+</span></code></pre></div>
+那么，<code>s2</code> 的值依然是 hello。这是因为，第三行代码，只是新开了一个值是 world 的字符串，把 s 的引用指向那个内存，并不是把 s 指向的内存的内容设置成 world。</p>
+<p>关于传值传引用、数组和字符串的详细内容，参考课件 3 的 10~20 页。</p>
+<h2 id="_7">可变参数方法</h2>
+<p>Java 中有一种很简单的可变参数方法写法。仅需要把参数列表写成 <code>类型... 变量名</code>，形如：<br/>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">sum1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">sum2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">sum5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="p">}</span>
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="kt">int</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">ans</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="n">ans</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">ans</span><span class="p">;</span>
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="p">}</span>
+</span></code></pre></div></p>
+</article>>

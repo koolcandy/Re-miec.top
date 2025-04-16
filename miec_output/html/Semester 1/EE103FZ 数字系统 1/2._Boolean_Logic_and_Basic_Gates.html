@@ -1,0 +1,106 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="2-boolean-logic-and-basic-gates">2. Boolean Logic and Basic Gates</h1>
+<h2 id="_1">生词</h2>
+<table>
+<thead>
+<tr>
+<th align="left">英文</th>
+<th align="left">中文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">canonical truth table</td>
+<td align="left">规范真值表</td>
+</tr>
+<tr>
+<td align="left">canonical product term</td>
+<td align="left">规范乘积项</td>
+</tr>
+<tr>
+<td align="left">canonical sum term</td>
+<td align="left">规范加法项</td>
+</tr>
+<tr>
+<td align="left">canonical expression</td>
+<td align="left">规范表达式</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">常见逻辑门</h2>
+<table>
+<thead>
+<tr>
+<th align="left">gate name</th>
+<th align="left">中文名</th>
+<th align="left">IEEE 符号</th>
+<th align="left">布尔表达式</th>
+<th align="left">计算方法</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">NOT</td>
+<td align="left">非</td>
+<td align="left"><img alt="image-20230329212226848" src="https://s2.loli.net/2023/03/29/4iXlQ51KZkFVnvI.png"/></td>
+<td align="left">$f = \overline{A}$</td>
+<td align="left">输出反码</td>
+<td align="left">也叫反相器 Inverter</td>
+</tr>
+<tr>
+<td align="left">AND</td>
+<td align="left">与</td>
+<td align="left"><img alt="image-20230329212235045" src="https://s2.loli.net/2023/03/29/1dWzgq4TsUjSX9o.png"/></td>
+<td align="left">$f = AB$</td>
+<td align="left">当且仅当<strong>所有</strong>输入都是 HIGH 才输出 HIGH 否则为 LOW</td>
+<td align="left">执行逻辑乘法</td>
+</tr>
+<tr>
+<td align="left">OR</td>
+<td align="left">或</td>
+<td align="left"><img alt="image-20230329212240024" src="https://s2.loli.net/2023/03/29/ohOugRG93pE5bBa.png"/></td>
+<td align="left">$f = A+B$</td>
+<td align="left">当且仅当<strong>所有</strong>输入都是 LOW 才输出 LOW 否则为 HIGH</td>
+<td align="left">执行逻辑加法</td>
+</tr>
+<tr>
+<td align="left">NAND</td>
+<td align="left">与非</td>
+<td align="left"><img alt="image-20230329212247850" src="https://s2.loli.net/2023/03/29/8E45IXo92yVWAQY.png"/></td>
+<td align="left">$f = \overline{AB}$</td>
+<td align="left">当且仅当<strong>所有</strong>输入都是 HIGH 才输出 LOW 否则为 HIGH</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">NOR</td>
+<td align="left">或非</td>
+<td align="left"><img alt="image-20230329212252069" src="https://s2.loli.net/2023/03/29/xEBf4QFUcJl2jC3.png"/></td>
+<td align="left">$f = \overline{A+B}$</td>
+<td align="left">当且仅当<strong>所有</strong>输入都是 LOW 才输出 HIGH 否则为 LOW</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">XOR</td>
+<td align="left">异或</td>
+<td align="left"><img alt="image-20230329212302735" src="https://s2.loli.net/2023/03/29/VJa2AP41kU5eKTs.png"/></td>
+<td align="left">$f = A \oplus B$</td>
+<td align="left">当且仅当 <strong>HIGH 的个数是奇数</strong>，输出是 HIGH 否则为 LOW</td>
+<td align="left">可以看作二元加法器</td>
+</tr>
+<tr>
+<td align="left">XNOR</td>
+<td align="left">同或</td>
+<td align="left"><img alt="image-20230329212306432" src="https://s2.loli.net/2023/03/29/kumYsGt3fbQTMW4.png"/></td>
+<td align="left">$f = \overline{A \oplus B}$</td>
+<td align="left">当且仅当 <strong>HIGH 的个数是奇数</strong>，输出是 LOW 否则为 HIGH</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="sop-pos">SOP 和 POS</h2>
+<ul>
+<li>SOP：sum of products，如 x + xyz + yz</li>
+<li>POS：product of sums，如 (x + y)(y + z)</li>
+</ul>
+</article>>

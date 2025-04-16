@@ -1,0 +1,46 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-5-combinational-testing">Lecture 5. Combinational Testing</h1>
+<p>The inputs to the software is called the <em>Causes</em>；</p>
+<p>The associated output is called the <em>Effects</em>。</p>
+<h2 id="_1">常见工具</h2>
+<ul>
+<li>真值表 truth table</li>
+<li>因果图 cause-effect graph</li>
+<li>判定表 decision table</li>
+<li>正交实验设计 orthogonal experimental design</li>
+</ul>
+<h2 id="_2">真值表</h2>
+<p>The inputs to the software is called the <em>Causes</em>；The associated output is called the <em>Effects</em>。</p>
+<ul>
+<li>$2^n$ 种组合</li>
+<li>一个条件就要么真要么假，两个就需要考虑组合</li>
+<li>如果遇到逻辑上不可能成立的组合，就可以删掉</li>
+<li>don't care 条件，类似于卡诺图啥的，在这里依然存在。可以用于减少组合的数量。</li>
+<li>关于判断 $l \leq x \leq r$ 的条件，需要拆点，大概是拆成 $x &lt; l$ 和 $x \leq r$ 两个，有点 2-sat 的感觉，具体怎么拆，参考下图课件</li>
+<li>对于不合法的输入，可以不用往真值表里面塞，起到精简的作用。</li>
+</ul>
+<p><img alt="image-20221016125922401" src="https://s2.loli.net/2022/11/10/nO7BQZCjeA6SEo2.png"/></p>
+<h2 id="_3">因果图</h2>
+<p>用于分析组合条件的关系。是有向图。看懂就行，不做要求。</p>
+<h2 id="_4">判定表</h2>
+<ul>
+<li>条件桩 condition stub</li>
+<li>动作桩 action stub</li>
+<li>条件项 condition item</li>
+<li>动作项 action item</li>
+</ul>
+<p>桩大概是行的意思，项大概是格的意思</p>
+<p>假设有 $n$ 个条件桩，那么最多有 $2^n$ 列。同样可以用 don't care 来精简。</p>
+<h2 id="_5">正交实验设计</h2>
+<p>感觉像是一种奇技淫巧（黑科技），比如对于三个布尔条件，可以均衡的把真值表 8 个缩成 4 个测试。</p>
+<p>正交表已经有现成的了，可以直接查 https://www.york.ac.uk/depts/maths/tables/orthogonal.htm：</p>
+<ul>
+<li><a href="https://www.york.ac.uk/depts/maths/tables/l4.gif">L4</a>: Three two-level factors</li>
+<li><a href="https://www.york.ac.uk/depts/maths/tables/l8.gif">L8</a>: Seven two-level factors</li>
+<li><a href="https://www.york.ac.uk/depts/maths/tables/l9.gif">L9 </a>: Four three-level factors</li>
+<li><a href="https://www.york.ac.uk/depts/maths/tables/l12.gif">L12</a>: Eleven two-level factors</li>
+<li><a href="https://www.york.ac.uk/depts/maths/tables/l16.htm">L16</a>: Fifteen two-level factors</li>
+<li><a href="https://www.york.ac.uk/depts/maths/tables/l16b.htm">L16b</a>: Five four-level factors</li>
+</ul>
+<p>L 后面的数字代表这个表有几行。可见，七个布尔变量，如果用真值表需要 128 个测试点，这里仅需 8 行（个测试点）</p>
+</article>>

@@ -1,0 +1,74 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-17-testing-in-the-software-progress">Lecture 17. Testing in the Software Progress 软件过程中的测试</h1>
+<ul>
+<li>Big bang 大爆炸开发测试，写一堆再测</li>
+<li>incremental 增量开发测试，写一点测一点，通常会更好一点</li>
+</ul>
+<h2 id="_1">时间线（增量测试）</h2>
+<p>单元测试、集成测试、系统测试、验收测试。</p>
+<p>关于 verification 和 validation 的区别：</p>
+<ul>
+<li>verification 是，开发人员看看是否产品是否满足规格规范限制条件，通常是一个 <strong>内部</strong> 的过程</li>
+<li>validation 是，产品满足客户的需求，通常是 <strong>外部</strong> 客户的确认过程。</li>
+</ul>
+<h2 id="test-plan">Test plan 测试计划</h2>
+<p>通常包含：</p>
+<ul>
+<li>要测试什么 item</li>
+<li>需要做什么任务</li>
+<li>负责人</li>
+<li>时间表</li>
+<li>需要的测试资源</li>
+</ul>
+<h3 id="ieee">IEEE 的测试计划模型</h3>
+<p>IEEE 读作 eye-triple-ee。</p>
+<p>指出，测试计划好之后开始执行，执行过程要记录日志和故障，最后写出总结报告</p>
+<h2 id="software-development-life-cycle">软件开发生命周期（software development life cycle）</h2>
+<p>SDLC 是一个结构模型。</p>
+<h2 id="waterfall-model">瀑布模型（waterfall model）</h2>
+<p>就是一步步去做，一个阶段一个阶段的过程。</p>
+<p>需求定义 --&gt; 系统设计 --&gt; 编码 --&gt; 测试 --&gt; 运维。</p>
+<h3 id="_2">优点</h3>
+<p>前期如果投入时间很多，意味着分析的比较到位，文档会比较全面，下一步出现故障的概率比较小，节省后面时间。</p>
+<h3 id="_3">缺点</h3>
+<p>整个项目什么时候能做完，只有到做完了才能知道。</p>
+<p>不方便后来再重新改动，否则可能整个进度就被打乱了。</p>
+<p>做文档比较耗时间。</p>
+<p>测试放在最后，可能不会太充分。而且可能会嫌改前面的东西太麻烦，就懒得改了。导致软件质量不大行。</p>
+<h2 id="v-v-model">V 模型（v-model）</h2>
+<p>因为整个流程的形状像一个 V 字母。相当于瀑布模型的扩展。注重于边开发边测试。</p>
+<p>每个环节都对应着一个测试，并且为下一步做准备。</p>
+<p>需求收集阶段，进行验收测试。需求分析阶段进行系统测试。概要设计阶段对应集成测试。详细设计对应单元测试。最后是编码。</p>
+<h3 id="_4">优点</h3>
+<p>比较简单，容易管理，在每个阶段都都要 verification 和 validation。</p>
+<h3 id="_5">缺点</h3>
+<p>由于是瀑布模型的扩展，如果要再做改变和调整，还是比较麻烦。</p>
+<p>不太适合面向对象的比较长期的项目。</p>
+<h2 id="w">W 模型</h2>
+<p>有点类似 V 模型。W 相当于两个 V 合在一起。</p>
+<p>相比 V 模型，多了分析测试、设计测试、规范测试等。这几步骤是针对于文档的测试。</p>
+<h2 id="incremental-and-agile-development">增量开发和敏捷开发（incremental and agile development）</h2>
+<p>在这种开发环境下，瀑布模型和 V 模型可能不是那么好用，因为很多需求不是一开始就确定了的。这时候就需要一些敏捷的模型。</p>
+<h2 id="incremental-model">增量模型（incremental model）</h2>
+<p>每个阶段都是：需求、设计、编码、测试、发布，然后到下一个阶段，然后继续。</p>
+<p>由于每一段代码都是一点点写出来的，所以出现 bug 的概率小一点，同时也更加容易做出更改。</p>
+<p>缺点就是复杂程度一点点的增加，管理和维护难度会不断增加。</p>
+<h2 id="extreme-programming">极限编程（extreme programming）</h2>
+<p>极限编程是敏捷开发的子集。</p>
+<p>强调代码评审、持续集成、自动化测试、短期迭代。</p>
+<p>不太看重写文档。</p>
+<p>比较强调团队合作，客户和开发者要一起参与进来。</p>
+<p>关键点：沟通、设计简洁、持续反馈、勇气。</p>
+<h3 id="user-story">用户故事（user story）</h3>
+<p>与极限编程有关。</p>
+<p>用自然语言描述一下软件是做什么的。</p>
+<p>感觉就类似于用户视角对软件的需求。</p>
+<h4 id="story-card">故事卡片（story card）</h4>
+<p>通常就是写在一张纸上。有了故事卡片，就按照故事卡片的要求，转化为任务卡片，然后去实现。</p>
+<h4 id="story-template">故事模板（story template）</h4>
+<p>As a &lt;用户&gt;, I want &lt;功能&gt; so that &lt;目的&gt;。</p>
+<p>例如：As an account holder, I want to able to withdraw cash from the ATM, so that I can get money</p>
+<h2 id="scrum">SCRUM</h2>
+<p>也是敏捷开发的一种方法，类似于极限编程。</p>
+<p>核心好像是，把一堆事项按照优先级排好顺序，以及冲刺（sprint）</p>
+</article>>

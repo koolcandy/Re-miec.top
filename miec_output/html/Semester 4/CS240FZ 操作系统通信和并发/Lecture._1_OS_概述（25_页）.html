@@ -1,0 +1,34 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-1-os-25">Lecture. 1 OS 概述（25 页）</h1>
+<p>操作系统，OS，是一个复杂的软件系统，具有如下功能：</p>
+<ul>
+<li>对所有硬件资源进行管理，使之易于使用</li>
+<li>引导机器进入可用状态</li>
+<li>提供抽象层（layer of abstraction）给可移植应用开发</li>
+<li>为应用软件使用底层硬件的处理资源、内存空间、磁盘存储、输入/输出设备和网络通信功能提供公共服务（common service）。</li>
+</ul>
+<h2 id="_1">并发</h2>
+<p>操作系统是一个并发（concurrent）的环境，大量的 tasks 和 events 都要执行。操作系统负责协调。</p>
+<h2 id="_2">应用程序</h2>
+<p>应用程序，通过 API 和 System Call 与操作系统进行交互。API 和 System Call 定义了一系列常用函数和参数。</p>
+<p>因此，应用程序是为特定的操作系统编写的。操作系统是一个编程的平台，操作系统提供的 API 让应用程序更容易在硬件上工作。</p>
+<p>应用程序分为两种，GUI 的、CLI 的。GUI 就是有图形用户接口的，CLI 是 Command-line User Interface 也就是命令行用户接口。</p>
+<h2 id="kernel">内核 Kernel</h2>
+<p>内核，是指一系列的核心服务，与 CPU、内存管理，基本进程间通信、底层硬件设备相关。内核在处理器上执行具有特殊的高权限。</p>
+<p>内核对于各种操作系统发行版（distribution）是通用（common）的。但发行版的内核，会拥有一些附加组件，比如文件系统、数据库引擎、网络通信套件之类的。</p>
+<h2 id="_3">云计算操作系统</h2>
+<ul>
+<li>云操作系统，数据和应用都存储在远程服务器上，通过浏览器等进行访问。</li>
+<li>云计算的可靠性、可用性、可扩展性、成本效益性能都很高。</li>
+</ul>
+<h2 id="_4">操作系统特点总结</h2>
+<ul>
+<li>竞争用户进程之间的资源分配和管理。</li>
+<li>以提高整体系统 <em>吞吐量（throughput）</em> 为目标，最大限度地利用资源。</li>
+<li>提供用户界面（UI）和应用程序界面</li>
+<li>协调许多并发活动和设备，处理来自附加硬件的输入和输出并确保实现正确的 <em>同步（correct synchronisation</em> 和通信。</li>
+<li>保护计算机的各种资源</li>
+<li>计算用户进程的资源使用周期，恰当的实施配额或限制</li>
+<li>电源管理、<em>热量（thermal）</em> 管理</li>
+</ul>
+</article>>

@@ -1,0 +1,101 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="1-binary-number-representation">1. Binary Number Representation</h1>
+<h2 id="_1">生词</h2>
+<table>
+<thead>
+<tr>
+<th align="left">英文</th>
+<th align="left">中文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">analog</td>
+<td align="left">模拟</td>
+</tr>
+<tr>
+<td align="left">discrete</td>
+<td align="left">离散的</td>
+</tr>
+<tr>
+<td align="left">implemente</td>
+<td align="left">实现</td>
+</tr>
+<tr>
+<td align="left">overlap</td>
+<td align="left">重叠</td>
+</tr>
+<tr>
+<td align="left">pulse</td>
+<td align="left">脉冲</td>
+</tr>
+<tr>
+<td align="left">instantaneous</td>
+<td align="left">瞬时的</td>
+</tr>
+<tr>
+<td align="left">1's complement</td>
+<td align="left">反码</td>
+</tr>
+<tr>
+<td align="left">2's complement</td>
+<td align="left">补码</td>
+</tr>
+<tr>
+<td align="left">sign-magnitude system</td>
+<td align="left">原码</td>
+</tr>
+<tr>
+<td align="left">Binary Coded Decimal</td>
+<td align="left">二-十进制编码</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">十进制转二进制（整数）（短除法）</h2>
+<p><img alt="" src="https://z3.ax1x.com/2021/09/17/4KjHkF.png"/></p>
+<h2 id="_3">十进制转二进制（小数）</h2>
+<p>短除之后，方向与整数部分反过来即可（可能出现无限不循环）</p>
+<p><img alt="" src="https://z3.ax1x.com/2021/09/17/4Kjj61.png"/></p>
+<h2 id="_4">反码、补码</h2>
+<ul>
+<li>反码（1's complement）</li>
+<li>补码（2's complement）</li>
+</ul>
+<p>补码 = 反码 + 1</p>
+<h3 id="_5">补码的特殊性质</h3>
+<ul>
+<li>补码转换到原码：<strong>取反 + 1</strong></li>
+<li>原码转换到补码：<strong>取反 + 1</strong></li>
+</ul>
+<h2 id="_6">带符号二进制整数到十进制的转换</h2>
+<h3 id="_7">原码</h3>
+<p>直接加负号</p>
+<h3 id="_8">反码</h3>
+<ol>
+<li>按权累加（符号位权重是负值）</li>
+<li>若符号位为 1，则十进制结果 + 1</li>
+</ol>
+<p>例：<img alt="" src="https://z3.ax1x.com/2021/09/17/4KzbtS.png"/></p>
+<h3 id="_9">补码</h3>
+<p>直接按权累加（符号位权重是负值）</p>
+<p>例：<img alt="" src="https://z3.ax1x.com/2021/09/17/4KzXlj.png"/></p>
+<h2 id="_10">有符号二进制数取值范围</h2>
+<p>以 8 位为例：</p>
+<ol>
+<li>原码：-127 ~ 127</li>
+<li>反码：-127 ~ 127</li>
+<li>补码：-128 ~ 127</li>
+</ol>
+<h2 id="binary-coded-decimalbcd">Binary Coded Decimal（BCD）</h2>
+<p>在 BCD（又称 8421 码）当中，<strong>每 4 位连续</strong>二进制数，对应一个十进制数位（0~9）</p>
+<p>BCD 码的主要优点是在机器格式与人可读的格式之间转换容易，以及十进制数值的高精度表示<br/>
+BCD 码的主要缺点是增加了实现算术运算的电路的复杂度，以及存储效率低。</p>
+<h2 id="84-2-1-2421">84-2-1 码以及 2421 码</h2>
+<p>其中，2421 码又叫艾肯码（Aiken Code）</p>
+<p>84-2-1 和 2421 码的特点是，0~4 与 9~5 是互补的，如图</p>
+<p><img alt="" src="https://z3.ax1x.com/2021/09/17/4MpuKs.png"/></p>
+<h2 id="gray-code">格雷码（Gray Code）</h2>
+<p>特点是，<strong>格雷码相邻的两个数之间，只有一个位元改变</strong>。</p>
+<p>格雷码是无权数码，且格雷码的顺序不唯一。</p>
+<p><img alt="" src="https://z3.ax1x.com/2021/09/17/4MpjZq.png"/></p>
+</article>>

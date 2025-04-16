@@ -1,0 +1,103 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-17-relational-algebra-and-query-planning-in-sql-and-more-referential-integrity">Lecture 17. Relational Algebra and Query Planning in SQL and More Referential Integrity 关系代数、查询过程、参照完整性</h1>
+<p>首先声明：关系代数虽然写成数学里的代数形式，但其实跟数学里面的代数没啥关系，不过它是基于集合论的。</p>
+<p>关系代数是用于给关系数据库当中的数据进行建模，同时定义查询的。</p>
+<p>关系代数的主要应用是，给关系数据库提供理论基础。</p>
+<p>关系代数的五种运算分别是：</p>
+<ul>
+<li>selection</li>
+<li>projection</li>
+<li>笛卡尔积 Cartesian product（也叫 cross join）</li>
+<li>集合并 set union</li>
+<li>集合差 set difference</li>
+</ul>
+<p>在 DBMS 当中对于关系的底层操作，都类似于关系代数的操作。</p>
+<p>把关系视作 tuple 的集合（不允许重复）。</p>
+<p>SQL 是 declarative 的。也就是说只需要告诉 DBMS 想干什么，而不用告诉他如何一步步的实现。</p>
+<h2 id="_1">简单关系代数示例</h2>
+<p><img alt="image-20221118103557378" src="https://s2.loli.net/2022/11/18/RwzsLMvSy7iWkQY.png"/></p>
+<p>以这张 Student 表为例。在关于代数中，用 $S$ 表示这张表。</p>
+<h3 id="projection">projection</h3>
+<p>用数学符号 $\pi$ 表示。相当于 SQL 当中的 <code>SELECT</code>。$\pi(A)(B)$ 相当于在集合 $B$ 当中取出子集 $A$。</p>
+<p>如，<code>SELECT studentname, dob FROM student</code> 可以表示为 $\pi(\texttt{studentname, dob})(S)$。</p>
+<h3 id="selection">selection</h3>
+<p>用数学符号 $\sigma$ 表示。相当于 SQL 当中的 <code>WHERE</code>。为了跟 <code>SELECT</code> 进行区分，有时候叫做 restriction。</p>
+<p>如，<code>WHERE dob &gt; '2000-12-31'</code> 可以表示为 $\sigma(\texttt{dob &gt; '2000-12-31'})(S)$</p>
+<h3 id="projection-selection">projection 和 selection 的结合</h3>
+<p>就相当于带有 <code>WHERE</code> 条件的 <code>SELECT</code>。</p>
+<p>比如，<code>SELECT studentname, dob FROM student WHERE dob &gt; '2000-12-31'</code> 可以写成：$\pi(\texttt{studentname, dob})(\sigma(\texttt{dob &gt; '2000-12-31'}))(S)$。</p>
+<h3 id="and-where">带有 <code>AND</code> 的 <code>WHERE</code></h3>
+<p>比如如果 <code>WHERE</code> 当中的条件是：<code>SELECT xx FROM yy WHERE A &gt; B AND C &gt; D</code>，写成关系代数，就是 $\pi(xx)(\sigma(A&gt;B)\&amp;\&amp;(C&gt;D))(yy)$。</p>
+<h3 id="_2">规律总结</h3>
+<p>可以发现，$\pi$ 和 $\sigma$ 都是相当于一元的操作。$\sigma$ 是横向切割，$\pi$ 是纵向切割。</p>
+<p><img alt="image-20221118105018028" src="https://s2.loli.net/2022/11/18/wYIiRzNsUM45nfQ.png"/></p>
+<h2 id="_3">关系代数中的笛卡尔积</h2>
+<p>笛卡尔积直接用乘号 $\times$ 表示。</p>
+<p><img alt="image-20221118105205907" src="https://s2.loli.net/2022/11/18/oFBIajn6qJW1EDz.png"/></p>
+<p>可以看到，$R$ 有三行，$S$ 有两行，每行想象成一个 tuple，所以相乘得到六行（$3 \times 2$个 tuple）。$R$ 两列，$S$ 两列，乘起来就是（$2+2=4$）。注意行的变化是乘法，列的变化是加法，不要搞混了。</p>
+<p>在 SQL 当中，<code>SELECT * FROM T1, T2</code> 就相当于把 <code>T1</code> 和 <code>T2</code> 两张表做了个笛卡尔积。</p>
+<h2 id="join">关系代数当中的 join</h2>
+<p>用数学符号 $\bowtie$ 表示。join 用于连接具有相同属性的两个关系（表）。</p>
+<h3 id="join_1">条件 join</h3>
+<p>表示为 $E_1 \bowtie_{\text{condition}} E_2$，相当于 $\sigma_{\text{condition}}(E_1 \times E_2)$。</p>
+<h3 id="join_2">自然 join</h3>
+<p>表示为 $E_1 \bowtie E_2$。DBMS 计算自然 join 结果的过程如下：</p>
+<ol>
+<li>先直接计算 $E_1 \times E_2$ 的笛卡尔积。如果有重复的属性（列），就先重命名一下。</li>
+<li>然后删掉所有重复的地方不相等的行。</li>
+<li>把重复属性合并。</li>
+</ol>
+<p>说白了，共享列就是用来删行的。如果没有共享列，那就相当于直接笛卡尔积了。</p>
+<h2 id="join_3">自然 join 的例子</h2>
+<h3 id="_4">例一</h3>
+<p><img alt="image-20221118111642599" src="https://s2.loli.net/2022/11/18/bvDlzxLtRhoYkgJ.png"/></p>
+<p>如果 $r_1$ 和 $r_2$ 先直接笛卡尔积，会产生六（$3 \times 2$）行、四（$2+2$）列。列分别是：$E, D_1, D_2, H$。</p>
+<p>然后顺着每一行去检查。如果有某一行 $D_1 \not= D_2$，就把这一行删掉。在这个例子当中，总共有三个被删了。</p>
+<p>最后再把 $D_1$ 和 $D_2$ 合并成一个 $D$（反正俩是相等的）。</p>
+<h3 id="_5">例二</h3>
+<p><img alt="image-20221118112149826" src="https://s2.loli.net/2022/11/18/TH7F3AjaLbtMSyW.png"/></p>
+<p>这个例子当中，两个要 join 的表，不仅有一个列相同（共享）。这种情况下，每一对共享列删掉一个留一个。</p>
+<p>但是考试的时候，全都列出来再删，太麻烦了！一种简单方法是：对于第一个表当中的每个行，用共享列直接去找第二个表当中与之匹配的，单独做笛卡尔积，然后合起来。</p>
+<h3 id="_6">例三</h3>
+<p><img alt="image-20221118112815715" src="https://s2.loli.net/2022/11/18/dzrRUIeyKpoJ6Lm.png"/></p>
+<p>既然共享列是用来删行的，那么就有把行删光的可能性。</p>
+<p>通常的 join 都是跟外键 foreign key 有关的，然而这里 $r_2$ 的 D 不是外键（外键必须出现在另一个表里），造成了这种删光的现象。</p>
+<h3 id="join_4">例四：多次 join</h3>
+<p><img alt="image-20221118113257568" src="https://s2.loli.net/2022/11/18/9wncDv1hxOPFkCU.png"/></p>
+<h2 id="sql-join">SQL 的 join 翻译成关系代数式子</h2>
+<p>其实，关系代数式子只能有一种，但是不同的 SQL 当中可能会有不同的表达。所以说只有关系代数是准确的。</p>
+<h3 id="_7">例一</h3>
+<p>~~（晕）~~</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">co</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">cp</span><span class="p">.</span><span class="n">name</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">cp</span><span class="p">,</span><span class="w"> </span><span class="n">ap</span><span class="p">,</span><span class="w"> </span><span class="n">co</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="p">(</span><span class="n">co</span><span class="p">.</span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ap</span><span class="p">.</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="p">(</span><span class="n">cp</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ap</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="p">(</span><span class="n">co</span><span class="p">,</span><span class="n">name</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">'%L%'</span><span class="p">);</span>
+</span></code></pre></div>
+<p>翻译之后：$\pi(\texttt{co.name, cp.name}) (\sigma(\texttt{co.name like '\%L\%'})( (\texttt{co}\bowtie_{\texttt{r = r}}\texttt{ap}) (\texttt{cp} \bowtie_{\texttt{id = id}} \texttt{ap})))$。</p>
+<h3 id="_8">例二</h3>
+<p>~~？？？~~</p>
+<p>画成树状图会比较好看一点</p>
+<p>叶子节点代表的是表，也就是关系的集合。</p>
+<h2 id="query-planning">询问过程 Query planning</h2>
+<p>询问过程是一个有序集合，表示如何一步一步的访问数据，也就是表示了一个过程。</p>
+<h3 id="explain"><code>EXPLAIN</code> 关键字</h3>
+<p>Postgre SQL 当中，用 <code>EXPLAIN</code> 关键字可以打印出 SQL 语句的执行过程。如：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">EXPLAIN</span><span class="w"> </span><span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+</span></code></pre></div>
+<p><img alt="image-20221125102402709" src="https://s2.loli.net/2023/03/18/U5ZRBahkXOuHo6s.png"/></p>
+<h3 id="explain-analyze"><code>EXPLAIN ANALYZE</code> 关键字</h3>
+<h4 id="_9">一个例子</h4>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">EXLLAIN</span><span class="w"> </span><span class="k">ANALYZE</span><span class="w"> </span><span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+</span></code></pre></div>
+<p><img alt="image-20221125102918147" src="https://s2.loli.net/2023/03/18/q1Vi5uUBToIhszL.png"/></p>
+<h4 id="having">另一个例子（<code>Having</code>）</h4>
+<p><img alt="image-20221125103517248" src="https://s2.loli.net/2023/03/18/ENbkU2cqKsWOJfH.png"/></p>
+<p>这个例子里面的输出是 hash aggregate，刚才是 aggregate。因为 <code>GROUP BY</code> 分组类似哈希表。~~</p>
+<p><img alt="image-20221125103201712" src="https://s2.loli.net/2023/03/18/2VZfpR9Bgy5jqTC.png"/></p>
+<h4 id="join_5">再一个例子（join）</h4>
+<p><img alt="image-20221125103640021" src="https://s2.loli.net/2023/03/18/VNkBwzSmdJ59IE1.png"/></p>
+<h2 id="_10">函数</h2>
+<p>用 <code>PREPARE</code> 关键字，搞一个类似于函数的东西（好像这里叫做模板 template），然后再传参调用，可以简化重复的代码部分。其中，<code>$1</code> 和 <code>$2</code> 分别代表第一个和第二个参数（parameter）。</p>
+<p><img alt="image-20221125104125460" src="https://s2.loli.net/2023/03/18/2yzTiPYDauSMrbR.png"/></p>
+<h2 id="query-planner">Query Planner</h2>
+<p>~~就一页 ppt ，不知道讲了啥。。。~~</p>
+</article>>

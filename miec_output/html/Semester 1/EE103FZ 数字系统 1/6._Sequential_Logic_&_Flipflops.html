@@ -1,0 +1,73 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="6-sequential-logic-flipflops">6. Sequential Logic &amp; Flipflops</h1>
+<h2 id="_1">组合逻辑电路</h2>
+<p>组合逻辑电路（Combinatorial logic）是一种逻辑电路，它的任一时刻的稳态输出，仅仅与该时刻的输入变量的取值有关，而与该时刻以前的输入变量取值无关。</p>
+<p>组合逻辑电路由各种逻辑门组成，网络中无记忆器件，也无反馈线</p>
+<h2 id="_2">时序逻辑电路</h2>
+<p>时序逻辑电路的输出结果除了依照目前的输入外也和先前的输入有关系。也就是说，时序逻辑拥有<strong>储存器件（内存）</strong>来存储信息，而组合逻辑则没有。</p>
+<p>时序逻辑电路可分为<strong>同步</strong>和<strong>异步</strong>时序电路两类。</p>
+<p>同步电路的行为，由离散时刻的输入决定，也就是说有一个<strong>时钟信号</strong></p>
+<p>而异步电路的行为，在任何时刻都可以有输入影响</p>
+<p><strong>触发器</strong>是<strong>同步</strong>时序电路当中最基本的储存器件</p>
+<p><strong>锁存器</strong>是<strong>异步</strong>时序电路当中最基本的储存器件</p>
+<h2 id="flip-flop">触发器（flip-flop）</h2>
+<p>从功能上，触发器可分为：</p>
+<ul>
+<li>RS - 置零置一触发器</li>
+<li>JK - 多功能触发器</li>
+<li>D - 延迟触发器</li>
+<li>T - 翻转触发器</li>
+</ul>
+<p>一个触发器能存储一位二进制数字信息：0 或 1 </p>
+<h3 id="rs-sr">RS 触发器（也称 SR 锁存器）</h3>
+<p>是触发器中最简单的一种，也是各种其他类型触发器的基本组成部分。</p>
+<p>两个 NAND 或 NOR 的输入端输出端进行交叉耦合或首尾相接，即可构成一个基本 RS 触发器。如图<br/>
+<img alt="image-20230329212347600" src="https://s2.loli.net/2023/03/29/dhIXivyOYM9b4lW.png"/><br/>
+<img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/R-S_mk2.gif/330px-R-S_mk2.gif"/></p>
+<p>对于 NAND 构成的 RS 触发器，可列出状态表：<br/>
+<img alt="" src="https://s4.ax1x.com/2021/12/16/T98Sg0.png"/><br/>
+进而推导出特征方程：$\large Q_{\text{next}} = S' + RQ$，且需保证 R+S != 0</p>
+<h3 id="rs-clocked-version">RS 触发器（clocked version）</h3>
+<p>带有时钟的 RS 触发器（如图），在最前面多了点东西<br/>
+<img alt="" src="https://s4.ax1x.com/2021/12/16/TPlKbD.png"/><br/>
+可以推出这种含有时钟的 RS 触发器的状态表是<br/>
+<img alt="" src="https://s4.ax1x.com/2021/12/16/TP8KbT.png"/><br/>
+进而可以发现，S=1, R=0 是 SET；S=0, R=1 是 RESET
+当 CLK=0 时，会令 S_C 和 R_C 均为 1，触发器失效；<strong>故触发器仅当 CLK=1 生效</strong></p>
+<p>这种带有时钟的 RS 触发器，符号为<br/>
+<img alt="" src="https://s4.ax1x.com/2021/12/16/TPYFUO.png"/><br/>
+且含时钟的 RS 触发器，方程为 $\large Q_{\text{next}} = S + R'Q$，且 RS = 0</p>
+<h3 id="d">D 触发器</h3>
+<p>D 触发器就相当于把含有时钟的 RS 触发器的 S 设置为 R'</p>
+<p>当 CLK=1 时，<strong>D 触发器的输出与输入相等</strong></p>
+<h3 id="jk">JK 触发器</h3>
+<p>JK 触发器，是类似于 RS 触发器，只不过<strong>允许两个输入同时为 1</strong>（此时输出 Q'）</p>
+<p><img alt="" src="https://s4.ax1x.com/2021/12/16/TPsmHH.png"/></p>
+<p><img alt="" src="https://s4.ax1x.com/2021/12/16/TPrG79.png"/></p>
+<p>方程：$\large Q_{\text{next}} = JQ' + K'Q$，其中 KJ 分别相当于 RS</p>
+<h3 id="t">T 触发器</h3>
+<p>T 触发器相当于<strong>两个输入永远相同的 JK 触发器</strong></p>
+<p>方程：$\large Q_{\text{next}} = TQ' + T'Q = T \oplus Q$</p>
+<h2 id="latch">锁存器（latch）</h2>
+<p>锁存器与触发器很相似，但主要有几点不同：</p>
+<ul>
+<li>触发器一般会应用于同步电路，而锁存器应用于异步电路</li>
+<li>锁存器不用时钟来控制信号，而是手动输入的</li>
+<li>锁存器手动<strong>输入的值只要是 1</strong>，输出就可以随时随着输入而改变；而触发器<strong>只有时钟状态从 0 变为 1 的时候</strong>，输出才能改变，如图（以 D 触发器/锁存器为例）<br/>
+<img alt="" src="https://s4.ax1x.com/2021/12/16/TP5ic9.png"/></li>
+</ul>
+<h2 id="master-slave-flip-flop">主从触发器（Master-Slave Flip Flop）</h2>
+<p>由于在普通的锁存器当中，输出值可能会短时间内多次变化。为了解决这个问题，可以使用主从触发器。</p>
+<p>以主从 RS 触发器为例说明，主从 RS 触发器由两个 RS 触发器和一个反相器构成：<br/>
+<img alt="" src="https://s4.ax1x.com/2021/12/16/TPICUf.png"/></p>
+<p>可以看到，把反相器接到从触发器和时钟信号中间，就可以让整个主从触发器的输出在<strong>一个完整的时钟周期内仅改变一次</strong>。</p>
+<h2 id="_3">异步输入</h2>
+<p>触发器通常会包含独立于时钟的输入，从而允许独立于时钟进行<strong>设置（PRE）</strong>和<strong>复位（CLR）</strong>操作。这种输入叫做异步输入（Asynchronous Input），用于在正常时钟操作开始之前进行正确的<strong>初始化</strong>。</p>
+<h2 id="_4">触发器的应用</h2>
+<h3 id="_5">消除接触抖动</h3>
+<p>接触抖动，例如刚刚按下插排电源的时候，按钮还未固定，可能在开与关的状态之间来回跳。虽然这个反复横跳的时间很短，但是可能会造成不必要的损失。把开关连上一个 RS 触发器就可以消除这个问题。</p>
+<h3 id="_6">降频</h3>
+<p>如利用一个 D 触发器，可将信号频率由 f 降为 f/2。若有多个 D 触发器，能降到 f/2^n</p>
+<h2 id="_7">补充</h2>
+<p>Edge Triggering: In edge triggering the circuit becomes active at negative or positive edge of the clock signal. For example if the circuit is positive edge triggered, it will take input at exactly the time in which the clock signal goes from low to high. Similarly input is taken at exactly the time in which the clock signal goes from high to low in negative edge triggering. But keep in mind after the the input, it can be processed in all the time till the next input is taken.</p>
+</article>>

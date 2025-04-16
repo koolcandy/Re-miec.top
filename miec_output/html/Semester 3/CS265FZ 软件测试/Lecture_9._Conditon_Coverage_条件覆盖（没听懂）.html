@@ -1,0 +1,82 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-9-conditon-coverage">Lecture 9. Conditon Coverage 条件覆盖（没听懂）</h1>
+<h2 id="_1">条件覆盖</h2>
+<p>目标就是，在每一个判定条件当中，让每一个独立的条件的真假都被测到。</p>
+<p>假如有 $n$ 个独立的条件，那么就需要至多 $2^n$ 种条件取值。（怎么听起来像是真值表测试呢？）</p>
+<p>但是其实并不是真值表测试。真值表要求测至多 $2^n$ 个测试数据，但是这里只需要让每个条件的真和假都取到，比如一个测试点让所有条件都是真，另一个测试点让所有的都是假，总共俩测试数据，就能满足这个要求——覆盖所有条件的真假。</p>
+<h2 id="condition-decision-coverage">条件判定覆盖（condition decision coverage）</h2>
+<p>刚才条件覆盖看起来很搞笑~假如只用了俩测试数据就覆盖了所有条件，必然有一些分支是走不到的啊！</p>
+<p>所以这个条件判定覆盖是对于条件覆盖的一个补充。</p>
+<p>条件判定覆盖，就是不仅要让每个单独的条件覆盖到真假，还要补充上一个让每个组合起来的判定条件，整体的真假也被覆盖掉。这样就能稍微靠谱一点了~同时，设计测试数据的时候，可以不考虑短路。比如对于一行 <code>if</code> 语句：<code>if ((passengers &gt; 0) &amp;&amp; (passengers &lt;= allSeats))</code>，可以设计如下的条件判定覆盖测试点（前两个点是整体的真假，三四个点是第一个条件的真假，五六点是第二个条件的真假）：</p>
+<table>
+<thead>
+<tr>
+<th>Test case</th>
+<th>Condition / Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CDC-1</td>
+<td><code>((passengers &gt; 0) &amp;&amp; (passengers &lt;= allSeats))</code></td>
+</tr>
+<tr>
+<td>CDC-2</td>
+<td><code>!((passengers &gt; 0) &amp;&amp; (passengers &lt;= allSeats))</code></td>
+</tr>
+<tr>
+<td>CDC-3</td>
+<td><code>(passengers &gt; 0)</code></td>
+</tr>
+<tr>
+<td>CDC-4</td>
+<td><code>!((passengers &gt; 0)</code></td>
+</tr>
+<tr>
+<td>CDC-5</td>
+<td><code>(passengers &lt;= allSeats)</code></td>
+</tr>
+<tr>
+<td>CDC-6</td>
+<td><code>!(passengers &lt;= allSeats)</code></td>
+</tr>
+</tbody>
+</table>
+<p>得到测试点之后，可以开始设计测试数据。每一个 decision 当中的 condition 的真假都要覆盖掉（原文：every condition in every decision takes on the value true and false）。</p>
+<p>疑问：为啥 ppt 第 7 页上的 decision sequence 2 不是 246？</p>
+<p>回答：其实上面第二条路径的 <code>2 4</code> 相当于 <code>2 4 5</code> 的短路。然而重点在于：<code>4</code> 和 <code>6</code> 不可能同时满足。</p>
+<p>还有一个疑问：为啥第二条第三条路径不能直接合成一条 2 4 6？</p>
+<p>回答：<code>!(A &amp;&amp; B)</code> 的形式，要分两类讨论，一类是 <code>A &amp;&amp; !B</code>，另一类是 <code>!A &amp;&amp; B</code>.</p>
+<p><img alt="image-20221104032137552" src="https://s2.loli.net/2022/11/10/h7TpH8aVF9EvR2K.png"/></p>
+<h3 id="if">更复杂的一个例子（一个 <code>if</code> 里仨子条件）</h3>
+<p><img alt="image-20221104032302601" src="https://s2.loli.net/2022/11/10/41GBDLWYCJyUvaV.png"/></p>
+<p>疑问：这里 decision sequence 2 为什么没有拆成 246、2458 俩？</p>
+<p>回答：<code>!(A || B)</code> 比较好拆，就是 <code>!A &amp;&amp; !B</code>。重要的是，<code>6</code> 和 <code>8</code> 可以同时取到。</p>
+<p>但是这样会产生无法完全覆盖所有组合的情况。</p>
+<h3 id="_2">小结</h3>
+<p>比分支覆盖和条件覆盖都要强一些</p>
+<p>但是没有测试到条件的组合情况。比如一个判定有三个条件，这里只考虑每个条件整体取真还是假，但是没有测试整体条件的每个子条件是真是假。</p>
+<p>测试输入数据的设计有一点麻烦。</p>
+<h2 id="multiple-condition-coverage">多条件覆盖 multiple condition coverage</h2>
+<p>多条件覆盖当中，对于每个具有 $n$ 个子条件的判定，设计 $2^n$ 个测试点（$n &gt; 1$）。</p>
+<p>弄测试数据的时候，还是要先把所有的 decisions 列出来，然后对于当前 decision 的取值，从真值表里面找能实现这个取值的所有的 condition 的组合。</p>
+<p><img alt="image-20221104033223600" src="https://s2.loli.net/2022/11/10/DQcB71yZamgw8Ph.png"/></p>
+<p>当然，期望的输出结果，要根据规格说明书来确定，千万不能根据代码来确定！</p>
+<h3 id="_3">更复杂的一个例子</h3>
+<p>千万要注意，对于 <code>if (xxx) {} else if (yyy) {}</code>，这种含有 <code>else if</code> 的结构，其实 <code>yyy</code> 条件还隐含了一个 <code>!xxx</code>。</p>
+<p>对于代码</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">passengers</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Status</span><span class="p">.</span><span class="na">ERROR</span><span class="p">;</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">passengers</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">121</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="n">passengers</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">81</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">comfortFlag</span><span class="p">))</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Status</span><span class="p">.</span><span class="na">FAILURE</span><span class="p">;</span>
+</span></code></pre></div>
+<p>可以设计如下的测试数据：</p>
+<p><img alt="image-20221104033901347" src="https://s2.loli.net/2022/11/10/lJbnfEgGYsVvRCw.png"/></p>
+<p>此外还需要注意，对于只含有一个条件的判定，要单独考虑。</p>
+<p>总结一下，MCC 就是对于所有判定的所有可能的条件组合都会被测试到，但是测试数据依然不太好设计。</p>
+<h2 id="modified-condition-decision-coverage">Modified Condition Decision Coverage 修订的条件判定覆盖（晕）</h2>
+<p>测试数据是基于条件判定覆盖的，但是增加了一些验证独立条件的、对输出有影响的条件变化。</p>
+<p>MCDC 的目标是，实现所有的判定、条件、输出的覆盖。</p>
+<p>~~不懂：课件 23 页，MCDC3 和 MCDC 7 有啥区别？~~</p>
+<p>相比于多条件覆盖，强度较低了一点；但是相比于条件判定覆盖强了很多，因为每一个测试数据都需要再考虑一下输出结果。</p>
+</article>>

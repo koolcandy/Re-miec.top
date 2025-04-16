@@ -1,0 +1,93 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="chapter-7-css-part2">Chapter 7. CSS Part2（留白、文本、字体、链接、列表、表格）</h1>
+<h2 id="padding">框内留白 padding</h2>
+<p>跟 <code>margin</code> 非常类似。<code>padding</code> 的取值有：</p>
+<ul>
+<li>px, pt, cm 等单位指定的长度</li>
+<li>百分比，相对于父元素</li>
+<li><code>inherit</code>，继承父元素</li>
+</ul>
+<h2 id="weight-x-height">王修涵（Weight X Height）</h2>
+<p>宽度高度，<strong>不包含</strong> 边框以及框内外留白，只是单纯的设置显示的内容区域的大小。</p>
+<p>还有 <code>max-width</code> 与 <code>max-height</code>。可以实现图片的等比例缩放。</p>
+<h2 id="text">文本格式化 Text</h2>
+<p>涉及的比较多，这里只是一些比较重要的。</p>
+<h3 id="text-align">文本水平对齐 <code>text-align</code></h3>
+<p><code>left</code> 或 <code>right</code> 或 <code>centered</code> 或 <code>justified</code>（拉伸，实现类似 Word 的两端对齐）</p>
+<h3 id="text-decoration">划线 <code>text-decoration</code></h3>
+<p>取值 <code>overline</code> <code>underline</code> <code>line-through</code> <code>none</code> 等，设置上划线删除线等。</p>
+<p>把 <code>text-decoration: none;</code> 扔给 <code>&lt;a&gt;</code> 可以取消超链接的下划线。</p>
+<p>【26 27 没讲】</p>
+<h3 id="direction">文本方向 <code>direction</code></h3>
+<p>取值 <code>rtl</code> 可以实现从右向左的排版。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/24/ReLpDGTKWEaiVYw.png"/></p>
+<h3 id="word-spacing">文字间距 <code>word-spacing</code></h3>
+<p>取值是像素等单位。假如取值 $x$，那么实际间距是 $\operatorname{default} + x$。</p>
+<h2 id="font">字体 <code>font</code></h2>
+<h3 id="font-family">字体族 <code>font-family</code></h3>
+<p><img alt="" src="https://s2.loli.net/2023/04/24/94BgtCFJY6GfOzb.png"/></p>
+<ul>
+<li>generic family，看起来类似的，比如 serif 和 monospace</li>
+<li>font family，特定的字体族，像 Times New Roman</li>
+</ul>
+<p>指定 <code>font-family</code> 的值的时候应当设定多个，第一个是最希望的效果，如果第一个不存在，让浏览器选取后面的：<code>font-family: "Time New Roman", Times, serif;</code>。</p>
+<h3 id="font-style">字形 <code>font-style</code></h3>
+<p>取值可以是 <code>normal</code> <code>italic</code> <code>oblique</code>（也像是斜体）。</p>
+<h3 id="font-size">字号 <code>font-size</code></h3>
+<p>可以是相对大小和绝对大小。如果不指定，<code>p</code> 标签当中的默认是 16px，16px=1em。</p>
+<p>绝对大小，在不同浏览器里，显示字体大小是一样的。但是不同大小的显示器上固定大小，显然不太合理。所以已知显示器（输出设备）尺寸的情况下，绝对大小才比较有用。</p>
+<p>而相对大小表示字号与周边元素相关。</p>
+<p>W3C 推荐使用 <code>em</code> 作为字体大小的单位。可以在不同浏览器当中自动适配字体大小。？？？？？？？？这个需要实践一下才能理解可能。</p>
+<p><a href="https://stackoverflow.com/questions/609517/">Stackoverflow: Why em instead of px?</a></p>
+<p>对于老板 IE 浏览器，em 好像会有点问题。大的偏大，小的偏小。于是把 <code>body</code> 的 <code>font-size</code> 设置成 <code>100%</code> 之后再设置 <code>em</code> 就可以解决。</p>
+<h2 id="_1">链接</h2>
+<p>这几种，其实都是 <code>&lt;a&gt;</code> 配合 CSS 实现的效果。比如通过背景色、padding 等特性，就可以搞成右边那个按钮的样子。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/24/PRT3Ii9mFA1swyh.png"/>
+之前提到过，链接有多种状态：</p>
+<ul>
+<li>未访问 <code>link</code>：默认蓝色下划线，</li>
+<li>访问过 <code>visited</code>：默认紫色下划线</li>
+<li>鼠标悬浮状态 <code>hover</code>，顾名思义，默认鼠标形状改变</li>
+<li>活跃状态 <code>active</code>，指的是，鼠标点了一下但还没有释放：默认红色下划线</li>
+</ul>
+<p>注意，为了防止 CSS 覆盖失效，<code>:hover</code> 要放在 <code>a:link</code> 和 <code>a:visited</code> 的后面，<code>a:active</code> 要放在 <code>a:hover</code> 的后面。</p>
+<p>顺带提一句，<code>&lt;a&gt;</code> 的默认是 <code>display: inline;</code>。如果设置 <code>display: inline-block</code> 之后，就可以指定 width 和 height。</p>
+<h2 id="_2">列表</h2>
+<h3 id="list-style-type">标志样式 <code>list-style-type</code></h3>
+<p>之前说过，针对无序列表，样式 <code>list-style-type</code> 具有四种可选值，可以指定行首的标记：</p>
+<ul>
+<li><code>disc</code>，表示每一行用实心粗圆圈 $\bullet$ 打头</li>
+<li><code>circle</code>，就是用空心圆圈打头</li>
+<li><code>square</code>，方块（实心）</li>
+<li><code>none</code>，没有行首标志，但是有缩进</li>
+</ul>
+<p>针对有序列表，<code>list-style-type</code> 取值有：</p>
+<ul>
+<li><code>upper-roman</code> 大写罗马数字</li>
+<li><code>lower-alpha</code> 小写英文字母</li>
+</ul>
+<h3 id="list-style-image">图片替代标志 <code>list-style-image</code></h3>
+<p>还可以用 <code>list-style-image: url(xxx)</code> 用图片指定行首标志</p>
+<h3 id="list-style-position">标志的位置 <code>list-style-position</code></h3>
+<ul>
+<li><code>inside</code> 离得远一点</li>
+<li><code>outside</code> 离得近一点，是默认的</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/04/24/ynlQ6rtLNgpuIE7.png"/></p>
+<h3 id="list-style">缩写：<code>list-style</code></h3>
+<p>按照 <code>type</code> - <code>position</code> - <code>image</code> 的顺序。</p>
+<p>比如：<code>square inside url("xxx.gif")</code>，代表图片能显示就显示图，不能显示就是方块。</p>
+<h3 id="_3">奇怪的一点应用</h3>
+<ul>
+<li>做成一个垂直表格的样子</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/04/24/n5IbD8zC6kNStru.png"/></p>
+<p><img alt="" src="https://s2.loli.net/2023/04/24/GwHceoDQsrOKF2U.png"/></p>
+<h2 id="_4">表格</h2>
+<h3 id="text-align-vertical-align">对齐 <code>text-align</code> &amp; <code>vertical-align</code></h3>
+<p>前者用于水平对齐，后者用于竖直对齐。</p>
+<h3 id="hover">鼠标悬浮效果 <code>:hover</code></h3>
+<p><code>tr:hover</code> 可以改变鼠标所在的行的样式。</p>
+<h3 id="zebra-striped-nth-childevenodd">斑马条纹效果 zebra-striped <code>:nth-child(even/odd)</code></h3>
+<p><code>tr:nth-child(even)</code> 表示偶数行，剩下的没有指定的就是奇数行。Vice Versa。</p>
+</article>>

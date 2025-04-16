@@ -1,0 +1,123 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-2-divide-and-conquer">Lecture 2. Divide and Conquer 分治</h1>
+<p>分治算法的核心步骤是：</p>
+<ol>
+<li>分 divide。把当前问题分成子问题。</li>
+<li>治 conquer。递归的解决子问题。当问题规模足够小（递归边界）就直接解决。</li>
+<li>合并 combine。根据子问题的答案，计算出当前问题的答案。</li>
+</ol>
+<h2 id="merge-sort">归并排序 Merge Sort</h2>
+<p>归并排序是分治算法的典型例子。归并排序是 bottom-out（触底反弹，也可以理解为自底向上）的，其中，底是指当前序列长度为 $1$ 的情况。</p>
+<p>归并排序的三个分治步骤是：</p>
+<ol>
+<li>分解 divide：将原数组对半分成子数组</li>
+<li>解决 conquer：递归，对两个子数组进行归并排序</li>
+<li>合并 combine：把两个有序的子数组合并成一个新的有序的数组</li>
+</ol>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/pRCBLzn8wckuaJD.png"/></p>
+<h3 id="merge">归并排序的核心： <code>MERGE</code></h3>
+<p>归并排序的核心，是「合并」步骤，也就是把两个已经排序好了的子数组合并成一个新的有序数组。这个合并过程需要 $\Theta(n)$ 的时间。<code>MERGE(A, p, q, r)</code> 实现合并 $A[p .. q]$ 和 $A[q + 1.. r]$ 的过程。</p>
+<p><code>MERGE</code> 的原理是，先把两个有序子数组提取出来，然后设立两个指针，边比较大小边移动。最后处理剩下的部分。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/15/XhDip2qvZLnjudE.png"/></p>
+<h4 id="yyf">YYF 的版本</h4>
+<p>YYF 觉得 CLRS 写的这个太丑了，于是用 Java 重新实现了一个</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">merge</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">nl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">nr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">q</span><span class="p">;</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">L</span><span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[</span><span class="n">nl</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[</span><span class="n">nr</span><span class="o">]</span><span class="p">;</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nl</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">        </span><span class="n">L</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="o">]</span><span class="p">;</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nr</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">        </span><span class="n">R</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">q</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">]</span><span class="p">;</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nl</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nr</span><span class="p">)</span>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">L</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">R</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="p">)</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">            </span><span class="n">a</span><span class="o">[</span><span class="n">k</span><span class="o">++]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L</span><span class="o">[</span><span class="n">i</span><span class="o">++]</span><span class="p">;</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">        </span><span class="k">else</span>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">            </span><span class="n">a</span><span class="o">[</span><span class="n">k</span><span class="o">++]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">R</span><span class="o">[</span><span class="n">j</span><span class="o">++]</span><span class="p">;</span>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nl</span><span class="p">)</span>
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">        </span><span class="n">a</span><span class="o">[</span><span class="n">k</span><span class="o">++]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L</span><span class="o">[</span><span class="n">i</span><span class="o">++]</span><span class="p">;</span>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nr</span><span class="p">)</span>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">        </span><span class="n">a</span><span class="o">[</span><span class="n">k</span><span class="o">++]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">R</span><span class="o">[</span><span class="n">j</span><span class="o">++]</span><span class="p">;</span>
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="_1">归并排序性能分析</h3>
+<p>要分析归并排序的性能，先要分析 <code>MERGE</code> 的性能。显然一次 <code>MERGE</code> 是 $\Theta(n)$ 的（这个 $n$ 其实是 $r-p+1$），因为指针 $i$ 和 $j$ 总共移动的距离之和恰好是 $r-p+1$。</p>
+<p>由于归并排序的实现是涉及到递归的，所以在分析复杂度的时候也可以列出递归的式子。</p>
+<p>设 $T(n)$ 表示解决原问题所需要的时间。当 $n$ 足够小，无需分治，此时只需要常数时间，即 $\Theta(1)$；当需要分治的时候，设原问题可以被拆解为 $a$ 个子问题，每个子问题的规模是原问题的 $\frac{1}{b}$，那么就需要解决 $a$ 个规模为 $\frac{n}{b}$ 的问题，再设将原问题拆开所需要的时间是 $D(n)$，合并子问题答案所需时间是 $C(n)$，那么：$$T(n)= \begin{cases}\Theta(1) &amp; \text { if } n&lt;n_0 \\ D(n)+a T(\frac{n}{b})+C(n) &amp; \text { otherwise }\end{cases}$$。对于归并排序，$a=b=2$，于是 $aT(\frac{n}{b}) = 2T(\frac{n}{2})$。（注意：归并排序当中 $a=b=2$，但是有一些分治算法当中 $a\not= b$）</p>
+<p>接下来分析一下 $D(n)$ 和 $C(n)$：</p>
+<ul>
+<li>由于拆分问题只是需要计算一下中点的位置，所以是 $D(n) = \Theta(1)$</li>
+<li>$C(n)$ 就是 <code>MERGE</code> 所需要的时间，所以 $C(n) = \Theta(n)$</li>
+</ul>
+<p>于是，得到 $$T(n)= \begin{cases}\Theta(1) &amp; \text { if } n=1 \\ 2T(\frac{n}{2}) + \Theta(n) &amp; \text { otherwise }\end{cases}$$，其实 $T(n) = \Theta(n \lg n)$，这个可以用主定理证明。接下来用图示的方式解释为何是 $\Theta(n \lg n)$（为了方便，设 $n$ 是 $2$ 的幂，同时用 $c_1$ 代替 $\Theta(1)$，用 $c_2n$ 代替 $\Theta(n)$），得到 $$T(n)= \begin{cases}c_1&amp; \text { if } n=1 \\ 2T(\frac{n}{2}) + c_2n &amp; \text { otherwise }\end{cases}$$</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/ytVN1pBkSZe58vg.png"/></p>
+<ul>
+<li>图 (a) 表示原式子</li>
+<li>图 (b) 表示进行一次递归，把 $T(n)$ 代换成了 $c_2n$（根节点）加上两个子节点 $2T(\frac{n}{2})$</li>
+<li>图 (c) 表示继续再递归一层，把两个 $T(\frac{n}{2})$ 也代换掉了</li>
+<li>接下来的图 (d) 表示递归到最深层后，整棵树的样子。</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/pdARlan97vFG5Um.png"/></p>
+<p>可以看到，除了最底层叶子节点，每一层都是 $c_2n$ 的时间，这样的层数是 $\lg n$ 层。最后一层是 $n$ 个常数问题规模的子问题，所以最后一层需要时间 $c_1n$。因此，总共需要 $c_2n \lg n + c_1n$ 的时间，即 $\Theta(n \lg n)$。</p>
+<h2 id="quicksort">快速排序 Quicksort</h2>
+<p>归并排序虽然时间复杂度很不错，但是它不是 <em>原址排序（sort in place）</em>，也就是说，归并排序的额外空间使用高于常数级别。</p>
+<p>快速排序是一种 <strong>原址排序</strong>，也使用了分治的思想，期望时间复杂度是 $\Theta(n \lg n)$，且常数很小。不过，它在最坏情况下是 $\Theta(n^2)$ 的</p>
+<p>快速排序的三个分治步骤是：</p>
+<ol>
+<li>分解 divide：选取一个下标 $q$，将数组 $A[p..r]$ 划分为两个（可能为空的）子数组 $A[p..q-1]$ 和 $A[q+1,r]$，使得前一个子数组的每个元素都小于等于 $A[q]$，后一个子数组的所有元素都大于等于 $A[q]$</li>
+<li>解决 conquer：递归，对两个子数组进行快速排序</li>
+<li>合并 combine：快速排序无需这个步骤，因为快速排序是原址排序的，所以递归结束后两个子数组就已经有序了，进而整个数组都是有序的</li>
+</ol>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/mxkh6uyVEge9rwP.png"/></p>
+<p>由此看来，快速排序最重要的部分是第一步：分解。</p>
+<h3 id="partition">快速排序的核心：<code>PARTITION</code></h3>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/T8KuW2nAeR5owDp.png"/></p>
+<p><code>PARTITION</code> 选取当前数组最右端的元素 $A[r]$ 作为主元，以它作为中间点，划分数组。注意，这个划分只是把比主元小的挪到左边去，把比主元大的挪到右边去，并不进行排序。
+<img alt="" src="https://s2.loli.net/2023/03/22/VSPR6OzIvHxWYg4.png"/></p>
+<p>以这张图为例（黄色表示主元，橙色表示（$A[p..i]$）被划分到小于等于主元区域的值，蓝色表示（$A[i+1..j-1]$）被划分到大于主元区域的值，白色表示（$A[j..r-1]$）还未被划分的元素）</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/szCU3K9D4qp1Vmx.png"/></p>
+<ul>
+<li>图 (a) 表示 <code>PARTITION</code> 循环开始之前的状态。$A[r]$ 被选为主元，用黄色标识。此时 $i$ 初始化为 $p-1$，$j=p$</li>
+<li>图 (b) 表示 $2$ 自己与自己交换，即把自己放在了小于等于区域。</li>
+<li>图 (c) 和图 (d) 继续进行循环，由于 $8$ 和 $7$ 都比主元大，所以不被交换，分配给蓝色区域，$j$ 持续增长</li>
+<li>图 (e) 终于遇到了比主元小的元素，增加一个橙色区域的槽位，把最左边的的蓝色区域元素换到后面去</li>
+<li>图 (f) 又遇到一个比主元小的，划分给橙色区域，最左边的蓝色元素被换到右边去</li>
+<li>图 (g) 和图 (h) 没找到小于主元的元素，所以都分给蓝色区域，循环结束</li>
+<li>图 (i) 是最后一步：退出循环，把主元换到中间，结束</li>
+</ul>
+<h4 id="partition_1"><code>PARTITION</code> 过程的循环不变量</h4>
+<p>上述 <code>PARTITION</code> 过程当中每一次循环开始之前，都满足：</p>
+<ol>
+<li>若 $k \in [p, i]$ 则 $A[k] \leq x$，也就是橙色区域</li>
+<li>若 $k \in [i+1, j-1]$ 则 $A[k] &gt; x$，对应着蓝色区域</li>
+<li>若 $k = r$ 则 $A[k] = x$，即主元的位置始终不变</li>
+</ol>
+<p>该不变式没有涉及到 $k \in [j, r-1]$ 的情况，这对应着白色未知区域，没有特殊性质。</p>
+<p>下面证明该循环不变量在初始化（initialization）（第一轮循环开始前）阶段和保持（maintenance）（每一轮循环结束）阶段都为真，并且在终止（termination）阶段可以体现算法正确性：</p>
+<ul>
+<li>初始阶段，前两条都是空集，显然成立；第三条也显然成立</li>
+<li>保持阶段，分两种情况考虑<ul>
+<li>$A[j] &gt; x$，此时只有 $j$ 的值发生变化，所以仅考虑第二条性质是否依然成立。显然依旧成立。</li>
+<li>$A[j] \leq x$，此时 $i, j$ 都自增，且发生了交换。分别考虑三条性质：<ol>
+<li>因为本来是 $A[j] \leq x$ 的，而 $A[j]$ 被换到了 $i$ 位置，所以此时 $A[i] \leq x$ 成立，故第一条仍然成立</li>
+<li>只需判断 $A[j-1] &gt; x$ 是否成立。其实这个 $A[j-1]$ 就是交换之前的 $A[i]$，也就是上一轮的 $A[i+1]$。由于上一轮 $A[i+1]&gt;x$ 成立，所以这一轮的 $A[i] &gt; x$ 本成立，交换并自增 $j$ 后使得 $A[j-1]&gt;x$ 成立。故第二条仍然成立</li>
+<li>$A[r]$ 没有发生变化，所以第三条仍然成立</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>终止阶段，$j=r$，整个数组被完全划分成了三段：$[p, i]$，$[i+1, j-1]$，$[j=r, r]$，分别是所有小于等于主元的、大于主元的、一个主元。故该算法是正确的。</li>
+</ul>
+<h3 id="_2">快速排序性能分析</h3>
+<p>快速排序的性能依赖于划分是否平衡，而划分是否平衡又依赖于主元的取值。如果划分平衡，那么快速排序的性能与归并排序相同；如果划分不平衡，那么快速排序的性能退化为接近插入排序。</p>
+<p>显然，<code>PARTITION</code> 过程的时间复杂度是 $\Theta(n)$ 的。</p>
+<h4 id="_3">最坏情况</h4>
+<p>最坏情况就是，划分产生了一个大小为 $n-1$ 的子数组、一个大小为 $0$ 的子数组、一个主元，且每一轮划分都是如此，即：输入的原数组是已经升序或降序排序好了的。那么此时，$$\begin{aligned}T(n) &amp;= \Theta(n) + T(n-1) + T(0) \\ &amp;= \Theta(n) + T(n-1) + \Theta(1) \\ &amp;= \Theta(n) + T(n-1) \\ &amp;= \Theta(n^2)\end{aligned}$$</p>
+<h4 id="_4">最好情况</h4>
+<p>最好情况下，每次划分，产生的两个子问题规模分别是 $\lfloor \frac{n}{2} \rfloor$ 和 $\lceil \frac{n}{2} \rceil - 1$，此时 $$T(n) = \Theta(n) + 2T(\frac{n}{2}) = \Theta(n \lg n)$$</p>
+<h4 id="_5">平衡的情况</h4>
+<p>假如每次划分，不是 $0 : n-1$，而是 $\frac{n}{10} : \frac{9n}{10}$，那么此时的性能是怎样的？</p>
+<p>直观上，感觉这样的划分好像很不平衡，会很慢，但实际上这样划分依然是 $O(n \lg n)$。画出下面这棵树，如图，在前 $\log_{10}n$ 层，每一层的总时间代价都是 $n$；总共有 $\log_{\frac{10}{9}}n$ 层，之后每一层的代价都 $\leq n$，所以总代价依然是 $O(n \lg n)$ 的。</p>
+<p><img alt="" src="https://s2.loli.net/2023/03/22/tqoniclMjDgAIXv.png"/></p>
+<p>事实上，就算每次划分都是 $\frac{n}{100} : \frac{99n}{100}$ 这样荒唐比例，它也依然是 $O(n \lg n)$ 的——只要不是常数就行。</p>
+</article>>

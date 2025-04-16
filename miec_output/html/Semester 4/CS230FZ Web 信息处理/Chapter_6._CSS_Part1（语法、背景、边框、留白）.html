@@ -1,0 +1,106 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="chapter-6-css-part1">Chapter 6. CSS Part1（语法、背景、边框、留白）</h1>
+<p>全称叫做层叠样式表（cascading style sheets）。</p>
+<p>有三种方式使用 CSS：外部样式文件、内部样式代码（不太灵活，页面独有的样式属性才用）、内嵌到元素中的样式。前两种方式的例子如下：</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>  <span class="cm">&lt;!-- 使用 &lt;link&gt; 标签引用外部样式文件，要放在 &lt;head&gt; 里面 --&gt;</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">"stylesheet"</span> <span class="na">type</span><span class="o">=</span><span class="s">"text/css"</span> <span class="na">href</span><span class="o">=</span><span class="s">"mycss.css"</span><span class="p">&gt;</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>  <span class="cm">&lt;!-- 用 &lt;style&gt; 标签指定该文件的样式，也要放在 &lt;head&gt; 里面 --&gt;</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="c">/* xxx */</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">  </span><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>对于前面两种 CSS，在 <strong>选择器和元素都相同</strong> 的情况下，优先级关系是：<strong>前面定义的 &lt; 后面定义的</strong>。也就是说，定义越晚，优先级越高，可以覆盖掉之前的样式。<strong>而内嵌的 CSS 永远具有最高优先级。</strong></p>
+<blockquote>
+<p>注：这里关于优先级的描述不完整。</p>
+</blockquote>
+<h2 id="_1">语法与选择器</h2>
+<h3 id="_2">语法</h3>
+<p>每一条 CSS 规则都是由选择器和 declaration block 构成的。declaration block 中间有若干由分号分隔的 property-value pair。每个 pair 用冒号分隔 property 与 value。</p>
+<p><img alt="" src="https://s2.loli.net/2023/04/10/wMVlPDQOKJma15i.png"/></p>
+<p>CSS 的注释格式与 HTML 不同，是 <code>/* xxx */</code>。不是 <code>//</code>。</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="o">//</span><span class="w"> </span><span class="nt">NO</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="o">/*</span><span class="w"> </span><span class="nt">YES</span><span class="w"> </span><span class="o">*</span>
+</span></code></pre></div>
+<h3 id="_3">选择器</h3>
+<p>选择器就是根据元素的 <code>name</code>，<code>id</code>，<code>class</code> 与属性等来确定元素的东西。分若干类：</p>
+<ul>
+<li>element selector，直接写元素名：<code>tagName {}</code></li>
+<li>id selector，用井号 <code>#</code> 后面接上 id 值：<code>#id {}</code>。由于 id 唯一，这只能选择一个元素。</li>
+<li>class selector，点号 <code>.</code> 后面接上类名：<code>.class {}</code>。即使元素类型不同，只要类名一致，就可以被选中。顺带一提，一个元素可能同时属于多个类，即拥有多个类名，空格分隔，如 <code>&lt;p class="c1 c2"&gt;</code>。也可以指定标签，比如 <code>p.c1</code> 表示类名 <code>c1</code> 的 <code>&lt;p&gt;</code> 标签。</li>
+<li>grouping selector，多个选择器如果想要搞一样的格式，可以直接逗号隔开，如 <code>sele1, sele2, sele3 {}</code></li>
+</ul>
+<h2 id="background">背景 background</h2>
+<h3 id="background-color">背景颜色 <code>background-color</code></h3>
+<p>略</p>
+<h3 id="background-image">背景图片 <code>background-image</code></h3>
+<p>用于指定选定的标签（元素）的背景图片。</p>
+<p>如果图片的大小跟元素的大小不一致？默认情况下，这个图会在水平和垂直方向上自动进行自我复制，保证填充满该元素的背景。</p>
+<p>而 <code>background-repeat</code> 可以指定是否重复或仅允许水平还是竖直的重复。</p>
+<p>图片的位置也可以更改，使用 <code>background-position</code>。</p>
+<p>甚至可以固定位置——即使鼠标滚轮进行了页面滚动，使用 <code>background-attachment: fixed</code>。</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="k">background-image</span><span class="p">:</span><span class="w"> </span><span class="nb">url</span><span class="p">(</span><span class="s2">"https://..."</span><span class="p">);</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span><span class="c">/* repeat-x 只能在水平方向进行复制，repeat-y 垂直方向，no-repeat 顾名思义 */</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">  </span><span class="k">background-repeat</span><span class="p">:</span><span class="w"> </span><span class="kc">no-repeat</span><span class="p">;</span><span class="w">  </span><span class="c">/* 表示不能复制 */</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">  </span><span class="k">background-position</span><span class="p">:</span><span class="w"> </span><span class="kc">right</span><span class="w"> </span><span class="kc">top</span><span class="p">;</span><span class="w"> </span><span class="c">/* 若禁止重复，则表示图片放在元素的右上角 */</span>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">  </span><span class="k">background-attachment</span><span class="p">:</span><span class="w"> </span><span class="kc">fixed</span><span class="p">;</span><span class="w"> </span><span class="c">/* 不管怎么滚动，图片都固定右上角 */</span>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="shorthand">缩写 shorthand</h3>
+<p>可以用 <code>background</code> 代替 <code>background-xxx</code>，值的顺序关系是：</p>
+<ol>
+<li><code>background-color</code></li>
+<li><code>background-image</code></li>
+<li><code>background-repeat</code></li>
+<li><code>background-attachment</code></li>
+<li><code>background-position</code></li>
+</ol>
+<p>个别属性值缺少，也没关系。也就是说以上五个不需要每个都要给出，只要整体来看是按照这个顺序，就行。</p>
+<p>如：</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="c">/* 指定了背景图片，不复制，在右上角 */</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nb">url</span><span class="p">(</span><span class="s2">"https://..."</span><span class="p">)</span><span class="w"> </span><span class="kc">no-repeat</span><span class="w"> </span><span class="kc">right</span><span class="w"> </span><span class="kc">top</span><span class="w"> </span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="border">边框 border</h2>
+<p>四条边（按照 <strong>上右下左</strong> 的顺序）可以分别指定样式（空格分隔）。如果只写了三个（没写全），那么三个值就是对应：上（左+右）下。如果只写了两个，那这两个就对应：（上+下）（左+右）。</p>
+<p>上述方法的可读性太差了。有时候不如直接 <code>border-[top|right|bottom|left]-style</code> 这样指定具体是哪一条边。</p>
+<h3 id="border-style">边框样式 <code>border-style</code></h3>
+<p><code>border-style</code> 的取值有挺多，主要是前四种</p>
+<ul>
+<li><code>dotted</code>，点</li>
+<li><code>dashed</code>，虚线</li>
+<li><code>solid</code>，实线</li>
+<li><code>double</code>，双实线</li>
+<li><code>groove</code>，3d</li>
+<li><code>ridge</code>，3d</li>
+<li><code>inset</code>，3d</li>
+<li><code>outset</code>，3d</li>
+<li><code>none</code>，无边框</li>
+<li><code>hidden</code>，有但是隐藏了</li>
+</ul>
+<h3 id="border-width">边框宽度 <code>border-width</code></h3>
+<p>有多种单位：像素 px，pt，cm，em，或使用预设值（<code>thin</code>，<code>medium</code>，<code>thick</code> 三者之一）。</p>
+<h3 id="border-color">边框颜色 <code>border-color</code></h3>
+<p>略</p>
+<h3 id="shorthand_1">缩写 shorthand</h3>
+<p>类似于背景，边框也能缩写：用 <code>border</code> 代替 <code>border-xxx</code>，顺序如下：</p>
+<ol>
+<li><code>border-width</code></li>
+<li><code>border-style</code>（必须）</li>
+<li><code>border-color</code></li>
+</ol>
+<p>所以实验当中经常有：<code>1px solid black</code> 的写法。</p>
+<h2 id="margin">框外留白 margin</h2>
+<p><code>margin</code> 的取值有：</p>
+<ul>
+<li><code>auto</code>，浏览器自动计算留白大小（左右一致），以此 <strong>实现居中</strong></li>
+<li>px, pt, cm 等单位指定的长度</li>
+<li>百分比，相对于父元素</li>
+<li><code>inherit</code>，继承父元素</li>
+</ul>
+<p>也可以四个方向分别指定。</p>
+</article>>

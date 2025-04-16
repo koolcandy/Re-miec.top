@@ -1,0 +1,61 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-7-pn">Lecture 7. 半导体与 PN 结二极管</h1>
+<h2 id="_1">基本物理与化学知识</h2>
+<h3 id="atom">原子 atom</h3>
+<p>对于电荷（charge）来说，同性相斥异性相吸：unlike charges attract, like charges repel.</p>
+<p>物质由原子构成，原子由 <em>质子（proton）</em>、<em>中子（neutron）</em>、<em>电子（electron）</em> 构成。质子和中子位于 <em>原子核（Nucleus）</em>，具有 1 个 AMU 的质量；电子在原子核外，仅具有 1/1787 的 AMU 质量。</p>
+<p>质子带电 $+e$，电子带电 $-e$，因此有多少质子就应该有多少电子（否则就带电了）。</p>
+<p>原子核的直径是 $10^{-14} \operatorname{m}$ 的数量级，原子的直径是 $10^{-10} \operatorname{m}$ 的数量级。所以原子大部分空间被质量很小很小的电子占据了。</p>
+<h3 id="energy-level-energy-band">能级 energy level 与能带 energy band</h3>
+<blockquote>
+<p>能级又称能阶，是描述微观粒子体系可能存在的相对稳定状态下，所对应一系列不连续的、分立的且确定的“内在”能量值或状态。 能级理论则是一种解释原子核外电子运动轨道的理论。它认为电子只能在特定的、分立的轨道上运动，各个轨道上的电子具有分立的能量，这些能量值即为能级。</p>
+</blockquote>
+<ul>
+<li>对于原子，能级是离散的几个值</li>
+<li>对于固体，能级是离散的几个区间（能带）：来自不同原子的价电子相互作用，导致能带的形成；带隙是不存在电子态的能量范围。</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/lBEbVz3hc61DgTi.png"/></p>
+<h4 id="_2">能带与导电性</h4>
+<p><strong>固体的带隙的大小决定了材料的导电性能</strong>。绝缘体具有较大的带隙，这使得电子很难进入导带。半导体具有适中的带隙，使电子在一定条件下很容易被激发进入导带。金属具有重叠的能带，使电子能够自由移动并导电。</p>
+<p>如图，对于绝缘体、导体、半导体，能带示意图分别如下。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/iGxcgLVvz2Jw4MR.png"/></p>
+<ul>
+<li>绝缘体需要很多能量才能导电</li>
+<li>导体需要一点点能量就可以导电</li>
+<li>半导体需要大约 $1\operatorname{eV}$ 的能量来导电</li>
+</ul>
+<h3 id="covalent-bond">共价键 covalent bond</h3>
+<p>就是多个原子通过共享电子，达成稳定结构（如 2.8.8..）。</p>
+<p>像氟原子，本身具有 9 个电子。两个氟原子共享一个电子，那么就都达成了 (2+8) 的稳定结构：$\text{F}_2$ 氟单质。</p>
+<h3 id="_3">半导体：硅</h3>
+<p>半导体的 <em>价（valence）</em> 是 4。像硅元素，就具有 14 个电子（2+8+4），需要四个共价键才能形成八电子稳定结构。</p>
+<p>对于硅单质（纯硅），它的结构长这样。所有电子都参与构成了共价键，不存在自由电子。因为不存在自由电子，电子无法轻松的自由移动，所以 <strong>硅单质的导电性很差</strong>。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/DLxEFCG1rTHyq2l.png"/></p>
+<p>但是，对硅单质进行加热，可以让其中的一些 <em>价电子（valence electron）</em> 获得能量，突破束缚，变成 <em>传导电子（conduction electron）</em>，可自由移动。因此，温度较高的硅单质，导电性会好一些。</p>
+<h4 id="n-type">半导体 N-Type 硅（加磷，多电子）</h4>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/hENqGKVzxmuDb9J.png"/></p>
+<p>就是在纯硅里面加入一些磷元素。磷元素最外层是 5 个电子，相比硅元素可以提供更多的电子，从而增强导电性。</p>
+<h4 id="p-type">半导体 P-Type 硅（加硼，少电子，多洞洞）</h4>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/rS65ElCOYXKVGno.png"/></p>
+<p>就是在纯硅里面加入一些硼元素。硼元素最外层只有 3 个电子，相比硅元素变少了，于是就会产生一些“洞”，即该有电子却缺了电子的地方（带正电）。洞变多了，那么电子的移动也就变得容易了，于是导电性就变好了。</p>
+<h2 id="_4">二极管</h2>
+<h3 id="_5">原理</h3>
+<p>在 n-type 硅与 p-type 硅的交汇处，二者会产生一些相互的抵消（depletion，多余的电子与多余的洞洞），于是就会形成 PN 结（pn-junction），也就是一种 diode（二极管）。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/ePNpUnOTDXdMAYB.png"/></p>
+<p>在中间这块区域，没有自由电子，没有洞洞，所以是不导电的。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/jbQsMzGEReKdhYn.png"/></p>
+<p>那为什么说这是个单向导电的二极管呢？</p>
+<p>因为假如通了电（方向对），那么，外部电源让把洞洞和电子重新挤在一起了，于是中间那块 <em>不导电的区域（depletion region）</em> 消失了，所以现在可以导电</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/UaTGxBrAStfymMb.png"/></p>
+<p>但是假如反向通电，外部电源把洞洞和电子拆得更远了，于是中间 <em>那块区域（depletion region）</em> 反而变大了！更不导电了。</p>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/sJ5quhbNfGk2Vz6.png"/></p>
+<p>综上，这种二极管的 <strong>电流流向，应当是 P --&gt; N</strong>。</p>
+<h3 id="_6">二极管的伏安特性曲线</h3>
+<p><img alt="" src="https://s2.loli.net/2023/05/23/3uCF4Uzc9mYPxbt.png"/></p>
+<h3 id="_7">应用</h3>
+<ul>
+<li>整流，把交流电转换成直流电（砍掉一半）</li>
+<li>电路保护，防止正负极接反导致的元件损坏</li>
+<li>逻辑运算，比如逻辑门的实现（CS220 有提到过）</li>
+</ul>
+</article>>

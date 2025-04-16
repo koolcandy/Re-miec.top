@@ -1,0 +1,11 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-4-more-advanced-usage-of-sql">Lecture 4: More Advanced Usage of SQL</h1>
+<h2 id="_1">几个好用的关键字</h2>
+<ul>
+<li><code>count()</code> 表示返回的结果（result set）一共有多少行。</li>
+<li><code>order by &lt;column name&gt; &lt;method&gt;</code>  表示对于返回的结果，以这一列为关键字排序，method 表示按照什么方式排序，可选的有：<code>asc</code>，<code>desc</code> 等。</li>
+</ul>
+<h2 id="pattern-matching">字符串的模式匹配（Pattern Matching）</h2>
+<p>上面说到过，字符串是大小写敏感的。假如数据库存储的是 'A'，那么查询 'a' 就会查不到。</p>
+<p><code>LIKE</code> 关键字可以用于实现模式匹配。如：<code>where &lt;col name&gt; LIKE 'A%'</code>表示查询所有以 'A' 开头的字符串。其中，<code>%</code> 表示匹配任何内容（通配符），可以为空。类似地，<code>%B</code> 表示所有以 'B' 结尾的字符串，<code>%C%</code> 表示任意包含子串 'C' 的字符串。注意，如果要进行模式匹配，不能用 <code>=</code> 连接。</p>
+</article>>

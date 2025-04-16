@@ -1,0 +1,239 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="chaper-2-part-1-boolean-algebra">Chaper 2 Part 1: Boolean Algebra 布尔代数</h1>
+<p>（共 42 页）</p>
+<h2 id="_1">逻辑门</h2>
+<p>基本逻辑门，就是 AND，OR，NOT 这仨啦。</p>
+<p>观察真值表容易发现，AND 有逻辑乘法的作用，而 OR 有逻辑乘法的作用。NOT，有时候被称作 Inverter。</p>
+<p>而 AND 与 NOT 组合，产生了 NAND。OR 与 NOT 组合，产生了 NOR。</p>
+<p>EX-OR，全称 exclusive-or，顾名思义，不包含全是 1 的 OR，也就是异或。符号是 $\oplus$。$A \oplus B = A'B + AB'$。</p>
+<p>与异或对应的是 EX-NOR，同或，说白了就是异或再接上一个 NOT。</p>
+<p>下面表格摘自 EE103 笔记：</p>
+<h3 id="_2">常见逻辑门</h3>
+<table>
+<thead>
+<tr>
+<th align="left">gate name</th>
+<th align="left">中文名</th>
+<th align="left">IEEE 符号</th>
+<th align="left">布尔表达式</th>
+<th align="left">计算方法</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">NOT</td>
+<td align="left">非</td>
+<td align="left"><img alt="" src="https://s2.loli.net/2022/12/06/19Sa5Y8GKDQfeCT.png"/></td>
+<td align="left">$f = \overline{A}$</td>
+<td align="left">输出反码</td>
+<td align="left">也叫反相器 Inverter</td>
+</tr>
+<tr>
+<td align="left">AND</td>
+<td align="left">与</td>
+<td align="left"><img alt="" src="https://s2.loli.net/2022/12/06/4wcSDHZ1YvbeLio.png"/></td>
+<td align="left">$f = AB$</td>
+<td align="left">当且仅当 <strong>所有</strong> 输入都是 HIGH 才输出 HIGH 否则为 LOW</td>
+<td align="left">执行逻辑乘法</td>
+</tr>
+<tr>
+<td align="left">OR</td>
+<td align="left">或</td>
+<td align="left"><img alt="" src="https://s2.loli.net/2022/12/06/9eTWUjEZo4mQxlY.png"/></td>
+<td align="left">$f = A+B$</td>
+<td align="left">当且仅当 <strong>所有</strong> 输入都是 LOW 才输出 LOW 否则为 HIGH</td>
+<td align="left">执行逻辑加法</td>
+</tr>
+<tr>
+<td align="left">NAND</td>
+<td align="left">与非</td>
+<td align="left"><img alt="" src="https://s2.loli.net/2022/12/06/rtFEIUVySB5PQlb.png"/></td>
+<td align="left">$f = \overline{AB}$</td>
+<td align="left">当且仅当 <strong>所有</strong> 输入都是 HIGH 才输出 LOW 否则为 HIGH</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">NOR</td>
+<td align="left">或非</td>
+<td align="left"><img alt="" src="https://s2.loli.net/2022/12/06/qs8iRf2XbtChBHw.png"/></td>
+<td align="left">$f = \overline{A+B}$</td>
+<td align="left">当且仅当 <strong>所有</strong> 输入都是 LOW 才输出 HIGH 否则为 LOW</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">XOR</td>
+<td align="left">异或</td>
+<td align="left"><img alt="" src="https://s2.loli.net/2022/12/06/y7VXuEdjq3RScte.png"/></td>
+<td align="left">$f = A \oplus B$</td>
+<td align="left">当且仅当 <strong>HIGH 的个数是奇数</strong>，输出是 HIGH 否则为 LOW</td>
+<td align="left">可以看作二元加法器</td>
+</tr>
+<tr>
+<td align="left">XNOR</td>
+<td align="left">同或</td>
+<td align="left"><img alt="" src="https://s2.loli.net/2022/12/06/ZVGrROP3ANBXI4c.png"/></td>
+<td align="left">$f = \overline{A \oplus B}$</td>
+<td align="left">当且仅当 <strong>HIGH 的个数是奇数</strong>，输出是 LOW 否则为 HIGH</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">布尔函数</h2>
+<p>跟数学上的函数基本上一样。比如 $f(A, B, C) = AB' + BC + C'$ 就是一个布尔函数。</p>
+<h3 id="dual">对偶函数（dual）</h3>
+<p>函数的对偶函数（dual），<strong>就是把所有的 AND 换成 OR，OR 换成 AND；1 换成 0，0 换成 1</strong>；保持原先的变量及其运算顺序（加上适当的括号）。比如上面 $f$ 的对偶函数就是 $f_d(A, B, C) = (A + B')(B + C)C'$。</p>
+<p>所有布尔表达式都具有一个与之对应的对偶式 dual。</p>
+<h3 id="complement">补函数（complement）</h3>
+<p>布尔代数领域的补函数就是说，对于 $2^n$ 种变量输入组合，函数值永远与原函数相反。</p>
+<p><strong>把对偶函数的每个变量 invert 一下，就可以构造出一个补函数</strong>。然而课件里面没说是怎么证明的，就记住这个结论好了。</p>
+<p>比如，上面函数 $f$ 的补函数就是 $\overline{f} = (A' + B)(B' + C')C$。</p>
+<h3 id="inverse">反函数（inverse）</h3>
+<p>把函数 $f$ 的真值表列出来，$f$ 本身相当于把所有 $f=1$ 的项求 SOP。</p>
+<p>而 $\overline {f}$ 相当于把所有 $f=0$ 的项求 SOP。</p>
+<p>这里的反函数 inverse 和补函数 complement 是 <strong>同一个概念</strong>，只是求出来的途径、表达形式不一样。</p>
+<h2 id="functionally-completeness">自足算子 Functionally Completeness</h2>
+<p>一个运算的集合被称作 <em>functionally complete（或者 universal）</em>，当且仅当这几个运算可以表达任何的布尔函数。</p>
+<p>例如，{AND, NOT} 就是一个自组算子，因为 NOT 和 AND 可以组合成 NAND，而 NAND 可以表示任意门。同理，{OR, NOT} 也是自足算子（complete set）。</p>
+<p>再进一步，NAND 本身构成的集合 {NAND} 就是一个自足算子。</p>
+<h3 id="nandcs171">用 <code>NAND</code>（与非）表示其他逻辑运算（CS171）</h3>
+<h4 id="not">表示 <code>NOT</code></h4>
+<p><img alt="pic" src="https://s2.loli.net/2022/12/06/iNh4W9FHaCTOL7g.png"/></p>
+<p>NOT(A)  = A NAND A</p>
+<h4 id="and">表示 <code>AND</code></h4>
+<hr/>
+<p><img alt="pic" src="https://s2.loli.net/2022/12/06/NRHDBomr1fl56sj.png"/></p>
+<p>A AND B = ( A NAND B ) NAND ( A NAND B )</p>
+<h4 id="or">表示 <code>OR</code></h4>
+<p><img alt="pic" src="https://s2.loli.net/2022/12/06/ACEtK7Nlqkp2G8b.png"/></p>
+<p>A OR B  = ( A NAND A ) NAND ( B NAND B )</p>
+<h4 id="nor">表示 <code>NOR</code></h4>
+<p><img alt="pic" src="https://s2.loli.net/2022/12/06/XuHMfSAQLWktFeU.png"/></p>
+<p>A NOR B = [ ( A NAND A ) NAND ( B NAND B ) ] NAND [ ( A NAND A ) NAND ( B NAND B ) ]</p>
+<h4 id="xor">表示 <code>XOR</code></h4>
+<p><img alt="" src="https://s2.loli.net/2022/12/06/H2jnqTR6oGAMJBN.png"/></p>
+<p>A XOR B = [ A NAND ( A NAND B ) ] NAND [ B NAND ( A NAND B ) ]</p>
+<h2 id="pos">POS 形式的布尔函数</h2>
+<p>有两种方法，一种是利用对偶函数和反函数，另一种是利用最大项</p>
+<h3 id="_4">利用对偶函数和反函数</h3>
+<ol>
+<li>列出真值表</li>
+<li>给所有 $f=0$ 的求 SOP，即求出反函数（可以用卡诺图）</li>
+<li>给反函数求对偶函数</li>
+<li>再把对偶函数的每个变量 invert 一下，就得到原函数的 POS 形式</li>
+</ol>
+<p><strong>即：原函数经过对偶再翻转变量，得到反函数；反函数经过对偶再翻转变量，同样可以得到原函数。</strong></p>
+<h3 id="_5">利用最大项</h3>
+<p>所谓 <em>最大项 maxterm</em>，就是一堆变量直接加起来。相对应的 <em>最小项 minterm</em>，就是一堆变量直接乘起来。变量和运算次数相同的时候，最大项写起来长，最小项写起来短。</p>
+<ol>
+<li>列出真值表</li>
+<li>找出所有 $f = 0$ 的项，把构成这个项的所有变量 OR 起来。注意，变量值取 0 的不变，取 1 的翻转。</li>
+<li>把刚才求出来的所有 S 给乘起来，就得到了 POS</li>
+</ol>
+<p>如，$f = \Sigma(1,2,3,5) = \Pi(0,4,6,7)$ 这个函数：</p>
+<p><img alt="image-20220927121316383" src="https://s2.loli.net/2022/12/06/pv9dLf865ujhRZs.png"/></p>
+<ul>
+<li>第一个 $f=0$ 的行，变量取值是 $0,0,0$，因此对应 $A+B+C$</li>
+<li>第二个 $f=0$ 的行，变量取值是 $1,0,0$，因此对应 $A' + B + C$</li>
+<li>以此类推，最终得到：$f(A,B,C) = (A + B + C)(A' + B+ C)(A' + B' + C)(A' + B' + C')$</li>
+</ul>
+<h2 id="_6">布尔运算的基本性质与运算律</h2>
+<h3 id="and_1">AND</h3>
+<p>$A.0 = 0$  </p>
+<p>$A.1 = A$  </p>
+<p>$A.A' = 0$</p>
+<p>$A.A = A$</p>
+<h3 id="or_1">OR</h3>
+<p>$A+0 = A$</p>
+<p>$A + 1 = 1$</p>
+<p>$A + A' = 1$</p>
+<p>$A + A = A$</p>
+<h3 id="not_1">NOT</h3>
+<p>$A = A''$</p>
+<h3 id="operator-precedence">运算优先级（Operator Precedence）</h3>
+<p>概括来说，就是 NOT &gt; AND &gt; OR。</p>
+<p>因为 NOT 的运算与符号后面的 atom 直接融为一体，而 AND 的运算优先级总是高于 OR 的。</p>
+<h3 id="_7">布尔运算的运算律</h3>
+<h4 id="commutation">交换律 Commutation</h4>
+<ul>
+<li>$A + B = B + A$</li>
+<li>$AB = BA$</li>
+</ul>
+<h4 id="association">结合律 Association</h4>
+<ul>
+<li>$A + (B + C) = (A + B) + C$</li>
+<li>$A(BC) = (AB)C$</li>
+</ul>
+<h4 id="distribution">分配律 Distribution</h4>
+<ul>
+<li>$A + BC = (A + B)(A + C)$</li>
+<li>$A(B + C) = AB + AC$</li>
+</ul>
+<h4 id="absorption">吸收律 Absorption</h4>
+<ul>
+<li>$A + AB = A$</li>
+<li>$A(A + B) = A$</li>
+</ul>
+<p>理解：</p>
+<ul>
+<li>$A + AB = A \cdot 1 + AB = A(1 + B) = A$</li>
+<li>$A(A + B) = AA + AB = A + AB = A$</li>
+</ul>
+<h4 id="consensus">一致律 Consensus</h4>
+<ul>
+<li>$AC + BC' = AB + AC + BC'$</li>
+<li>$(A + C)(B + C') = (A + B)(A + C)(B + C')$</li>
+</ul>
+<p>推导：</p>
+<ul>
+<li>$\begin{aligned} \text{等式右侧} &amp;= AB + AC + BC' \\ &amp;= AB(C + C') + AC(B + B') + BC'(A + A') \\ &amp;= ABC + ABC' + ABC + AB'C + ABC' + A'BC' \\ &amp;= ABC + ABC' + AB'C + A'BC' \\ &amp;= AB(C + C') + B'C(A + A') \\ &amp;= AB + B'C \\ &amp;= \text{等式左侧} \end{aligned}$</li>
+<li>$\begin{aligned} \text{等式右侧} &amp;= (A+B)(A+C)(B+C') \\ &amp;= (A + BC)(B + C') \\ &amp;= AB + AC' + BC \\ &amp;= AB + AC' + BBC + BCC' \\ &amp;= AB + AC + BC + CC' \\ &amp;= A(B + C') + C(C + C') \\ &amp;= (A + C)(C + C') \\ &amp;= \text{等式左侧}\end{aligned}$</li>
+</ul>
+<h4 id="_8">德摩根律</h4>
+<p>$(A + B)' = A'B'$</p>
+<p>$(AB)' = A' + B'$</p>
+<h3 id="cs172">CS172 笔记摘录</h3>
+<table>
+<thead>
+<tr>
+<th align="left">运算律</th>
+<th align="center">示例 1</th>
+<th align="center">示例 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">交换律</td>
+<td align="center">$p \wedge q = q \wedge p$</td>
+<td align="center">$p \vee q = q \vee p$</td>
+</tr>
+<tr>
+<td align="left">结合律</td>
+<td align="center">$(p \wedge q) \wedge r = p \wedge (q \wedge r)$</td>
+<td align="center">$(p \vee q) \vee r = p \vee(q \vee r)$</td>
+</tr>
+<tr>
+<td align="left"><strong>分配律</strong></td>
+<td align="center">$p \wedge(q \vee r) = (p \wedge q) \vee(p \wedge r)$</td>
+<td align="center">$p \vee(q \wedge r) = (p \vee q) \wedge(p \vee r)$</td>
+</tr>
+<tr>
+<td align="left">德摩根</td>
+<td align="center">$\neg(p \wedge q) = (\neg p) \vee(\neg q)$</td>
+<td align="center">$\neg(p \vee q) = (\neg p) \wedge(\neg q)$</td>
+</tr>
+<tr>
+<td align="left"><strong>吸收律</strong></td>
+<td align="center">$p \vee(p \wedge q) = p$</td>
+<td align="center">$p \wedge(p \vee q) = p$</td>
+</tr>
+<tr>
+<td align="left">条件句</td>
+<td align="center">$(p \rightarrow q) = (\neg p \vee q)$</td>
+<td align="center">$\neg(p \rightarrow q) = (p \wedge \neg q)$</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_9">布尔表达式化简示例</h3>
+<p>$$\begin{aligned} F &amp;= (A + B)(A + B')(A' + C) \\ &amp;= (AA + BB')(A' + C) \\ &amp;= (A + 0)(A' + C) \\ &amp;= AA' + AC \\ &amp;= 0 + AC \\ &amp;= AC \end{aligned}$$</p>
+</article>>

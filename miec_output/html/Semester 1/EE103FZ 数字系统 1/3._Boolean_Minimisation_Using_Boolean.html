@@ -1,0 +1,167 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="3-boolean-minimisation-using-boolean">3. Boolean Minimisation Using Boolean</h1>
+<h2 id="_1">布尔分析</h2>
+<p>例如，对于布尔表达式 $f = D(C+AB)$，若 $f=1$，仅有两种情况满足：</p>
+<ul>
+<li>$D=1$ 且 $C=1$ </li>
+<li>$D=1$ 且 $A=B=1$</li>
+</ul>
+<p>所以此时真值表：</p>
+<table>
+<thead>
+<tr>
+<th align="center">A</th>
+<th align="center">B</th>
+<th align="center">C</th>
+<th align="center">D</th>
+<th align="center">f</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">布尔代数</h2>
+<h3 id="_3">运算律</h3>
+<ul>
+<li>交换律</li>
+<li>结合律</li>
+<li>分配律</li>
+</ul>
+<h3 id="_4">德摩根定律（对偶律）</h3>
+<p>$\overline{A+B} = \overline{A}\times\overline{B}$<br/>
+$\overline{A\times B} = \overline{A}+\overline{B}$</p>
+<p>即：</p>
+<p>$\neg(p \wedge q) \equiv(\neg p) \vee(\neg q)$<br/>
+$\neg(p \vee q) \equiv(\neg p) \wedge(\neg q)$</p>
+<p>图示：</p>
+<p><img alt="" src="https://z3.ax1x.com/2021/10/27/57vWDA.png"/></p>
+<h3 id="_5">一些等式</h3>
+<p>$A+AB=A$<br/>
+$A(A+B)=A$<br/>
+$A+\overline{A}B=A+B$<br/>
+$(A+B)(A+C)=A+BC$</p>
+<h3 id="_6">化简示例</h3>
+<p>A'BC + AB'C' + AB'C + ABC' + ABC<br/>
+= A'BC + A(B'C' + B'C + BC' + BC)<br/>
+= A'BC + A((B' + B)(C + C'))<br/>
+= A'BC + A</p>
+<p>AB + A'C + BC<br/>
+= AB + A'C + (1)BC<br/>
+= AB + A'C + (A + A'))BC<br/>
+= AB + A'C + (ABC + A'BC)<br/>
+= (AB + ABC) + (A'C + A'BC)<br/>
+= AB(1 + C) + A'C(1 + B)<br/>
+= AB + A'C</p>
+</article>>

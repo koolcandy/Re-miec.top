@@ -1,0 +1,50 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="slide-5-expressiveness">slide 5: Expressiveness</h1>
+<h2 id="_1">谢非尔竖线</h2>
+<p>谢非尔竖线「$\mid$」用于表示 NAND，即 $p \mid q \leftrightarrow \neg(p \wedge q)$</p>
+<p>NAND 可以表示常见的五种符号：</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算名</th>
+<th align="left">原来的</th>
+<th align="left">NAND</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">NOT</td>
+<td align="left">$\neg p$</td>
+<td align="left">$p \mid p$</td>
+</tr>
+<tr>
+<td align="left">OR</td>
+<td align="left">$p \vee q$</td>
+<td align="left">$(p \mid p) \mid (q \mid q)$</td>
+</tr>
+<tr>
+<td align="left">AND</td>
+<td align="left">$p \wedge q$</td>
+<td align="left">$(p \mid q) \mid (p \mid q)$</td>
+</tr>
+<tr>
+<td align="left">IMPLIES</td>
+<td align="left">$p \rightarrow q$</td>
+<td align="left">$p \mid (q \mid q)$</td>
+</tr>
+<tr>
+<td align="left">EQUIVALENCE</td>
+<td align="left">$p \leftrightarrow q$</td>
+<td align="left">$(p \mid q) \mid ((p \mid p) \mid (q \mid q))$</td>
+</tr>
+</tbody>
+</table>
+<h2 id="canonical-normal-forms">规范形式  Canonical Normal Forms</h2>
+<ul>
+<li>文字（literal），即 $x$ 和 $\neg x$</li>
+<li>逻辑<em>析取</em>（disjunctive），即<strong>或</strong></li>
+<li>逻辑<em>合取</em>（conjunctive），即<strong>与</strong></li>
+<li>析取范式 DNF，Disjunctive Normal Form，即一堆文字的<strong>与的或</strong>，SOP</li>
+<li>合取范式 CNF，Conjunctive Normal Form，即一堆文字的<strong>或的与</strong>，POS</li>
+</ul>
+</article>>

@@ -1,0 +1,104 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-14-risc-vs-cisc">Lecture 14. RISC VS CISC、现代计算机技术</h1>
+<blockquote>
+<p>CSAPP 第四章有更详细的描述</p>
+</blockquote>
+<p>常见指令，risc 比 cisc 快，因为指令少</p>
+<p>但是有些 cisc 的指令要用一堆 risc 指令实现（比如 <code>mul</code> 要用一堆 <code>add</code> 和 <code>loop</code> 实现）</p>
+<p>RISC 与 CISC 是两个比较极端的概念。在实际当中，没有太 RISC 的，也没有太 CISC 的。</p>
+<h2 id="risc-vs-cisc">RISC VS CISC</h2>
+<h3 id="cisccomplex-instruction-set">CISC：Complex Instruction Set</h3>
+<p>CISC 就是包含大量不同的寻址方式和指令。</p>
+<ul>
+<li>所以 CISC 的，汇编代码写起来就相对来说比较容易。</li>
+<li>CISC 的 CPU 在内部会实现一些操作，于是这些指令执行起来就会很快。</li>
+<li>但是 CISC 的指令解码，就会带来许多额外的开销，降低整体性能；然而对于频繁执行某个特定指令的程序，用 CISC 反而可能变得更快了</li>
+<li>由于 CISC 程序的指令数量相对少一些，所以程序的体积也小一些</li>
+</ul>
+<h3 id="riscreduced-instruction-set">RISC：Reduced Instruction Set</h3>
+<p>RISC 在指令集、寻址模式、数据格式等方面做了精简，使得绝大多数指令都可以在一个时钟周期内直接完成。</p>
+<ul>
+<li>对于编译器来说，想要生成 RISC 的代码，也相对更难一些。</li>
+<li>RISC 需要内存的性能比较良好，延迟不能太高，要不然一直不停的从内存里面取指令，那反而性能降低了</li>
+<li>RISC 总体上来说性能会更好，常用于高性能运算场景</li>
+<li>RISC 需要使用更多的通用寄存器，这样也可以减少对内存的访问（说白了就是指令的操作数几乎全是寄存器，寻址模式相比 CISC 少了很多）；但是由于摩尔定律，硬件成本将会显得越来越不重要</li>
+<li>RISC 还优化了指令 <em>流水线（pipeline）</em>，从而允许同时执行多条指令</li>
+</ul>
+<h2 id="pipeline">流水线 pipeline</h2>
+<p>早期的 CPU，就单纯的一次执行一个指令（获取、解码、执行），效率比较低。</p>
+<p>但是高级一点的 CPU，哎，采用流水线技术：</p>
+<ul>
+<li>先获取指令 1</li>
+<li>解码指令 1 的时候，去获取指令 2</li>
+<li>然后执行指令 1 的时候，解码指令 2，获取指令 3</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/tJrp9whqC7NdxWy.png"/></p>
+<p>奔腾处理器甚至有 U 和 V 两个执行单元。如果两条指令非常相似且无依赖关系，甚至可以直接同时执行。</p>
+<h3 id="_1">流水线的缺陷</h3>
+<ul>
+<li>比如总线这样的东西，同一时间只能是一个东西用，可能会产生一点点冲突。</li>
+<li>还有对于分支跳转语句，肯定不能跟其他东西并行执行。</li>
+<li>对数据的写入操作也不能同时进行。</li>
+</ul>
+<p>这块就感觉跟 CS240 挺像的。</p>
+<h2 id="_2">向量处理</h2>
+<p>比如两个浮点数相加，需要四个步骤：</p>
+<ol>
+<li>C: check，是否是 0</li>
+<li>S: shift，对齐小数点</li>
+<li>A: add</li>
+<li>N: normalize，转化为科学计数法</li>
+</ol>
+<p>所以假设要做 12 次浮点数加法，标量运算，需要 48 步。</p>
+<p>如果使用流水线进行运算，需要 12+3 = 15 步：</p>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/Ju7liUdPeboFC6t.png"/></p>
+<p>向量运算，就是把 ALU 当成若干个独立部分，每个部分同时执行一个运算，比如下图这俩向量，就分三块同时运算</p>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/Bxp95Xacumb3WdM.png"/></p>
+<p>如果用向量运算（ALU 分成四个）再配合 ALU 流水线，实现 12 次加法，只需要 6 步：</p>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/GUeZztu2WgVBjnQ.png"/></p>
+<h2 id="mimd">MIMD</h2>
+<ul>
+<li>SISD 是单一指令、单一数据。后续可以通过流水线技术实现优化。</li>
+<li>SIMD 是单一指令、多个数据。向量处理器就是这样的。</li>
+<li>这一节关注的是 MIMD，意思是多个指令、多个数据。这个需要使用多个处理器才能实现。</li>
+</ul>
+<h3 id="_3">多处理器</h3>
+<p>利用多处理器技术，处理器之间共享一块内存。</p>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/xm4WHJgReOTcK3Y.png"/></p>
+<h3 id="_4">多计算机</h3>
+<p>除了多处理器技术，还有一种类似的，叫做多计算机技术。多计算机技术当中，对于每台计算机，内存是独立的。</p>
+<p>说白了就是分布式系统。</p>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/5evOC3yti1VMQPg.png"/></p>
+<p>多处理器系统是不容易扩张的（有多少处理器就是多少个），但是多计算机系统可以通过 network 进行灵活的扩展。</p>
+<p>计算机之间要实现消息传递，可以通过 PVM（并行虚拟机）或 RPC（远程过程调用）。</p>
+<h4 id="_5">拓扑结构</h4>
+<p>有如下四种类型</p>
+<p><img alt="" src="https://s2.loli.net/2023/07/03/yut4k67dhNUK2Ss.png"/></p>
+<ul>
+<li>环形结构 ring，最远距离 n/2</li>
+<li>网状结构 mesh，最远距离 2n-2</li>
+<li>树形结构 tree，一般适用于分治的系统</li>
+<li>超立方体结构，一共有 2^n 个节点，每个节点连出去 log2(n) 条边。最远距离 n</li>
+</ul>
+<h3 id="superscalar-p">超标量处理器 Superscalar P</h3>
+<p>就是能同时执行多个指令的处理器，但是必须保证指令之间不存在依赖或者冲突关系</p>
+<h2 id="parallel-system">并行系统 parallel system</h2>
+<p>并行系统差不多就是多处理器系统，有两个特征：</p>
+<ol>
+<li>紧耦合性 tightly coupled，就是说处理器之间共享总线、时钟，通过共享内存实现通信。因此不容易扩展。相反，分布式系统（多计算机系统）不共享总线和时钟，通过特定通信协议进行通信，所以就是 loosely coupled 不耦合的。</li>
+<li>容忍错误 fault tolerance，就是说假如有一个处理器坏了，其他处理器应当可以补充完成这个坏掉的处理器的工作。</li>
+</ol>
+<h3 id="_6">分类</h3>
+<ol>
+<li>串联系统 tandem system，就是一个进程复制两份，扔给两个处理器同时运行。如果一个坏了，就换成另一个。虽然听起来很浪费资源，但是在银行系统、证券交易所等场合，很有必要。</li>
+<li>非对称系统 asymmetric system，CS240 提到过，一个主，一堆从，每个处理器执行特定任务</li>
+<li>对称系统 symmetric system，CS240 提到过，每个处理器地位相等，需要通信</li>
+</ol>
+<h3 id="_7">优点</h3>
+<ul>
+<li>资源共享，比如打印机</li>
+<li>计算加速，一个程序不同部分可以同时运行</li>
+<li>可靠性，如果系统当中是有冗余（redundancy）的，那么一个坏了，系统依然能运行</li>
+<li>通信。</li>
+</ul>
+</article>>

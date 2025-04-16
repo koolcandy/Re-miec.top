@@ -1,0 +1,112 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-12-js">Lecture 12. JS 对象</h1>
+<h2 id="_1">字符串</h2>
+<p>有几个常用函数</p>
+<ul>
+<li><code>s.indexOf(t, start=0)</code>，返回从 <code>start</code> 开始第一次出现 t 的位置或 -1</li>
+<li><code>s.lastIndexOf(t, start=0)</code>，返回从 <code>start</code> 开始最后一次出现 t 的位置或 -1</li>
+<li><code>s.slice(start, end=n)</code> 和 <code>s.substring(start, end=n)</code> 用于切割子串，二者都是左闭右开</li>
+<li><code>s.substr(start, len=n-start)</code> 返回某个位置开始的指定长度的子串</li>
+<li><code>s.replace(s1, s2)</code> 用于查找 <code>s1</code> 并替换为 <code>s2</code></li>
+<li><code>s.toUpperCase()</code> 和 <code>s.toLowerCase()</code> 顾名思义</li>
+<li><code>s.concat(sep, s2)</code> 用于字符串拼接，相当于 <code>s = s + sep + s2</code></li>
+<li><code>s.charAt(pos)</code>，有些浏览器也支持 <code>s[pos]</code>，但是 <code>charAt()</code> 比 <code>[]</code> 更安全</li>
+<li><code>s.charCodeAt(pos)</code>，返回的是这个位置字符的编码</li>
+<li><code>s.split(sep)</code> 顾名思义。其中 <code>sep</code> 可以是 <code>""</code></li>
+</ul>
+<h2 id="_2">数字</h2>
+<h3 id="nan-not-a-number">NaN - Not a Number</h3>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">100</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s2">"apple"</span><span class="p">;</span><span class="w">  </span><span class="c1">// 就会得到 NaN</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">100</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s2">"10"</span><span class="p">;</span><span class="w">     </span><span class="c1">// 会得到 10</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">fx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span><span class="w">      </span><span class="c1">// fx = true</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">fy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span><span class="w">      </span><span class="c1">// fy = false</span>
+</span></code></pre></div>
+<p>如果 NaN 参与到了算术运算当中，得到的就一定还是 NaN。如果参与到字符串运算当中，就会作为字符串处理。</p>
+<h3 id="_3">常用函数</h3>
+<ul>
+<li><code>toString()</code> 把任意类型的数字转换成字符串</li>
+<li><code>valueOf()</code> 常用于 Object，可以把数字类型的 Object 转换成原始数据类型</li>
+<li>（事实上，JavaScript 的所有类型，都具有 <code>toString()</code> 和 <code>valueOf()</code> 这俩函数）</li>
+<li><code>Number(xxx)</code> 可以把 <code>xxx</code> 转换为数字，比如 <code>Number("10 ")</code>，<code>Number(new Date())</code>，<code>Number(true)</code> 之类的，但是如果遇到 <code>Number("12 34")</code> 会返回 NaN</li>
+<li><code>parseInt(str)</code> 会把传入的字符串转为数字。可以认为字符集是 <code>[0-9]</code>。遇到字符集以外的就终止。</li>
+<li><code>parseFloat(str)</code> 与 <code>parseInt()</code> 类似。可以认为字符集是 <code>[0-9\.]</code>。</li>
+<li><code>Math.min()</code> 和 <code>Math.max()</code> 顾名思义，可变参数长度</li>
+<li><code>Math.random()</code> 返回 $[0, 1)$ 之中的随机实数，通过数学变换可以变成任意区间的随机数</li>
+<li><code>Math.round(x)</code> 可以返回最近的整数（返回 <code>int(x+0.5)</code> 的值），相当于四舍五入</li>
+<li><code>Math.celi(x)</code> 和 <code>Math.floor(x)</code> 顾名思义</li>
+</ul>
+<h2 id="_4">日期</h2>
+<p>日期从 1970 年 1 月 1 日 00:00 开始（UTC +0）</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">();</span><span class="w">  </span><span class="c1">// 返回当前时间，结果是：Mon Jun 12 2023 11:47:53 GMT+0800 (中国标准时间)</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="mf">86400</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1000</span><span class="p">);</span><span class="w">  </span><span class="c1">// 传毫秒，加一天：Fri Jan 02 1970 08:00:00 GMT+0800 (中国标准时间)</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="mf">99</span><span class="p">,</span><span class="w"> </span><span class="mf">5</span><span class="p">,</span><span class="w"> </span><span class="mf">24</span><span class="p">,</span><span class="w"> </span><span class="mf">11</span><span class="p">,</span><span class="w"> </span><span class="mf">33</span><span class="p">,</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// 表示 1999 年 (5+1) 月 24 日 11 点 33 分 30 秒 0 毫秒</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">                                     </span><span class="c1">// Thu Jun 24 1999 11:33:30 GMT+0800 (中国标准时间)</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="mf">99</span><span class="p">,</span><span class="w"> </span><span class="mf">5</span><span class="p">,</span><span class="w"> </span><span class="mf">24</span><span class="p">);</span><span class="w"> </span><span class="c1">// 后面的省略了就是零：Thu Jun 24 1999 00:00:00 GMT+0800 (中国标准时间)</span>
+</span></code></pre></div>
+<p>日期和日期直接可以直接用大于小于号进行比较，实际上就是比较的毫秒数。</p>
+<h3 id="_5">常用函数</h3>
+<ul>
+<li><code>d.toString()</code>，格式就是刚刚那一大坨</li>
+<li><code>d.toDateString()</code>，格式是 'Thu Jun 24 1999'</li>
+<li><code>d.getDate()</code> 获取今天是几日</li>
+<li><code>d.getDay()</code> 今天是星期几（0~6），周一到周六对应 1~6，周天是 0</li>
+<li><code>d.getTime()</code> 表示获取从零时间到现在的毫秒数</li>
+<li><code>d.getFullYear()</code> 获取年份（四位数）</li>
+<li><code>d.setBlabla()</code> 跟 get 反过来而已</li>
+<li><code>Date.parse(str)</code> 如果传入的字符串是一个合法的日期，就返回这个日期距离零时刻的毫秒数</li>
+<li><code>new Date(str)</code> 如果传入的字符串是一个合法的日期，就返回这个日期的对象</li>
+</ul>
+<h2 id="_6">数组</h2>
+<ul>
+<li>创建数组有两种方式，一种是 <code>var arr = [a, b, c];</code>，一种是 <code>var arr = new Array(a, b, c);</code>；第二种效率上比较慢</li>
+<li>由于 JavaScript 是弱类型的，数组当中的元素的类型可以不同，比如 <code>arr = {Data, arr2, "haha"}</code></li>
+<li><code>arr.toString()</code> 用于把数组转化成字符串：<code>[a, b, c].toString() == [a,b,c]</code>，生成的字符串中间无空格；如果想要有空格，或者其他的分隔符，可以用 <code>arr.join()</code>：<code>[a, b, c].join(" * ") == a * b * c</code></li>
+<li><code>arr.reverse()</code> 相当于 python 里面的 <code>arr = arr[::-1]</code></li>
+<li><code>arr.sort()</code> 用于给数组按照 <strong>字典序</strong> 进行排序。比如整数数组 <code>[3, 2, 1, 10].sort()</code> 排序得到的是 <code>[1, 10, 2, 3]</code>；那如果想要按照数值进行排序，可以给 <code>sort()</code> 提供一个自定义比较函数：<code>[3, 2, 1, 10].sort(function(a,b){return a-b})</code> 就是按照数值升序排序</li>
+<li><code>arr.slice(x)</code> 相当于 Python 当中的 <code>arr[x:]</code>；也可以两个参数，<code>arr.slice(x, y)</code> 左闭右开</li>
+</ul>
+<h3 id="_7">添加或删除元素</h3>
+<ul>
+<li>可以用 <code>arr.push(x)</code> 来往数组当中添加元素，返回新的数组长度；<ul>
+<li>对应的，<code>arr.pop()</code> 用于返回并删除最后一个值；</li>
+<li>与 <code>pop</code> 类似，<code>arr.shift()</code> 用于返回并删除第一个元素；</li>
+<li>与 <code>shift</code> 类似，<code>arr.unshift(x)</code> 用于在第一个位置添加元素并返回新的数组长度</li>
+</ul>
+</li>
+<li>还有一种神奇的添加元素的方式：<code>arr[arr.length] = x</code>，不会发生越界异常；如果下标填的偏大，也不会越界，会在数组当中产生一堆 empty 的位置（undefined）</li>
+<li><code>arr.splice()</code> 很强，同时具有插入和删除的功能。<code>arr.splice(pos, delCnt, ...)</code> 用于在数组的指定位置添加若干个元素。<code>delCnt</code> 指定从 <code>pos</code> 开始删除多少个元素，如果只是想要添加的话，这个参数就填 <code>0</code></li>
+<li><code>arr1.concat(..)</code> 用于连接数组。<code>arr1.concat(arr2, arr3)</code> 用于把后两个数组的元素按照下标顺序添加到第一个数组</li>
+</ul>
+<h2 id="js-scope">JS 的域（scope）</h2>
+<p>JavaScript 把变量、函数、对象都视作变量，scope 就是指能访问的变量有哪些</p>
+<p>在一个 function 当中定义的变量，只能在函数的范围内被访问（LOCAL 的）。比如：</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="kd">function</span><span class="w"> </span><span class="nx">fun</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"haha"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"hahaid"</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">name</span><span class="p">;</span><span class="w">  </span><span class="c1">// 这里会获得 undefined</span>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>但是假如变量定义在 function 的外面，就是 GLOBAL 的：</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">name</span><span class="p">;</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="kd">function</span><span class="w"> </span><span class="nx">fun</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"haha"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"hahaid"</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">name</span><span class="p">;</span><span class="w">  </span><span class="c1">// 这里会获得 "haha" 的值</span>
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>如果变量没有在 function 外面定义，直接在 function 里面赋值，会自动视作 GLOBAL 的。确切的说，会是 <code>window</code> 对象的属性</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="kd">function</span><span class="w"> </span><span class="nx">fun</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"haha"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"hahaid"</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">name</span><span class="p">;</span><span class="w">  </span><span class="c1">// 这里会获得 "haha" 的值</span>
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"hahaid"</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">window</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span><span class="w">  </span><span class="c1">// 这样也可以</span>
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>LOCAL 的变量在函数结束后销毁，GLOBAL 的变量在页面关闭的时候销毁。</p>
+</article>>

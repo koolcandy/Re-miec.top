@@ -1,0 +1,65 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="lecture-7-creating-tables-and-inserting-data-in-postgresql">Lecture 7. Creating Tables and Inserting Data in PostgreSQL 创建表和插入数据</h1>
+<h2 id="_1">数字类型（本课程中常用）</h2>
+<ul>
+<li><code>integer</code>，四字节整数</li>
+<li><code>smallint</code>，二字节整数</li>
+<li><code>numeric</code>，精确的浮点数。小数点前可以有 131072 位，小数点后可以有 16383 位。</li>
+<li><code>real</code>，四字节浮点数（单精度）</li>
+<li><code>double precision</code>，八字节浮点数（双精度）</li>
+<li><code>serial</code>，四字节自增量，从 1 到 2147483647，完全由 PostgreSQL 控制。使用 <code>insert</code> 语句的时候，无需指定类型为 <code>serial</code> 的属性的值，PostgreSQL 会自动分配。</li>
+</ul>
+<h2 id="_2">字符串类型</h2>
+<p>需要用<strong>单引号</strong>括起来</p>
+<ul>
+<li><code>varchar(n)</code>，不定长字符串，最大长度 n</li>
+<li><code>char(n)</code> 定长字符串</li>
+<li><code>text</code> 无限长度，可以用于存储博客文章内容等数据</li>
+</ul>
+<p>并不是所有的字符串全都用 <code>text</code> 就是最好的。比如，对于姓名等数据，我可以要求限长 20，这样就可以让数据库自动检测出哪些 <code>INSERT</code> 之类的输入了非常长的不合法的假名字。同时，限长或定长的字符串，还可以用来辅助估计这个数据库的字节大小。</p>
+<h2 id="constraint"><code>constraint</code> 语句</h2>
+<p>DDL 语言中，只要是 <code>Create Table</code> 指令，就一定要有 <code>constraint</code> 语句出现。</p>
+<p>示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">mymoviews</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="n">moviename</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="p">(</span><span class="mi">200</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="n">movieminutes</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="n">movierating</span><span class="w"> </span><span class="nb">real</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="n">movieguide</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">mymoviews_pkey</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">moviename</span><span class="p">)</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>可以看到，<code>constraint</code> 的语法格式大概是：<code>constraint &lt;table name&gt;_pkey PRIMARY KEY(column name)</code>。其中，主键的表示格式是表名直接接上 <code>_pkey</code>。</p>
+<h2 id="insert"><code>INSERT</code> 的用法</h2>
+<p>大概作用是，插入<strong>一行</strong>数的据。不是插入新的列。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="o">&lt;</span><span class="k">column</span><span class="w"> </span><span class="n">list</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">&lt;</span><span class="n">value</span><span class="w"> </span><span class="n">list</span><span class="o">&gt;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>注意，这里的顺序最好和 create 的时候一致。</p>
+<p>示例：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">mymovies</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="p">(</span><span class="n">moviename</span><span class="p">,</span><span class="n">movieminutes</span><span class="p">,</span><span class="n">movierating</span><span class="p">,</span><span class="n">movie</span><span class="w"> </span><span class="n">guide</span><span class="p">)</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="k">values</span><span class="w"> </span><span class="p">(</span><span class="n">Interstellar</span><span class="s1">',169,8.7,'</span><span class="n">PG</span><span class="w"> </span><span class="mi">13</span><span class="err">'</span><span class="p">);</span>
+</span></code></pre></div>
+<p>插入完所有的行之后，可以通过 <code>select *</code> 或者右键选择「view all rows」查看整张表的数据，</p>
+<p>若插入新行的时候，如果指令出现了之前有过的 primary key，则插入语句不生效。</p>
+<h2 id="drop-table"><code>Drop table</code> 命令</h2>
+<p><code>drop table</code> 属于 DML，可以把整张表的数据删除。删除之后就可以重新 create 一个名字一模一样的表。</p>
+<p>注意，一旦执行了 <code>drop table</code>，是无法撤销的。</p>
+<p>通常，<code>drop table</code> 通常与 <code>if exists &lt;tableName&gt;</code> 结合使用，如：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">drop</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>如果不使用 <code>if exists</code>，并在不存在这个表的时候尝试 drop，可能会导致抛出异常的情况发生。</p>
+<h2 id="_3">创建表的步骤</h2>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="cm">/* Step 1 */</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="cm">/* Step 2 */</span>
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="p">...,</span>
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="p">...,</span>
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="p">...</span>
+</span><span id="__span-4-9"><a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="p">);</span>
+</span><span id="__span-4-10"><a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a>
+</span><span id="__span-4-11"><a href="#__codelineno-4-11" id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="cm">/* Step 3 */</span>
+</span><span id="__span-4-12"><a href="#__codelineno-4-12" id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">&lt;</span><span class="n">tableName</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(...,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(...,</span><span class="w"> </span><span class="p">...);</span>
+</span></code></pre></div>
+</article>>

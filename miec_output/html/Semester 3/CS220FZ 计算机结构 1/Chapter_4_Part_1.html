@@ -1,0 +1,40 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="chapter-4-part-1">Chapter 4 Part 1</h1>
+<p>（共 20 页）</p>
+<p>对于内存的读写操作，通常需要使用两个元件：decoder、multiplexer。这俩东西用来寻址。</p>
+<h2 id="decoder">Decoder 解码器</h2>
+<p>解码器，回顾一下，就是有 $n$ 个布尔输入，$[0, 2^n - 1]$ 共 $2^n$ 个输出。电路选择其中一个输出的值，激活。</p>
+<h3 id="_1">解码器的电路</h3>
+<p><img alt="" src="https://s2.loli.net/2023/01/06/iWOLbhCsvZtkg5p.png"/></p>
+<p>如图，这是一种常见的解码器（线性）构造方案。对于 $4$ 输入解码器，有 $16$ 种可能的输出，于是就需要 $16$ 个四输入的 AND 门（也就是总共 $2^4 \times 4$ 个输入）。这种电路延迟很低（只有一级延迟），但是可能会占用大量的芯片面积。</p>
+<p>为了改善这个问题，可以使用树形构造方案。</p>
+<p><img alt="" src="https://s2.loli.net/2023/01/06/xr9d8sSvXCNMZJa.png"/></p>
+<p>这个树形构造方案，分三个层次，第一层考虑两个变量，第二层考虑三个变量，第三层考虑四个变量。需要使用 $2^2 + 2^3 + 2^4 = 28$ 个双输入的 AND 门，也就是总共 $28 \times 2 = 56$ 个输入。虽然芯片占用面积减少了，但是延迟（propagation）有所增加。</p>
+<p>Balanced Multiplicative 平衡倍增解码器的构造方案是这样的。它需要 $2^2 + 2^2 + 2^{(2+2)} = 24$ 个双输入 AND 门，共计 $48$ 个输入。延迟比树形的少一层（但也比线性多一层），但是芯片面积占用达到了最低。</p>
+<p><img alt="" src="https://s2.loli.net/2023/01/06/gEloZVTkU4qbPDs.png"/></p>
+<p>这种平衡倍增的构造电路，还有一个优点，就是说，它可以把地址（address）分割成两个小部分，然后用小的解码器分别解码。</p>
+<h2 id="multiplexer">Multiplexer 多路复用器</h2>
+<p>回顾一下，MUX 是用来从一堆输入信号当中筛选出其中一个信号作为输出的电路设备。</p>
+<h2 id="memory-array-organisation-example">Memory Array Organisation Example 内存示例</h2>
+<p>以这个内存设备（含有 $16$ 个内存单元 memory cells）为例。由于有 $16$ 个 cells，所以每一个 cell 的地址需要都有 $4$ 个 bit。</p>
+<p><img alt="" src="https://s2.loli.net/2023/01/06/8deTR362SXVQPcy.png"/></p>
+<p>对于这种二维的内存，可以用平衡倍增的电路方案构造解码器，一半用来决定行，一半决定列。</p>
+<h3 id="memory-words">逻辑和物理的 memory words</h3>
+<p><em>物理字（physical word）</em>，是内存设备当中一整行的 bits，可能被表示为多个逻辑字的组合。并不是所有的行都能被读写。</p>
+<p><em>逻辑字（logical word）</em>，是一段 bits，在门的输出和内存写入的时候的单位。</p>
+<p>一个 level 的内存地址的解码，先选择一个行（物理字），另一个 level 则在这个行当中选择合适的位置（逻辑字）。</p>
+<p>行解码器可以选择出物理字。在这个物理字当中，提取出来逻辑字的过程，可以用 MUX 来实现。</p>
+<p>最终，一个 16x1 bit 的 ROM，可以这样设计：</p>
+<p><img alt="" src="https://s2.loli.net/2023/01/06/hPDeYZnrl1J9owA.png"/></p>
+<h2 id="2048x8-bit-rom">例题：画出一个 2048x8 bit 的 ROM 草图</h2>
+<ul>
+<li>由于 $2048 \times 8 = 2^14$，所以按照之前的二维矩阵的形式，这个内存设备是 $2^7 \times 2^7$ 的</li>
+<li>于是物理字的大小就是 $2^7$ 个 bit</li>
+<li>而题目要求的逻辑字的大小是 $8$ bit，所以一共有 $16$ 个逻辑字</li>
+<li>为了寻找逻辑字的位置，需要 $4$ bit 的内存地址信息</li>
+<li>而一共只有 $2048$ 个 cells，所以总共需要 $11$ bits 内存，其中 $7$ bits 用于选择行（rows），剩下的 $4$ bits 用来提取逻辑字</li>
+<li>最终，对于 $11$ 个 bits 的输入信息，$4 \sim 10$ 作为高位，传递给一个 7-128 解码器；$0 \sim 3$ 作为低位，传递给一个 16-1 的 MUX</li>
+<li>再加上一点必要成分，这个 ROM 就构造好了。</li>
+</ul>
+<p><img alt="" src="https://s2.loli.net/2023/01/06/nXVMw6WqhelCpOT.png"/></p>
+</article>>

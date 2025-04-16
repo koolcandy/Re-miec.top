@@ -1,0 +1,28 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="t04-arrays-and-array-algorithms">T04. Arrays and Array Algorithms</h1>
+<h2 id="_1">数组定义</h2>
+<p>有两种形式，一种是只声明数组大小，数组值 <strong>默认为 <code>0</code> / <code>null</code> / <code>false</code></strong>。</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">type</span><span class="o">[]</span><span class="w"> </span><span class="n">arrayName</span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">type</span><span class="o">[</span><span class="n">length</span><span class="o">]</span><span class="p">;</span>
+</span></code></pre></div>
+<p>也可以直接赋值</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">arr2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">};</span>
+</span></code></pre></div>
+<p>注意，数组定义后，数组的大小 <strong>固定不再改变</strong>。</p>
+<h2 id="_2">二维数组</h2>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1">// 前面两个中括号，啥都不要填</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="kt">int</span><span class="o">[][]</span><span class="w"> </span><span class="n">brr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[</span><span class="mi">10</span><span class="o">][</span><span class="mi">20</span><span class="o">]</span><span class="p">;</span>
+</span></code></pre></div>
+<h2 id="_3">数组缺点</h2>
+<ol>
+<li>有时候需要用一个变量来记录，数组中使用了多少内容</li>
+<li>如果想要查找或删除一个元素，需要遍历整个数组</li>
+<li>如果数组比较大，那么时间开销也很大</li>
+</ol>
+<h2 id="_4">关于有序数组</h2>
+<ol>
+<li>如果仅仅是查找，可以二分，相比普通数组，快</li>
+<li>但是插入操作需要维护有序性，必须找准位置插，相比普通数组，慢</li>
+<li>删除操作依然很慢</li>
+<li>所以如果插入少查找多，适合使用有序数组</li>
+</ol>
+</article>>

@@ -1,0 +1,17 @@
+<bound method Tag.prettify of <article class="md-content__inner md-typeset">
+<h1 id="5-implementation-using-nand-nor-gates">5. Implementation Using NAND NOR Gates</h1>
+<h2 id="_1">德摩根定律的变形</h2>
+<p>$\because\overline{A+B} = \overline{A}\times\overline{B}$<br/>
+$\therefore{A+B}=\overline{\overline{A}\times\overline{B}}$</p>
+<p>$\because\overline{A\times B} = \overline{A}+\overline{B}$<br/>
+$\therefore{A\times B}=\overline{\overline{A}+\overline{B}}$</p>
+<h2 id="_2">一般技巧</h2>
+<ul>
+<li>当需要将 f 化成 NAND 式子，直接化简</li>
+<li>若需要将 f 化成 NOR 式子，则化简 f' 再取反</li>
+</ul>
+<h3 id="_3">待补充格雷码的异或运算到卡诺图</h3>
+<h2 id="xor-nand-nor">XOR 到 NAND 和 NOR</h2>
+<p>A xor B = AB' + A'B = ((A'+B')' + (AB)')'</p>
+<p>A xor B = AB' + A'B = ((AB')'(A'B)')'</p>
+</article>>

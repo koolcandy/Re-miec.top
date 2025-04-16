@@ -1,0 +1,1327 @@
+[
+	{
+		"name": "README",
+		"path": "/static/note/readme.md",
+		"type": "file"
+	},
+	{
+		"name": "Semester 1",
+		"path": "/static/note/Semester 1/",
+		"type": "directory",
+		"children": [
+			{
+				"name": "About",
+				"path": "/static/note/Semester 1/About.md",
+				"type": "file"
+			},
+			{
+				"name": "CS161FZ 计算机科学导论 1",
+				"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "二进制的加减法和乘法",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/二进制的加减法和乘法.md",
+						"type": "file"
+					},
+					{
+						"name": "二维数组",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/二维数组.md",
+						"type": "file"
+					},
+					{
+						"name": "关键字与运算符",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/关键字与运算符.md",
+						"type": "file"
+					},
+					{
+						"name": "关于 Java 的 Hello world 解析",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/关于_Java_的_Hello_world_解析.md",
+						"type": "file"
+					},
+					{
+						"name": "计算机基础结构",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/计算机基础结构.md",
+						"type": "file"
+					},
+					{
+						"name": "数据类型转换",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/数据类型转换.md",
+						"type": "file"
+					},
+					{
+						"name": "数据输入（控制台）",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/数据输入（控制台）.md",
+						"type": "file"
+					},
+					{
+						"name": "文件",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/文件.md",
+						"type": "file"
+					},
+					{
+						"name": "文件系统和 Cluster 等概念",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/文件系统和_Cluster_等概念.md",
+						"type": "file"
+					},
+					{
+						"name": "一点基本的网络知识",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/一点基本的网络知识.md",
+						"type": "file"
+					},
+					{
+						"name": "一维数组",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/一维数组.md",
+						"type": "file"
+					},
+					{
+						"name": "异常处理",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/异常处理.md",
+						"type": "file"
+					},
+					{
+						"name": "字符串",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/字符串.md",
+						"type": "file"
+					},
+					{
+						"name": "IEEE 754",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/IEEE_754.md",
+						"type": "file"
+					},
+					{
+						"name": "Java 变量基础知识",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/Java_变量基础知识.md",
+						"type": "file"
+					},
+					{
+						"name": "Java 随机数",
+						"path": "/static/note/Semester 1/CS161FZ 计算机科学导论 1/Java_随机数.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "EE103FZ 数字系统 1",
+				"path": "/static/note/Semester 1/EE103FZ 数字系统 1/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "1. 二进制数表示 Binary Number Representation",
+						"path": "/static/note/Semester 1/EE103FZ 数字系统 1/1._Binary_Number_Representation.md",
+						"type": "file"
+					},
+					{
+						"name": "2. 布尔逻辑和基本门 Boolean Logic and Basic Gates",
+						"path": "/static/note/Semester 1/EE103FZ 数字系统 1/2._Boolean_Logic_and_Basic_Gates.md",
+						"type": "file"
+					},
+					{
+						"name": "3. 使用布尔代数进行布尔最小化 Boolean Minimisation Using Boolean",
+						"path": "/static/note/Semester 1/EE103FZ 数字系统 1/3._Boolean_Minimisation_Using_Boolean.md",
+						"type": "file"
+					},
+					{
+						"name": "4. 使用卡诺图进行布尔最小化 Boolean Minimisation Using Karnaugh Maps",
+						"path": "/static/note/Semester 1/EE103FZ 数字系统 1/4._Boolean_Minimisation_Using_Karnaugh_Maps.md",
+						"type": "file"
+					},
+					{
+						"name": "5. 使用NAND和NOR门的实现 Implementation Using NAND NOR Gates",
+						"path": "/static/note/Semester 1/EE103FZ 数字系统 1/5._Implementation_Using_NAND_NOR_Gates.md",
+						"type": "file"
+					},
+					{
+						"name": "6. 时序逻辑与触发器 Sequential Logic & Flipflops",
+						"path": "/static/note/Semester 1/EE103FZ 数字系统 1/6._Sequential_Logic_&_Flipflops.md",
+						"type": "file"
+					},
+					{
+						"name": "7. 计数器与寄存器 Counters & Registers",
+						"path": "/static/note/Semester 1/EE103FZ 数字系统 1/7._Counters_&_Registers.md",
+						"type": "file"
+					},
+					{
+						"name": "8. 多输出网络与七段显示器 Multi-Output Networks & 7-Segment Displays",
+						"path": "/static/note/Semester 1/EE103FZ 数字系统 1/8._Multi-Output_Networks_&_7-Segment_Displays.md",
+						"type": "file"
+					},
+					{
+						"name": "9. 可编程逻辑器件 Programmable Logic Devices",
+						"path": "/static/note/Semester 1/EE103FZ 数字系统 1/9._Programmable_Logic_Devices.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "EE121FZ 电子工程基础",
+				"path": "/static/note/Semester 1/EE121FZ 电子工程基础/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "9.13 静电学 Electrostatics",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/9.13_Electrostatics.md",
+						"type": "file"
+					},
+					{
+						"name": "9.13 EE121FZ 介绍 Introduction to EE121FZ",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/9.13_Introduction_to_EE121FZ.md",
+						"type": "file"
+					},
+					{
+						"name": "9.24 电压、电流和电阻 Voltage, Current and Resistance",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/9.24_Voltage,_Current_and_Resistance.md",
+						"type": "file"
+					},
+					{
+						"name": "9.27 电压、电流和电阻 Voltage, Current and Resistance",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/9.27_Voltage,_Current_and_Resistance.md",
+						"type": "file"
+					},
+					{
+						"name": "10.25 最大功率传输定理 Maximum Power Transfer Theorem",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/10.25_Maximum_Power_Transfer_Theorem.md",
+						"type": "file"
+					},
+					{
+						"name": "10.4 基尔霍夫定律 Kirchhoff's Law",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/10.4_Kirchhoff's_Law.md",
+						"type": "file"
+					},
+					{
+						"name": "11.1 基本电路理论1 Basic Circuit Theory 1",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/11.1_Basic_Circuit_Theory_1.md",
+						"type": "file"
+					},
+					{
+						"name": "11.29 发电与配电 Generation and Distribution",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/11.29_Generation_and_Distribution.md",
+						"type": "file"
+					},
+					{
+						"name": "11.29 其他基本组件 Other Basic Components",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/11.29_Other_Basic_Components.md",
+						"type": "file"
+					},
+					{
+						"name": "11.8 基本电路理论2 Basic Circuit Theory 2",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/11.8_Basic_Circuit_Theory_2.md",
+						"type": "file"
+					},
+					{
+						"name": "12.13 模拟与数字信号 Analog & Digital Signals",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/12.13_Analog_&_Digital_Signals.md",
+						"type": "file"
+					},
+					{
+						"name": "12.13 信道容量 Channel Capacity",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/12.13_Channel_Capacity.md",
+						"type": "file"
+					},
+					{
+						"name": "12.6 电信介绍 Introduction to Telecoms",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/12.6_Introduction_to_Telecoms.md",
+						"type": "file"
+					},
+					{
+						"name": "12.6 信号噪声 Signals Noise",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/12.6_Signals_Noise.md",
+						"type": "file"
+					},
+					{
+						"name": "12.6 信号无线电传播 DK Signals Radio Propagation - DK",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/12.6_Signals_Radio_Propagation_-_DK.md",
+						"type": "file"
+					},
+					{
+						"name": "12.xx 调制与多路复用 Modulation Multiplexing",
+						"path": "/static/note/Semester 1/EE121FZ 电子工程基础/12.xx_Modulation_Multiplexing.md",
+						"type": "file"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "Semester 2",
+		"path": "/static/note/Semester 2/",
+		"type": "directory",
+		"children": [
+			{
+				"name": "About",
+				"path": "/static/note/Semester 2/About.md",
+				"type": "file"
+			},
+			{
+				"name": "CS162FZ 计算机科学导论 2",
+				"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "Lecture 1 介绍与复习 intro & revision",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_1__intro_&_revision.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 2&3 方法 Methods",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_2&3__Methods.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 4 正则表达式 Regular Expression",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_4__Regular_Expression.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 5&6 递归",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_5&6__递归.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 8 有限状态机 Finite State Machine",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_8__有限状态机_Finite_State_Machine.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 10 排序和搜索算法",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_10__排序和搜索算法.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 11 高级机器学习（不考） Advanced Machine Learning",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_11__Advanced_Machine_Learning（不考）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 12 类与对象 Classes Objects",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_12__Classes_Objects.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 13 继承 Inheritance",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_13__Inheritance.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 14 图灵机 Turing Machine",
+						"path": "/static/note/Semester 2/CS162FZ 计算机科学导论 2/Lecture_14__图灵机_Turing_Machine.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "CS172FZ 计算机系统 2",
+				"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "side 11 谓词逻辑模型和有效性",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/side_11__谓词逻辑模型和有效性.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 1 课程大纲",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_1：课程大纲.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 2 推理",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_2：推理.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 3 命题逻辑",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_3：命题逻辑.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 4 命题逻辑：有效的推理",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_4：命题逻辑：有效的推理.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 5 表达能力 Expressiveness",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_5__Expressiveness.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 6 集合论：定义集合",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_6__集合论：定义集合.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 7 三段论推理 Syllogistic Reasoning",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_7__三段论推理_Syllogistic_Reasoning.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 8 关系 Relations",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_8__Relations_关系.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 9 关系分类 Classifying relations",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_9__Classifying_relations_关系分类.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 10 谓词逻辑 Predicate Logic",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_10__谓词逻辑_Predicate_Logic.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 12 自然演绎 natural deduction",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_12__自然演绎（natural_deduction）.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 13 量词的自然演绎",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_13__量词的自然演绎.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 14 函数 Functions",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_14__函数_Functions.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 15 势 Cardinality（有限集）",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_15__势_Cardinality（有限集）.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 16 势 Cardinality（无限集）",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_16__势_Cardinality（无限集）.md",
+						"type": "file"
+					},
+					{
+						"name": "slide 17 超限势 Transfinite Cardinals",
+						"path": "/static/note/Semester 2/CS172FZ 计算机系统 2/slide_17__Transfinite_Cardinals_超限势.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "CS210FZ 算法与数据结构 1",
+				"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "Overview",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/Overview.md",
+						"type": "file"
+					},
+					{
+						"name": "T00. 课程安排 Course Logistics",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T00._Course_Logistics.md",
+						"type": "file"
+					},
+					{
+						"name": "T01. 介绍 Introduction",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T01._Introduction.md",
+						"type": "file"
+					},
+					{
+						"name": "T02. 编程复习 Programming Revision",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T02._Programming_Revision.md",
+						"type": "file"
+					},
+					{
+						"name": "T03. 方法和对象 Methods and Objects",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T03._Methods_and_Objects.md",
+						"type": "file"
+					},
+					{
+						"name": "T04. 数组和数组算法 Arrays and Array Algorithms",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T04._Arrays_and_Array_Algorithms.md",
+						"type": "file"
+					},
+					{
+						"name": "T05. 大O表示法 Big O Notation",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T05._Big_O_Notation.md",
+						"type": "file"
+					},
+					{
+						"name": "T06. 排序算法 Sorting Algorithms",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T06._Sorting_Algorithms.md",
+						"type": "file"
+					},
+					{
+						"name": "T07. 栈和队列 Stacks and Queue",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T07._Stacks_and_Queue.md",
+						"type": "file"
+					},
+					{
+						"name": "T08. 链表 Linked Lists",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T08._Linked_Lists.md",
+						"type": "file"
+					},
+					{
+						"name": "T09. 递归 Recursion",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T09._Recursion.md",
+						"type": "file"
+					},
+					{
+						"name": "T10. 位操作 Bit Manipulation",
+						"path": "/static/note/Semester 2/CS210FZ 算法与数据结构 1/T10._Bit_Manipulation.md",
+						"type": "file"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "Semester 3",
+		"path": "/static/note/Semester 3/",
+		"type": "directory",
+		"children": [
+			{
+				"name": "About",
+				"path": "/static/note/Semester 3/About.md",
+				"type": "file"
+			},
+			{
+				"name": "CS130FZ 数据库",
+				"path": "/static/note/Semester 3/CS130FZ 数据库/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "Lecture 0",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_0.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 1",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_1.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 2. 数据建模和数据库设计简介 Introduction to Data Modelling and Database Design",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_2__Introduction_to_Data_Modelling_and_Database_Design.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 3. 结构化查询语言 Structured Query Language",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_3__Structured_Query_Language.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 4. SQL的更高级用法 More Advanced Usage of SQL",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_4__More_Advanced_Usage_of_SQL.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 5. 实体关系建模 Entity Relationship Modelling",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_5__Entity_Relationship_Modelling_实体关系模型.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 6. 更高级的模式匹配 More Advanced Pattern Matching",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_6__More_Advanced_Pattern_Matching_高级模式匹配.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 7. 在PostgreSQL中创建表和插入数据 Creating Tables and Inserting Data in PostgreSQL",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_7._Creating_Tables_and_Inserting_Data_in_PostgreSQL_创建表和插入数据.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 8. 在PostgreSQL中处理日期和时间 Working with Dates and Times in PostgreSQL",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_8._Working_with_Dates_and_Times_in_PostgreSQL_日期和时间的使用.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 9. 数据安全、DA、DBA Data Security, DA, DBA",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_9._Data_Security,_DA,_DBA_数据安全与管理.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 10. 使用主键 Working with Primary Keys",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_10._Working_with_Primary_Keys_主键的使用.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 11-12. 表别名、在SQL和PostgreSQL中使用函数 Table Aliases, Working with Functions in SQL and PostgreSQL",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_11-12._Table_Aliases,_Working_with_Functions_in_SQL_and_PostgreSQL_表别名、函数.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 13. 删除和修改数据库中的数据 Deleting and Altering Data in a Database",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_13._Deleting_and_Altering_Data_in_a_Database_删除和修改数据.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 14. 修改数据库表中的数据 Altering Data in a Database TABLE",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_14._Altering_Data_in_a_Database_TABLE_修改表.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 15. HAVING运算符、LIMIT运算符、表约束 The `HAVING` Operator, The `LIMIT` Operator, Table Constraints",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_15._The_`HAVING`_Operator,_The_`LIMIT`_Operator,_Table_Constraints_运算符_`HAVING`、运算符_`LIMIT`、表限制.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 16. 连接中的参照完整性、级联删除和更新操作 REFERENTIAL INTEGRITY in JOINS, CASCADING DELETE and UPDATE operations",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_16._REFERENTIAL_INTEGRITY_in_JOINS,_CASCADING_DELETE_and_UPDATE_operations_级联删除、级联更新和_JOIN_的参照完整性.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 17. 关系代数和SQL中的查询计划及更多参照完整性 Relational Algebra and Query Planning in SQL and More Referential Integrity",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_17._Relational_Algebra_and_Query_Planning_in_SQL_and_More_Referential_Integrity_关系代数、查询过程、参照完整性.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 18. SQL中的表集合 Tables as Sets in SQL",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_18._Tables_as_Sets_in_SQL_表集合.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 19. SQL注入攻击和SQL中连接的类型 SQL Injection Attack and Types of JOINS in SQL",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_19._SQL_Injection_Attack_and_Types_of_JOINS_in_SQL_注入攻击与_Join_的种类.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 20. 数据库标准化 Normalization in Databases",
+						"path": "/static/note/Semester 3/CS130FZ 数据库/Lecture_20._Normalization_in_Databases_数据库标准化.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "CS220FZ 计算机结构 1",
+				"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "阅读 CSAPP 关于算术运算的笔记",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/阅读_CSAPP_关于算术运算的笔记.md",
+						"type": "file"
+					},
+					{
+						"name": "Chaper 2 Part 1 布尔代数 Boolean Algebra",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chaper_2_Part_1__Boolean_Algebra_布尔代数.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 1 进制和数的表示 Number System",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_1__Number_System_进制和数的表示.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 2 Part 2 一些硬件知识",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_2_Part_2__一些硬件知识.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 2 Part 3 卡诺图",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_2_Part_3__卡诺图.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 2 Part 4 一大堆硬件电路（组合逻辑）",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_2_Part_4__一大堆硬件电路（组合逻辑）.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 3 Part 1 触发器 flip flop",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_3_Part_1__触发器_flip_flop.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 3 Part 2 触发器的应用以及时序逻辑电路设计",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_3_Part_2__触发器的应用以及时序逻辑电路设计.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 3 Part 3 算术运算",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_3_Part_3__算术运算.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 4 Part 1",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_4_Part_1.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 4 Part 2",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_4_Part_2.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 4 Part 3",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_4_Part_3.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 5, 6, 7",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Chapter_5,_6,_7.md",
+						"type": "file"
+					},
+					{
+						"name": "Overview",
+						"path": "/static/note/Semester 3/CS220FZ 计算机结构 1/Overview.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "CS265FZ 软件测试",
+				"path": "/static/note/Semester 3/CS265FZ 软件测试/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "安排",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/安排.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 0. 概述 Overview",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_0._Overview.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 1. 视角与概念 Perspectives and Concepts",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_1._Perspectives_and_Concepts.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 2. 视角与概念 Perspectives and Concepts",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_2._Perspectives_and_Concepts.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 3. 等价类测试 Equivalence Class Testing",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_3._Equivalence_Class_Testing.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 4. 边界值测试 Boundary Value Testing",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_4._Boundary_Value_Testing.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 5. 组合测试 Combinational Testing",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_5._Combinational_Testing.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 6. 随机测试和错误猜测 Random Testing and Error Guessing",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_6._Random_Testing_and_Error_Guessing.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 7. 结构测试 - 语句覆盖 Structural Testing - Statement Coverage",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_7._Structural_Testing_-_Statement_Coverage_结构测试_-_语句覆盖.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 8. 分支覆盖 Branch Coverage",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_8._Branch_Coverage_分支覆盖.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 9. 条件覆盖 Conditon Coverage（没听懂）",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_9._Conditon_Coverage_条件覆盖（没听懂）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 10. 路径覆盖 Path Coverage（旷课了）",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_10._Path_Coverage_路径覆盖（旷课了）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 11. 数据流覆盖 Dataflow Coeverage",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_11._Dataflow_Coeverage_数据流覆盖.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 12. 变异测试 Mutation Testing",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_12._Mutation_Testing_变异测试.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 13. 面向对象软件的单元测试 Unit Testing - Object Oriented Software",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_13._Unit_Testing_-_Object_Oriented_Software_面向对象软件的单元测试.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 14. 集成测试 Integration Testing",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_14._Integration_Testing_集成测试.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 14. 系统测试 System Testing",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_14._System_Testing_系统测试.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 16. 软件测试自动化 Software Test Automation",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_16._Software_Test_Automation_软件测试自动化.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 17. 软件过程中的测试 Testing in the Software Progress",
+						"path": "/static/note/Semester 3/CS265FZ 软件测试/Lecture_17._Testing_in_the_Software_Progress_软件过程中的测试.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "CS355FZ 计算理论",
+				"path": "/static/note/Semester 3/CS355FZ 计算理论/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "L0. 概括 Overview",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/L0._概括_Overview.md",
+						"type": "file"
+					},
+					{
+						"name": "L1. 数学初步与有限状态机 Math Preliminaries & Finate State Automata",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/L1._数学初步与有限状态机_Math_Preliminaries_&_Finate_State_Automata.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 2. 非确定型有限状态机 Nondeterministic Finite Automata",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_2._非确定型有限状态机（Nondeterministic_Finite_Automata）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 3. 上下文无关语言 Context Free Languages",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_3._Context_Free_Languages_上下文无关语言.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 4. 图灵机 Turing Machines",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_4._Turing_Machines_图灵机.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 5. 可判定性 Decidability",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_5._Decidability_可判定性.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 6. 不可判定性 Undecidability",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_6._Undecidability_不可判定性.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 7. 可归约性 Reducibility",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_7._Reducibility_可归约性.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 8. 时间复杂性 Time Complexity",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_8._Time_Complexity_时间复杂性.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 9. NP类 The Class NP",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_9._The_Class_NP_NP_类.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 10. NP完全 NP Complete",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_10._NP_Complete_NP_完全.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 11. 空间复杂性介绍 Introduction to Space Complexity",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_11._Introduction_to_Space_Complexity_空间复杂性引入.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 12. PSPACE完全性 PSPACE-completeness",
+						"path": "/static/note/Semester 3/CS355FZ 计算理论/Lecture_12._PSPACE-completeness_PSPACE_完全性.md",
+						"type": "file"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "Semester 4",
+		"path": "/static/note/Semester 4/",
+		"type": "directory",
+		"children": [
+			{
+				"name": "About",
+				"path": "/static/note/Semester 4/About.md",
+				"type": "file"
+			},
+			{
+				"name": "CS211FZ 算法与数据结构 2",
+				"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "概览",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/概览.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 1. 基础知识 Foundations",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_1._Foundations_基础知识.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 2. 分治 Divide and Conquer",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_2._Divide_and_Conquer_分治.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 3. 哈希表 Hash Tables",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_3._Hash_Tables_哈希表.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 4. 树",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_4._树.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 5. 图",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_5._图.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 6. 动态规划",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_6._动态规划.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 7. 贪心算法",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_7._贪心算法.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 8. 暴力",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_8._暴力.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 9. 回溯算法",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_9._回溯算法.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 10. 密码学",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_10._密码学.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 11. P、NP、NP 完全",
+						"path": "/static/note/Semester 4/CS211FZ 算法与数据结构 2/Lecture_11._P、NP、NP_完全.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "CS230FZ Web 信息处理",
+				"path": "/static/note/Semester 4/CS230FZ Web 信息处理/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "概览",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/概览.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 1. HTML Part1（标签、CSS、格式化、引用）",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Lecture_1._HTML_Part1（标签、CSS、格式化、引用）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 2. HTML Part2（颜色、图片、表格、列表）",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Lecture_2._HTML_Part2（颜色、图片、表格、列表）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 3. HTML Part3",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Lecture_3._HTML_Part3.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 4&5. HTML5 特性与编码规范",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Chapter_4&5._HTML5_特性与编码规范.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 6. CSS Part1（语法、背景、边框、留白）",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Chapter_6._CSS_Part1（语法、背景、边框、留白）.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 7. CSS Part2（留白、文本、字体、链接、列表、表格）",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Chapter_7._CSS_Part2（留白、文本、字体、链接、列表、表格）.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 8. CSS Part3（显示样式、位置、浮动）",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Chapter_8._CSS_Part3（显示样式、位置、浮动）.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 9. CSS Part4（对齐、选择器、伪类、导航条、下拉框）",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Chapter_9._CSS_Part4（对齐、选择器、伪类、导航条、下拉框）.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 10. CSS Part5（属性选择器、动画、分页）",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Chapter_10._CSS_Part5（属性选择器、动画、分页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 11. JS Part1（引用方式、显示信息、修改元素、语法类型）",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Chapter_11._JS_Part1（引用方式、显示信息、修改元素、语法类型）.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 13. DOM",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Chapter_13._DOM.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 14",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Chapter_14.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 12. JS 对象",
+						"path": "/static/note/Semester 4/CS230FZ Web 信息处理/Lecture_12._JS_对象.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "CS240FZ 操作系统通信和并发",
+				"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "概览",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/概览.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture. 1 OS 概述（25页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture._1_OS_概述（25_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 2. 进程管理（26页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_2._进程管理（26_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 3. 进程调度1：非抢占式调度（24页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_3._进程调度_1：非抢占式调度（24_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 4. 进程调度2：抢占式调度（25页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_4._进程调度_2：抢占式调度（25_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 5. 进程调度3：关于进程调度的数学建模（26页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_5._进程调度_3_关于进程调度的数学建模（26_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 6. 磁盘操作与磁盘调度（21页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_6._磁盘操作与磁盘调度（21_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 7. UNIX 的进程管理与进程间通信（30页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_7._UNIX_的进程管理与进程间通信（30_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 8. Unix 管道与套接字（16页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_8._Unix_管道与套接字（16_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 9. Unix 消息队列与远程过程调用（22页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_9._Unix_消息队列与远程过程调用（22_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 10. 线程（25页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_10._线程（25_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 11. 互斥锁问题（22页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_11._互斥锁问题（22_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 12. 解决临界区问题的算法（25页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_12._解决临界区问题的算法（25_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 13. 信号量（23页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_13._信号量（23_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 14 生产者-消费者问题（有节缓冲问题）（21页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_14_生产者-消费者问题（有节缓冲问题）（21_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 15.16 哲学家就餐以及读者作者问题（42页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_15.16_哲学家就餐以及读者作者问题（42_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 17. 死锁（31页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_17._死锁（31_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 18. 引入内存管理（28页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_18._引入内存管理（28_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 19.20 内存管理二：虚拟内存等（46页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_19.20_内存管理二：虚拟内存等（46_页）.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 21.22.23 文件系统（71页）",
+						"path": "/static/note/Semester 4/CS240FZ 操作系统通信和并发/Lecture_21.22.23_文件系统（71_页）.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "CS253FZ 计算机结构 Ⅱ",
+				"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "概览",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/概览.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 1. CPU",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_1._CPU.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 2. 汇编语言 Part1：寄存器与基础汇编结构知识",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_2._汇编语言_Part1：寄存器与基础汇编结构知识.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 3. 汇编语言 Part2：寻址模式与指令格式",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_3._汇编语言_Part2：寻址模式与指令格式.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 4. 汇编语言 Part3：算术、逻辑、位、转移指令",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_4._汇编语言_Part3：算术、逻辑、位、转移指令.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 5. 汇编语言 Part4：整数，实数，字符串",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_5._汇编语言_Part4：整数，实数，字符串.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 6. 汇编语言 Part5：浮点与 8087",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_6._汇编语言_Part5：浮点与_8087.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 7. 半导体与 PN 结二极管",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_7._半导体与_PN_结二极管.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 8. 晶体管和 FET",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_8._晶体管和_FET.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 9. IO 与中断",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_9._IO_与中断.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 10. 关于中断与 TSR 的汇编实现",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_10._关于中断与_TSR_的汇编实现.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 11. 内存与动态、静态 RAM",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_11._内存与动态、静态_RAM.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 12. 内存管理与缓存策略",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_12._内存管理与缓存策略.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 13.A 硬盘、CD-ROM",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_13.A_硬盘、CD-ROM.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 13.B 硬件保护",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_13.B_硬件保护.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 14. RISC VS CISC、现代计算机技术",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_14._RISC_VS_CISC、现代计算机技术.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 15. 总线",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_15._总线.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 16. 闪存与 FGPA",
+						"path": "/static/note/Semester 4/CS253FZ 计算机结构 Ⅱ/Lecture_16._闪存与_FGPA.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "CS335FZ 软件工程与软件过程",
+				"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "概览",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/概览.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 1 引入",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_1_引入.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 2 软件过程",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_2_软件过程.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 3 敏捷软件开发",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_3_敏捷软件开发.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 4 设计模式",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_4_设计模式.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 5 系统建模",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_5_系统建模.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 6 需求工程",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_6_需求工程.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 7 结构设计",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_7_结构设计.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 8 系统设计",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_8_系统设计.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 9 软件测试与调试",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_9_软件测试与调试.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 10. UI 与 UX 设计",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_10._UI_与_UX_设计.md",
+						"type": "file"
+					},
+					{
+						"name": "Lecture 11. 项目管理",
+						"path": "/static/note/Semester 4/CS335FZ 软件工程与软件过程/Lecture_11._项目管理.md",
+						"type": "file"
+					}
+				]
+			},
+			{
+				"name": "ST221FZ 统计学导论",
+				"path": "/static/note/Semester 4/ST221FZ 统计学导论/",
+				"type": "directory",
+				"children": [
+					{
+						"name": "概览",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/概览.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 1",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/Chapter_1.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 2 描述数据的方法",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/Chapter_2_描述数据的方法.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 3 概率",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/Chapter_3_概率.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 4 概率分布",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/Chapter_4_概率分布.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 5 概率密度 Probability Density",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/Chapter_5_概率密度_Probability_Density.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 6 样本分布",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/Chapter_6_样本分布.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 7 关于均值的推断",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/Chapter_7_关于均值的推断.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 8 比较两个对象",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/Chapter_8_比较两个对象.md",
+						"type": "file"
+					},
+					{
+						"name": "Chapter 9 方差",
+						"path": "/static/note/Semester 4/ST221FZ 统计学导论/Chapter_9_方差.md",
+						"type": "file"
+					}
+				]
+			}
+		]
+	}
+]
